@@ -1,0 +1,44 @@
+name: Build street zones
+
+on:
+  push:
+    branches: [main]
+    paths: ['tools/build_zones.py', '.github/workflows/build-zones.yml']
+  schedule:
+    - cron: '17 4 1 * *'   # monthly refresh
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-zones
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect street zones
+        run: python tools/build_zones.py
+      - name: Commit to main and gh-pages
+        run: |
+          git config user.name "parkfree-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/zones.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Update street zones from RingGo locator"
+          SHA=$(git rev-parse HEAD)
+          git push origin HEAD:main
+          git fetch origin gh-pages
+          git checkout -B gh-pages origin/gh-pages
+          git checkout "$SHA" -- data/zones.json
+          git commit -m "Update street zones from RingGo locator"
+          git push origin gh-pages

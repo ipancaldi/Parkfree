@@ -530,6 +530,10 @@ function resolveZone(name,lat,lng,tags){
     mine.sort((a,b)=>Math.hypot(a.lat-lat,a.lng-lng)-Math.hypot(b.lat-lat,b.lng-lng));
     return {z:mine[0].z,src:'you'};
   }
+  const rg=RINGGO[key];
+  if(rg){const zs=Object.keys(rg.zones);
+    if(zs.length===1)return {z:zs[0],src:'verified'};
+    return {z:null,src:'multi',cands:zs.sort((a,b)=>rg.zones[b]-rg.zones[a])};}
   if(VERIFIED[key])return {z:VERIFIED[key],src:'verified'};
   const t=zoneFromTags(tags); if(t)return {z:t,src:'osm'};
   return {z:null,src:null};
@@ -551,7 +555,7 @@ async function checkPoint(lat,lng,how){
     }
     if(!street){cur={lat,lng,name:null,borough,z:null,src:'nostreet'};render();return;}
     const r=resolveZone(street.name,lat,lng,street.tags);
-    cur={lat,lng,name:street.name,borough,z:r.z,src:r.src,segs:street.segs};
+    cur={lat,lng,name:street.name,borough,z:r.z,src:r.src,cands:r.cands||null,segs:street.segs};
     if(hereLine)map.removeLayer(hereLine);
     hereLine=L.layerGroup(street.segs.map(s=>L.polyline(s,{color:'#1d3f9e',weight:9,opacity:.35}))).addTo(map);
     render();
@@ -613,8 +617,11 @@ PF.ZONE_IDS.forEach(z=>{const b=document.createElement('button');b.textContent=z
   b.onclick=()=>confirmZone(z);grid.appendChild(b);});
 function openPicker(){
   if(!cur||!cur.name)return;
-  document.getElementById('pk-msg').textContent=
-    `Which zone letter is on the CPZ sign for ${cur.name}? It's on the entry sign beside the hours. You only need to do this once per street.`;
+  document.getElementById('pk-msg').textContent=cur.cands
+    ? `${cur.name} runs through zones ${cur.cands.join(' and ')}. Which letter is on the nearest CPZ sign? You only need to do this once here.`
+    : `Which zone letter is on the CPZ sign for ${cur.name}? It's on the entry sign beside the hours. You only need to do this once per street.`;
+  grid.querySelectorAll('button').forEach(b=>{const on=cur.cands&&cur.cands.includes(b.textContent);
+    b.style.background=on?'var(--sign)':'';b.style.color=on?'#fff':'';});
   document.getElementById('picker').hidden=false;
 }
 document.getElementById('pk-cancel').onclick=()=>document.getElementById('picker').hidden=true;
@@ -677,8 +684,8 @@ function renderVerdict(t){
     $('v-detail').textContent='Tap closer to a road.';$('v-until').textContent='';$('v-street').textContent='';$('v-src').innerHTML='';return;}
   $('v-street').textContent=cur.name;
   if(!cur.z){v.className='unknown';$('v-zone').className='unk';$('v-zl').textContent='?';
-    $('v-head').textContent='Zone not known yet';
-    $('v-detail').textContent='Read the zone letter on the CPZ sign and tap it below.';
+    $('v-head').textContent=cur.cands?'Street spans two zones':'Zone not known yet';
+    $('v-detail').textContent=cur.cands?`Zones ${cur.cands.join(' / ')}. Check the nearest sign and tap its letter below.`:'Read the zone letter on the CPZ sign and tap it below.';
     $('v-until').textContent='';$('v-src').innerHTML='<span class="chip warn">Needs your input</span>';return;}
   const st=PF.status(cur.z,t,profile), nx=PF.nextChange(cur.z,t,profile);
   v.className=st.state; $('v-zone').className=''; $('v-zl').textContent=cur.z;
@@ -754,7 +761,17 @@ $('b-import').onclick=()=>{try{const arr=JSON.parse($('io').value);if(!Array.isA
 let toastT;function toast(m){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el);}
   el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2600);}
 
-syncWhenInputs(); render(); loadAnchors();
+// Street → zone table built monthly from Islington's RingGo locator (tools/build_zones.py)
+let RINGGO=store.get('ringgo',{});
+async function loadZoneTable(){
+  for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/parkfree/main/data/zones.json']){
+    try{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)continue;const d=await r.json();
+      if(d&&d.streets&&Object.keys(d.streets).length){RINGGO=d.streets;store.set('ringgo',RINGGO);
+        if(cur&&cur.name&&!cur.z&&cur.src!=='outside'){const z=resolveZone(cur.name,cur.lat,cur.lng,{});Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});}
+        render();return;}}catch(e){}
+  }
+}
+syncWhenInputs(); render(); loadAnchors(); loadZoneTable();
 </script>
 </body>
 </html>
