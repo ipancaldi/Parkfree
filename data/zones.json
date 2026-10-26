@@ -1,0 +1,224 @@
+{
+ "generated": "2026-10-26T19:43:40+00:00",
+ "source": "https://myringgo.co.uk/islington/parkinglocator",
+ "locations": 36,
+ "failed": [
+  "54000",
+  "54052",
+  "54109",
+  "54187"
+ ],
+ "streets": {
+  "anson road": {
+   "name": "Anson Road",
+   "zones": {
+    "R": 1
+   }
+  },
+  "arran walk": {
+   "name": "Arran Walk",
+   "zones": {
+    "L": 1
+   }
+  },
+  "barnsbury street": {
+   "name": "Barnsbury Street",
+   "zones": {
+    "E": 1
+   }
+  },
+  "bath street": {
+   "name": "Bath Street",
+   "zones": {
+    "C": 1
+   }
+  },
+  "blackstock road": {
+   "name": "Blackstock Road",
+   "zones": {
+    "H": 1
+   }
+  },
+  "bowling green lane": {
+   "name": "Bowling Green Lane",
+   "zones": {
+    "A": 1
+   }
+  },
+  "caledonian road": {
+   "name": "Caledonian Road",
+   "zones": {
+    "S": 1
+   }
+  },
+  "cumming street": {
+   "name": "Cumming Street",
+   "zones": {
+    "B": 1
+   }
+  },
+  "dingley road": {
+   "name": "Dingley Road",
+   "zones": {
+    "C": 1
+   }
+  },
+  "dulas street": {
+   "name": "Dulas Street",
+   "zones": {
+    "J": 1
+   }
+  },
+  "essex road": {
+   "name": "Essex Road",
+   "zones": {
+    "E": 1
+   }
+  },
+  "gloucester way": {
+   "name": "Gloucester Way",
+   "zones": {
+    "A": 1
+   }
+  },
+  "golden lane": {
+   "name": "Golden Lane",
+   "zones": {
+    "C": 1
+   }
+  },
+  "grange grove": {
+   "name": "Grange Grove",
+   "zones": {
+    "L": 1
+   }
+  },
+  "grenville road": {
+   "name": "Grenville Road",
+   "zones": {
+    "HE": 1
+   }
+  },
+  "hanley road": {
+   "name": "Hanley Road",
+   "zones": {
+    "J": 1
+   }
+  },
+  "hardwick street": {
+   "name": "Hardwick Street",
+   "zones": {
+    "A": 1
+   }
+  },
+  "hargrave road": {
+   "name": "Hargrave Road",
+   "zones": {
+    "P": 1
+   }
+  },
+  "hilldrop crescent": {
+   "name": "Hilldrop Crescent",
+   "zones": {
+    "W": 1
+   }
+  },
+  "lonsdale square": {
+   "name": "Lonsdale Square",
+   "zones": {
+    "E": 1
+   }
+  },
+  "market road": {
+   "name": "Market Road",
+   "zones": {
+    "D": 1
+   }
+  },
+  "mildmay grove south": {
+   "name": "Mildmay Grove South",
+   "zones": {
+    "V": 1
+   }
+  },
+  "northampton road": {
+   "name": "Northampton Road",
+   "zones": {
+    "A": 1
+   }
+  },
+  "penton street": {
+   "name": "Penton Street",
+   "zones": {
+    "B": 1
+   }
+  },
+  "ramsey walk": {
+   "name": "Ramsey Walk",
+   "zones": {
+    "T": 1
+   }
+  },
+  "roman way": {
+   "name": "Roman Way",
+   "zones": {
+    "N": 1
+   }
+  },
+  "spencer street": {
+   "name": "Spencer Street",
+   "zones": {
+    "A": 1
+   }
+  },
+  "st paul's road": {
+   "name": "St Paul's Road",
+   "zones": {
+    "L": 1
+   }
+  },
+  "sussex way": {
+   "name": "Sussex Way",
+   "zones": {
+    "F": 1,
+    "TW": 1
+   }
+  },
+  "sycamore street": {
+   "name": "Sycamore Street",
+   "zones": {
+    "C": 1
+   }
+  },
+  "thornhill square": {
+   "name": "Thornhill Square",
+   "zones": {
+    "E": 1
+   }
+  },
+  "thorpedale road": {
+   "name": "Thorpedale Road",
+   "zones": {
+    "J": 1
+   }
+  },
+  "vorley road": {
+   "name": "Vorley Road",
+   "zones": {
+    "P": 1
+   }
+  },
+  "yardley street": {
+   "name": "Yardley Street",
+   "zones": {
+    "A": 1
+   }
+  },
+  "york way": {
+   "name": "York Way",
+   "zones": {
+    "S": 1
+   }
+  }
+ }
+}
