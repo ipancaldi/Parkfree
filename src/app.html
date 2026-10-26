@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-title" content="ParkFree">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="theme-color" content="#F2F4F7">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="parkfree-build" content="/*BUILD*/">
 <title>ParkFree Islington</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
@@ -930,6 +932,13 @@ document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.go));
 $('findcard').onclick=()=>go('find');
 if(wide())['zones','events','you','how'].forEach(n=>$('t-'+n).hidden=true);
 render(); placeRail(); loadAnchors(); loadZoneTable(); setTimeout(loadViewport,800);
+// Self-update: home-screen apps and browser caches can hold an old copy; reload once when a newer build is published
+(async function checkUpdate(){
+  const mine=document.querySelector('meta[name="parkfree-build"]').content;
+  try{const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const v=await r.json();
+    if(v.build&&v.build!==mine){const k='pf.reloaded.'+v.build;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+v.build);}}}catch(e){}
+  setTimeout(checkUpdate,10*60*1000);
+})();
 </script>
 </body>
 </html>
