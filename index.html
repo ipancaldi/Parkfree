@@ -8,15 +8,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="theme-color" content="#F2F4F7">
 <meta http-equiv="Cache-Control" content="no-cache">
-<meta name="parkfree-build" content="20261026215100">
+<meta name="parkfree-build" content="20261026215300">
 <title>ParkFree Islington</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="vendor/leaflet.css">
+<script src="vendor/leaflet.js"></script>
 <style>
 /* Layout: brand + search float over a full-bleed map; one answer card docks at the bottom (side panel on wide screens).
    The whole app takes on the answer's tone: green when you can park, amber when you should check the sign, red when you can't. */
@@ -653,8 +653,26 @@ setInterval(()=>{if(live)render();},30000);
 const dark=matchMedia('(prefers-color-scheme: dark)').matches;
 const map=L.map('map',{zoomControl:false}).setView(ISL_CENTRE,14);
 map.attributionControl.setPrefix(false);
-L.tileLayer(`https://{s}.basemaps.cartocdn.com/${dark?'dark_all':'light_all'}/{z}/{x}/{y}{r}.png`,{subdomains:'abcd',maxZoom:20,
-  attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
+// Free basemaps, no API key. If one provider doesn't answer, switch to the next.
+const OSMA='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+const BASES=[
+  [`https://{s}.basemaps.cartocdn.com/${dark?'dark_all':'light_all'}/{z}/{x}/{y}{r}.png`,{subdomains:'abcd',maxZoom:20,attribution:OSMA+' © <a href="https://carto.com/attributions">CARTO</a>'}],
+  ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:OSMA}],
+  ['https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,attribution:OSMA+' · OSM France'}],
+];
+let baseIdx=0, baseLayer=null;
+function useBase(i){
+  if(baseLayer)map.removeLayer(baseLayer);
+  baseIdx=i; let ok=0, bad=0;
+  baseLayer=L.tileLayer(BASES[i][0],BASES[i][1])
+    .on('tileload',()=>{ok++;})
+    .on('tileerror',()=>{bad++; if(!ok&&bad>=3&&baseIdx<BASES.length-1)useBase(baseIdx+1);})
+    .addTo(map);
+  if(dark&&i>0)document.querySelector('.leaflet-tile-pane')?.style.setProperty('filter','invert(.92) hue-rotate(180deg) brightness(.9)');
+  else document.querySelector('.leaflet-tile-pane')?.style.removeProperty('filter');
+}
+useBase(0);
+setTimeout(()=>{if(baseLayer&&!document.querySelector('.leaflet-tile-loaded')&&baseIdx<BASES.length-1)useBase(baseIdx+1);},6000);
 L.marker(EMIRATES,{icon:L.divIcon({className:'',html:'<div style="font:600 12px var(--font);color:var(--ink-2);background:var(--surface);padding:4px 8px;border-radius:8px;box-shadow:var(--shadow);white-space:nowrap">Emirates Stadium</div>',iconSize:[110,24],iconAnchor:[55,12]}),interactive:false}).addTo(map);
 const knownLayer=L.layerGroup().addTo(map), nearLayer=L.layerGroup().addTo(map);
 let pinMarker=null, gpsMarker=null, accCircle=null, hereLine=null, here=null;
