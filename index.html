@@ -764,7 +764,7 @@ let toastT;function toast(m){let el=document.querySelector('.toast');if(!el){el=
 // Street → zone table built monthly from Islington's RingGo locator (tools/build_zones.py)
 let RINGGO=store.get('ringgo',{});
 async function loadZoneTable(){
-  for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/parkfree/main/data/zones.json']){
+  for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/Parkfree/main/data/zones.json']){
     try{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)continue;const d=await r.json();
       if(d&&d.streets&&Object.keys(d.streets).length){RINGGO=d.streets;store.set('ringgo',RINGGO);
         if(cur&&cur.name&&!cur.z&&cur.src!=='outside'){const z=resolveZone(cur.name,cur.lat,cur.lng,{});Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});}

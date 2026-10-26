@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 
 BASE = "https://myringgo.co.uk"
 LIST = BASE + "/islington/parkinglocator"
-UA = "ParkFree-Islington/1.0 (+https://github.com/ipancaldi/parkfree; personal, non-commercial)"
+UA = "ParkFree-Islington/1.0 (+https://github.com/ipancaldi/Parkfree; personal, non-commercial)"
 ZONES = {"A","B","C","D","E","F","G","H","HE","J","K","L","N","P","Q","R","S","T","TW","U","V","W","Y","Z"}
 
 

@@ -2,7 +2,7 @@
 
 Can I park here, now? A phone web app for Islington's 24 controlled parking zones, including Emirates Stadium event-day controls and the Resident Roamer scheme.
 
-**Live:** https://ipancaldi.github.io/parkfree/
+**Live:** https://ipancaldi.github.io/Parkfree/
 
 ## How it works
 - Finds the street you're on (GPS, map tap or search) using OpenStreetMap.
