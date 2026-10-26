@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="theme-color" content="#F2F4F7">
 <meta http-equiv="Cache-Control" content="no-cache">
-<meta name="parkfree-build" content="20261026215300">
+<meta name="parkfree-build" content="20261026215929">
 <title>ParkFree Islington</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
@@ -47,7 +47,8 @@ body[data-tone="stop"]{--tone:var(--stop);--tone-ink:var(--stop-ink);--tone-tint
 [hidden]{display:none!important}
 html,body{height:100%;overflow:hidden}
 body{background:var(--tone-wash);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;
-  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;font-variant-numeric:tabular-nums;transition:background .5s}
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;transition:background .5s}
+.scale,.bubble,.day b,.item .r,.evd b{font-variant-numeric:tabular-nums}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:none;background:none}
 a{color:var(--plate);text-decoration:none}
@@ -57,6 +58,7 @@ a{color:var(--plate);text-decoration:none}
 #wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:var(--tone);opacity:0;transition:opacity .5s,background .5s}
 body[data-tone="free"] #wash,body[data-tone="check"] #wash,body[data-tone="stop"] #wash{opacity:.11}
 .leaflet-container{font-family:var(--font);background:var(--canvas)}
+.leaflet-tile-pane{filter:saturate(.55) brightness(1.04) contrast(.92)}
 .leaflet-control-attribution{font-size:10px!important;background:color-mix(in srgb,var(--surface) 80%,transparent)!important;color:var(--ink-3)!important}
 .leaflet-control-attribution a{color:var(--ink-2)!important}
 .leaflet-tooltip{font-family:var(--font);font-size:12px;border-radius:8px;border:none;box-shadow:var(--shadow);background:var(--surface);color:var(--ink)}
@@ -171,6 +173,7 @@ body[data-tone="idle"] .logo{background:var(--go)}
 .item .t{min-width:0}
 .item .t b{display:block;font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .item .t span{display:block;font-size:13px}
+#zone-rows .item .t b{white-space:normal}
 .item .r{color:var(--ink-3);font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:6px}
 .item .r.col{flex-direction:column;align-items:flex-end;gap:0}
 .dotc{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:700;flex:none}
@@ -656,7 +659,6 @@ map.attributionControl.setPrefix(false);
 // Free basemaps, no API key. If one provider doesn't answer, switch to the next.
 const OSMA='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 const BASES=[
-  [`https://{s}.basemaps.cartocdn.com/${dark?'dark_all':'light_all'}/{z}/{x}/{y}{r}.png`,{subdomains:'abcd',maxZoom:20,attribution:OSMA+' © <a href="https://carto.com/attributions">CARTO</a>'}],
   ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:OSMA}],
   ['https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,attribution:OSMA+' · OSM France'}],
 ];
@@ -668,7 +670,7 @@ function useBase(i){
     .on('tileload',()=>{ok++;})
     .on('tileerror',()=>{bad++; if(!ok&&bad>=3&&baseIdx<BASES.length-1)useBase(baseIdx+1);})
     .addTo(map);
-  if(dark&&i>0)document.querySelector('.leaflet-tile-pane')?.style.setProperty('filter','invert(.92) hue-rotate(180deg) brightness(.9)');
+  if(dark)document.querySelector('.leaflet-tile-pane')?.style.setProperty('filter','invert(.92) hue-rotate(180deg) brightness(.9)');
   else document.querySelector('.leaflet-tile-pane')?.style.removeProperty('filter');
 }
 useBase(0);
