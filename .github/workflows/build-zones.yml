@@ -38,10 +38,10 @@ jobs:
           git add data/
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "Update street zones from RingGo locator"
-          SHA=$(git rev-parse HEAD)
-          git push origin HEAD:main
-          git fetch origin gh-pages
-          git checkout -B gh-pages origin/gh-pages
-          git checkout "$SHA" -- data/
-          git commit -m "Update street zones from RingGo locator"
-          git push origin gh-pages
+          # main may have moved while collecting; rebase onto it (only data/ changed here)
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push origin HEAD:main && break
+            sleep 10
+          done
+          # gh-pages mirrors main
+          git push -f origin HEAD:gh-pages
