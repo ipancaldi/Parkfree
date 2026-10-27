@@ -65,13 +65,25 @@ const SIGN = ((PF) => {
     return [...set];
   }
 
+  const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  function datesIn(T) {
+    const out = [], today = PF.londonNow().date, y0 = +today.slice(0, 4);
+    const push = (d, m, y) => { y = y ? (+y < 100 ? 2000 + +y : +y) : y0; if (m < 1 || m > 12 || d < 1 || d > 31) return;
+      out.push(`${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`); };
+    let m; const re1 = /\b(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})\b/g;
+    while ((m = re1.exec(T))) push(+m[1], +m[2], m[3]);
+    const re2 = new RegExp(`\\b(\\d{1,2})(?:ST|ND|RD|TH)?\\s+(${MON.join('|')})[A-Z]*\\.?(?:\\s+(\\d{4}))?`, 'g');
+    while ((m = re2.exec(T))) push(+m[1], MON.indexOf(m[2]) + 1, m[3]);
+    return [...new Set(out)].sort();
+  }
   const dur = (n, u) => /^H/.test(u) ? +n * 60 : +n;
 
   function parse(text) {
     const T = clean(text);
     const lines = T.split(/\n+/).map(s => s.trim()).filter(Boolean);
     const sign = { zone: null, windows: [], anyTime: false, permit: false, paid: false, disabled: false, loading: false,
-      noWaiting: false, special: null, maxStay: null, noReturn: null, exceptBH: false, assumedDays: false, text: T };
+      noWaiting: false, special: null, maxStay: null, noReturn: null, exceptBH: false, assumedDays: false,
+      suspended: false, dates: null, text: T };
 
     // zone letter
     const zm = T.match(/\b(?:ZONE|CPZ)\s*[:\-]?\s*([A-Z]{1,2})\b/) || T.match(/\b([A-Z]{1,2})\s+PERMIT\s*HOLDERS?\b/) || T.match(/PERMIT\s*HOLDERS?\s*(?:ONLY)?\s*(?:ZONE\s*)?([A-Z]{1,2})\b(?!\w)/);
@@ -91,6 +103,11 @@ const SIGN = ((PF) => {
     if (nr) sign.noReturn = dur(nr[1], nr[2]);
     sign.exceptBH = /BANK\s*HOLIDAYS?/.test(T) && /EXCEPT/.test(T);
     if (/AT\s*ANY\s*TIME|24\s*(HOURS|HRS)|ANY\s*TIME/.test(T)) sign.anyTime = true;
+    if (/SUSPEN[DS]/.test(T)) {
+      sign.suspended = true;
+      const ds = datesIn(T);
+      if (ds.length) sign.dates = { from: ds[0], to: ds[ds.length - 1] };
+    }
 
     // windows, line by line: days carry forward to the next times line
     let lastDays = null, event = false;
@@ -126,6 +143,8 @@ const SIGN = ((PF) => {
     for (let i = 5; i <= 8 * 1440; i += 5) { const u = PF.mk(t.date, start + i); if (inForce(sign, u) !== now) return u; }
     return null;
   }
+  const MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fmtDay = iso => `${+iso.slice(8)} ${MN[+iso.slice(5, 7) - 1]}`;
   const fmtDur = m => m % 60 === 0 ? `${m / 60} hour${m === 60 ? '' : 's'}` : `${m} minutes`;
   const W = (t, u) => u ? PF.whenLabel(t, u).replace(/^tomorrow (.*)$/, '$1 tomorrow') : '';
 
@@ -133,6 +152,14 @@ const SIGN = ((PF) => {
   function decide(sign, t, me = {}) {
     const words = [];
     if (sign.zone) words.push(`Zone ${sign.zone}`);
+    if (sign.suspended) {
+      const d = sign.dates, active = !d || (t.date >= d.from && t.date <= d.to);
+      const until = d ? ` until ${fmtDay(d.to)}` : '';
+      if (active && (!sign.windows.length || inForce(sign, t)))
+        return { tone: 'stop', head: 'Bay suspended', reason: `No parking here${until}. Suspended bays are enforced and cars can be removed.` };
+      if (active) { const f = nextFlip(sign, t); return { tone: 'free', head: 'Free to park', reason: `The suspension starts again ${W(t, f)}${until ? ',' + until.replace(' until', ' ending') : ''}.`, until: f }; }
+      if (d && t.date < d.from) return { tone: 'check', head: 'Suspension coming', reason: `This bay is suspended from ${fmtDay(d.from)}${until}. Plan to move before then.` };
+    }
     if (!sign.windows.length && !sign.noWaiting)
       return { tone: 'check', head: 'Couldn’t read the hours', reason: 'Set the days and times below, or check the sign yourself.' };
     const on = sign.noWaiting && !sign.windows.length ? true : inForce(sign, t);
@@ -179,6 +206,6 @@ const SIGN = ((PF) => {
   }
   const windowLabel = w => `${daysLabel(w.days)} ${PF.fmt(w.from)}–${w.to === 1440 ? '24:00' : PF.fmt(w.to)}${w.event ? ' (event days)' : ''}`;
 
-  return { clean, timesIn, daysIn, parse, inForce, decide, daysLabel, windowLabel };
+  return { clean, timesIn, daysIn, datesIn, parse, inForce, nextFlip, decide, daysLabel, windowLabel, fmtDay };
 })(typeof PF !== 'undefined' ? PF : require('./logic.js'));
 if (typeof module !== 'undefined') module.exports = SIGN;

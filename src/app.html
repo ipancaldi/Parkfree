@@ -12,7 +12,8 @@
 <meta name="parkfree-build" content="/*BUILD*/">
 <title>ParkFree Islington</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
@@ -196,6 +197,28 @@ body[data-tone="idle"] .ans .ic{background:var(--ink-3)}
 details summary{list-style:none;cursor:pointer}
 details summary::-webkit-details-marker{display:none}
 
+.carbar{display:flex;align-items:center;gap:10px;margin:-2px 0 12px;padding:10px 12px;border-radius:14px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.carbar .ic{width:34px;height:34px;border-radius:10px;background:var(--ink);color:var(--surface);display:grid;place-items:center;flex:none}
+.carbar .t{flex:1;min-width:0}
+.carbar b{display:block;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.carbar span{display:block;font-size:13px;color:var(--ink-2)}
+.carbar span.late{color:var(--stop-ink);font-weight:600}
+.carbar button{font-size:13px;font-weight:600;color:var(--plate);padding:6px 2px;flex:none}
+.pay{display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border-radius:14px;margin-top:8px;background:var(--surface);color:var(--ink);font-weight:600;font-size:15px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.pay small{font-weight:500;color:var(--ink-3);font-size:13px}
+.actions{grid-template-columns:repeat(4,1fr)!important}
+.act.park{background:var(--ink);color:var(--surface)}
+.act.park.on{background:var(--go);color:#fff}
+.report{display:flex;gap:16px;flex-wrap:wrap}
+.report button{font-size:13.5px;font-weight:600;color:var(--plate);padding:4px 0}
+#camview{position:fixed;inset:0;z-index:70;background:#000;display:flex;flex-direction:column}
+#camview video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#camview .frame{position:absolute;left:8%;right:8%;top:16%;bottom:24%;border-radius:18px;box-shadow:0 0 0 2000px rgba(0,0,0,.55);outline:3px solid rgba(255,255,255,.9)}
+#camview .hint{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 70px);text-align:center;color:#fff;font-size:15px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.6);padding:0 24px}
+#camview .cvbar{position:absolute;left:0;right:0;bottom:0;padding:18px 24px calc(22px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between}
+#camview .shutter{width:76px;height:76px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.35)}
+#camview .side{width:64px;color:#fff;font-weight:600;font-size:14px}
+#camview .close{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:22px}
 .fab.scan{background:var(--ink);color:var(--surface)}
 #scanfab{position:fixed;z-index:15;right:max(12px,env(safe-area-inset-right,0px))}
 #scan{position:fixed;z-index:45;inset:0;background:var(--canvas);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);visibility:hidden}
@@ -273,6 +296,12 @@ details summary::-webkit-details-marker{display:none}
 <section id="card" aria-label="Parking answer">
   <div class="head" id="head">
     <div class="grab" aria-hidden="true"></div>
+    <div class="carbar" id="carbar" hidden>
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11a2 2 0 0 1 2 2v4a1 1 0 0 1-1 1h-1a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H4a1 1 0 0 1-1-1v-4a2 2 0 0 1 2-2zm2.2 0h9.6l-1.2-3.3a.5.5 0 0 0-.5-.3h-6.2a.5.5 0 0 0-.5.3z"/></svg></div>
+      <div class="t" id="car-go"><b id="car-name"></b><span id="car-when"></span></div>
+      <button type="button" id="car-remind">Remind me</button>
+      <button type="button" id="car-clear" style="color:var(--ink-3)">Moved</button>
+    </div>
     <div class="ans" aria-live="polite">
       <div class="ic" id="a-ic"></div>
       <div class="txt"><h2 id="a-head">Can I park here?</h2><p id="a-sub">Find out where you are, right now</p></div>
@@ -289,6 +318,7 @@ details summary::-webkit-details-marker{display:none}
     </div>
 
     <button class="cta" id="cta" type="button" hidden></button>
+    <a class="pay" id="pay" target="_blank" rel="noopener" hidden></a>
 
     <div class="picker" id="picker" hidden>
       <p id="pk-msg">Which zone letter is on the street sign? You only need to do this once.</p>
@@ -299,6 +329,7 @@ details summary::-webkit-details-marker{display:none}
 
   <div class="more" id="more">
     <div class="actions" id="actions">
+      <button class="act park" id="a-park" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11a2 2 0 0 1 2 2v4a1 1 0 0 1-1 1h-1a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H4a1 1 0 0 1-1-1v-4a2 2 0 0 1 2-2zm2.2 0h9.6l-1.2-3.3a.5.5 0 0 0-.5-.3h-6.2a.5.5 0 0 0-.5.3z"/></svg><span>Park here</span></button>
       <a class="act" id="a-dir" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>Directions</a>
       <button class="act" id="a-save" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span>Save</span></button>
       <button class="act" id="a-share" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>Share</button>
@@ -319,7 +350,8 @@ details summary::-webkit-details-marker{display:none}
       <dl class="rules" id="rules"></dl>
     </div>
 
-    <p class="fine">Always check the signs. Bays can be suspended, and yellow lines, loading bans and disabled bays aren't shown here.</p>
+    <div class="report" id="report" hidden><button type="button" id="r-wrong">This answer was wrong</button><button type="button" id="r-susp">Bay suspended here</button></div>
+    <p class="fine">Always check the signs. Islington doesn't publish bay suspensions: scan a yellow suspension notice and ParkFree remembers it for this spot.</p>
   </div>
 </section>
 
@@ -337,11 +369,20 @@ details summary::-webkit-details-marker{display:none}
       <p class="mine" id="s-limits"></p>
     </div>
     <p class="mine" id="s-mine"></p>
-    <div class="sbtns" id="s-btns" hidden><button id="s-retake" type="button">Scan again</button><button class="primary" id="s-use" type="button">Save zone for this street</button></div>
+    <div class="sbtns" id="s-btns" hidden><button id="s-retake" type="button">Scan again</button><button class="primary" id="s-use" type="button">Use for this spot</button></div>
     <details id="s-rawd" hidden><summary class="mine">What we read</summary><div class="raw" id="s-raw"></div></details>
     <p class="fine">The photo is read on your phone and isn't uploaded. Check the result against the sign: suspensions and temporary notices aren't detected.</p>
   </div>
 </section>
+
+<div id="camview" hidden>
+  <video id="cv-video" playsinline muted autoplay></video>
+  <div class="frame" id="cv-frame"></div>
+  <div class="hint">Fit the whole sign inside the frame, straight on</div>
+  <button class="close" id="cv-close" type="button" aria-label="Close camera">×</button>
+  <div class="cvbar"><button class="side" id="cv-lib" type="button">Photos</button><button class="shutter" id="cv-shot" type="button" aria-label="Take photo"></button><span class="side"></span></div>
+</div>
+<input type="file" id="lib" accept="image/*" hidden>
 
 <section id="menu" aria-label="Menu" aria-hidden="true">
   <div class="mhead"><h2>ParkFree</h2><button class="fab" id="m-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
@@ -353,11 +394,13 @@ details summary::-webkit-details-marker{display:none}
       <p class="help">With an Islington resident permit, your zone shows as covered, and you can also use resident bays in any zone Monday to Saturday, 11:00 to 15:00.</p>
     </div>
     <div class="sec"><h3>Saved places</h3><div class="list" id="saved"></div></div>
+    <div class="sec"><h3>Scanned signs <span>used for those spots</span></h3><div class="list" id="scans"></div></div>
     <div class="sec"><h3>Emirates events <span>extra controls nearby</span></h3><div class="list" id="events"></div></div>
     <details class="sec"><summary><h3>All 24 zones <span>tap to show</span></h3></summary><div class="list" id="zones"></div></details>
     <div class="sec">
       <h3>About</h3>
-      <p class="fine">Zones come from Islington's pay-by-phone records, refreshed monthly. Hours come from Islington Council's published rules, checked 26 October 2026, and use London time. Where a street's zone isn't known, you read the sign once and ParkFree remembers it on this phone.</p>
+      <p class="fine" id="m-install"></p>
+      <p class="fine">Zones come from Islington's pay-by-phone records, refreshed monthly. Emirates events refresh twice a week. Hours come from Islington Council's published rules, checked 26 October 2026, and use London time. Where a street's zone isn't known, you read the sign once and ParkFree remembers it on this phone.</p>
       <p class="fine" style="margin-top:8px">Sources: <a href="https://www.islington.gov.uk/parking/parking-restrictions/controlled-parking-zones" target="_blank" rel="noopener">CPZ hours</a>, <a href="https://www.islington.gov.uk/parking/parking-restrictions/emirates-stadium-restrictions" target="_blank" rel="noopener">Emirates restrictions</a>, <a href="https://www.islington.gov.uk/parking/parking-restrictions/resident-roamer-scheme" target="_blank" rel="noopener">Roamer scheme</a>, <a href="https://help.arsenal.com/support/solutions/articles/101000594163-fixture-and-event-timings-for-local-residents" target="_blank" rel="noopener">Arsenal fixtures</a>. Map © OpenStreetMap contributors.</p>
     </div>
   </div>
@@ -411,6 +454,16 @@ const norm=s=>(s||'').toLowerCase().replace(/\(\d+\)/g,' ').replace(/[,.']/g,' '
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 PF.setEvents(ARSENAL);
+// Your status in a zone: Blue Badge holders have no time limit in resident and shared-use bays
+function ST(z,t,pr){const st=PF.status(z,t,pr||profile);
+  if((pr||profile).badge&&!PF.isFree(st))return {state:'permit',badge:true,head:'You’re covered',detail:'Blue Badge: no time limit in resident and shared-use bays'};return st;}
+function NX(z,t,pr){const f0=PF.isFree(ST(z,t,pr)),start=t.min-(t.min%5);
+  for(let i=5;i<=8*1440;i+=5){const u=PF.mk(t.date,start+i);if(PF.isFree(ST(z,u,pr))!==f0)return u;}return null;}
+// Fixtures: prefer the twice-weekly list built from Arsenal's residents page
+(async()=>{try{const r=await fetch('data/events.json',{cache:'no-cache'});if(!r.ok)return;const d=await r.json();
+  const gen=(d.generated||'').slice(0,10),evs=(d.events||[]).filter(e=>/^\d{4}-\d{2}-\d{2}$/.test(e.date||''));
+  if(evs.filter(e=>e.date>=PF.londonNow().date).length<3)return;
+  PF.setEvents([...ARSENAL.filter(e=>e.date<gen),...evs.filter(e=>e.date>=gen)]);if(typeof render==='function')render();}catch(e){}})();
 
 // ================================================================
 //  TIME — London wall clock; "live" follows real time
@@ -588,7 +641,7 @@ function paintStreets(){
     if(st.k===curK)continue;
     const r=resolveZone(st.name,st.mid[0],st.mid[1]);
     let tone=null;
-    if(r.z){cache[r.z]=cache[r.z]||toneOf(PF.status(r.z,t,profile).state);tone=cache[r.z];}
+    if(r.z){cache[r.z]=cache[r.z]||toneOf(ST(r.z,t,profile).state);tone=cache[r.z];}
     else if(r.cands)tone='check';
     if(!tone)continue;
     st.segs.forEach(sg=>L.polyline(sg,{renderer:canvas,color:colorOf(tone),weight:map.getZoom()>=17?3:map.getZoom()>=16?5:3.5,opacity:map.getZoom()>=17?.55:.85,lineCap:'round',interactive:false}).addTo(streetLayer));
@@ -614,7 +667,7 @@ function offsetLine(pts,m,side){
 }
 function bayTone(name,lat,lng,t){
   const r=name?zoneFor(name,lat,lng):(()=>{const n=STREETS&&nearestLocal(lat,lng,40);return n?zoneFor(n.st.name,lat,lng):{};})();
-  return r.z?(PF.isFree(PF.status(r.z,t,profile))?'free':'stop'):'check';
+  return r.z?(PF.isFree(ST(r.z,t,profile))?'free':'stop'):'check';
 }
 function paintBays(){
   bayLayer.clearLayers();
@@ -655,7 +708,8 @@ async function checkPoint(lat,lng,opts={}){
     pin.setLatLng(snap);
     const z=zoneFor(name,lat,lng);
     cur={lat:snap[0],lng:snap[1],name,segs,z:z.z,src:z.src,cands:z.cands||null};
-    pickerOpen=!z.z&&!z.cands;
+    const sc=scanFor(norm(name),snap[0],snap[1]);if(sc){cur.sign=sc.sign;cur.scanTs=sc.ts;}
+    pickerOpen=!z.z&&!z.cands&&!cur.sign;
     render();
   }catch(e){if(id===reqId){cur={lat,lng,src:'error'};render();}}
 }
@@ -702,7 +756,7 @@ function showLocal(v){
   const hits=(STREETS||[]).filter(s=>s.k.includes(k)).sort((a,b)=>(a.k.startsWith(k)?0:1)-(b.k.startsWith(k)?0:1)||a.k.length-b.k.length).slice(0,6);
   const t=currentT();
   hits.forEach(s=>{const r=resolveZone(s.name,s.mid[0],s.mid[1]);let sub='Zone not known yet',badge='?';
-    if(r.z){const st=PF.status(r.z,t,profile);sub=`Zone ${r.z} · ${label(st.state)}`;badge=r.z;}else if(r.cands){sub=`Zones ${r.cands.join(' / ')}`;badge=r.cands[0];}
+    if(r.z){const st=ST(r.z,t,profile);sub=`Zone ${r.z} · ${label(st.state)}`;badge=r.z;}else if(r.cands){sub=`Zones ${r.cands.join(' / ')}`;badge=r.cands[0];}
     box.appendChild(resultBtn(s.name,sub,badge,()=>{visibleCentre(s.mid[0],s.mid[1],17);checkPoint(s.mid[0],s.mid[1]);}));});
   box.dataset.local=hits.length;
   if(!hits.length)box.innerHTML='<div class="msg">Searching…</div>';
@@ -762,6 +816,73 @@ $('cta').onclick=e=>{e.stopPropagation();const k=$('cta').dataset.k;
   if(k==='near'){setOpen(true);setTimeout(()=>$('s-near').scrollIntoView({block:'start',behavior:'smooth'}),80);}};
 
 // ================================================================
+//  PARK HERE + MOVE-BY REMINDER
+// ================================================================
+function moveByFor(c){const at=c.at;const e=spotEval(c,at);if(!e)return null;
+  if(e.free){const u=spotNext(c,at);return u?{date:u.date,min:u.min}:null;}
+  // Controlled now. If controls end before your paid stay runs out, you can stay until they start again.
+  const ms=(c.sign&&c.sign.maxStay)||c.maxStay, freeAt=spotNext(c,at);
+  if(freeAt&&(!ms||minsBetween(at,freeAt)<=ms)){const again=spotNext(c,freeAt);
+    if(!ms)return {date:freeAt.date,min:freeAt.min,paidUntilFree:true,again:again?{date:again.date,min:again.min}:null};
+    return again?{date:again.date,min:again.min}:null;}
+  if(ms){const u=PF.addMin(at,ms);return {date:u.date,min:u.min,paid:true};}
+  return {date:at.date,min:at.min,now:true};}
+const minsBetween=(a,b)=>Math.round((Date.parse(b.date)-Date.parse(a.date))/60000)+(b.min-a.min);
+$('a-park').onclick=()=>{if(!cur||!cur.name)return;
+  if(car&&near(car,cur)){car=null;store.set('car',null);if(carMarker){map.removeLayer(carMarker);carMarker=null;}toast('Parking cleared');render();return;}
+  const at=PF.londonNow(),rg=ringgoFor(cur.name,cur.z);
+  car={name:cur.name,lat:+cur.lat.toFixed(6),lng:+cur.lng.toFixed(6),z:cur.z,src:cur.src,sign:cur.sign?{...cur.sign,text:undefined}:null,at,maxStay:rg&&rg.maxStay||null,ts:Date.now()};
+  car.moveBy=moveByFor(car);store.set('car',car);
+  toast(car.moveBy?(car.moveBy.now?'Parked. Restrictions apply here now.':`Parked. Move by ${whenText(at,car.moveBy)}.`):'Parked. No restrictions in the next week.');render();};
+let carMarker=null;
+function renderCar(){
+  const bar=$('carbar');bar.hidden=!car;
+  if(carMarker&&!car){map.removeLayer(carMarker);carMarker=null;}
+  if(!car)return;
+  if(!carMarker)carMarker=L.marker([car.lat,car.lng],{interactive:false,zIndexOffset:850,icon:L.divIcon({className:'',html:'<div style="width:30px;height:30px;border-radius:9px;background:var(--ink);color:var(--surface);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)">'+SVG.car.replace(/22/g,'16')+'</div>',iconSize:[30,30],iconAnchor:[15,15]})}).addTo(map);
+  if(!car.moveBy||(!car.moveBy.paid&&!car.moveBy.now&&!car.moveBy.paidUntilFree))car.moveBy=moveByFor(car);
+  const now=PF.londonNow();$('car-name').textContent='Your car · '+car.name;
+  const w=$('car-when');w.className='';
+  if(!car.moveBy){w.textContent='No restrictions in the next week';$('car-remind').hidden=true;return;}
+  $('car-remind').hidden=false;
+  const left=minsBetween(now,car.moveBy);
+  if(car.moveBy.now){w.textContent='Restrictions applied when you parked. Check the sign.';w.className='late';$('car-remind').hidden=true;return;}
+  if(left<=0){w.textContent=`Move now. ${car.moveBy.paid?'Max stay ended':'Restrictions started'} ${whenText(now,car.moveBy)}.`;w.className='late';return;}
+  const h=Math.floor(left/60),m=left%60;
+  w.textContent=car.moveBy.paidUntilFree?`Pay until ${whenText(now,car.moveBy)}, then free${car.moveBy.again?` until ${whenText(now,car.moveBy.again)}`:''}`
+    :`${car.moveBy.paid?'Max stay ends':'Move by'} ${whenText(now,car.moveBy)} · ${h?h+' h ':''}${m} min left`;
+  if(left<=30)w.className='late';
+}
+$('car-go').onclick=e=>{e.stopPropagation();if(!car)return;visibleCentre(car.lat,car.lng,18);checkPoint(car.lat,car.lng);};
+$('car-clear').onclick=e=>{e.stopPropagation();car=null;store.set('car',null);render();toast('Parking cleared');};
+function londonToUTC(date,min){const [y,m,d]=date.split('-').map(Number);let g=Date.UTC(y,m-1,d,Math.floor(min/60),min%60);
+  for(let i=0;i<2;i++){const lt=PF.londonNow(new Date(g));g-=(minsBetween({date,min},lt))*60000;}return new Date(g);}
+const icsT=d=>d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+$('car-remind').onclick=e=>{e.stopPropagation();if(!car||!car.moveBy)return;
+  const start=londonToUTC(car.moveBy.date,car.moveBy.min),end=new Date(+start+10*60000);
+  const title=`Move the car (${car.name})`;
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ParkFree Islington//EN','BEGIN:VEVENT',`UID:parkfree-${car.ts}@ipancaldi.github.io`,`DTSTAMP:${icsT(new Date())}`,
+    `DTSTART:${icsT(start)}`,`DTEND:${icsT(end)}`,`SUMMARY:${title}`,`LOCATION:${car.name}, Islington`,
+    `DESCRIPTION:${car.moveBy.paid?'Max stay ends':'Parking restrictions start'} at ${PF.fmt(car.moveBy.min)}. Map: https://maps.apple.com/?ll=${car.lat},${car.lng}`,
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+title,'TRIGGER:-PT15M','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='move-the-car.ics';
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},5000);
+  toast('Add it to your calendar: you’ll get an alert 15 minutes before');};
+
+// ================================================================
+//  REPORT A WRONG ANSWER (prefilled GitHub issue, no account data sent anywhere else)
+// ================================================================
+$('r-wrong').onclick=()=>{if(!cur||!cur.name)return;const t=currentT(),v=compute(t),build=document.querySelector('meta[name="parkfree-build"]').content;
+  const ll=`${cur.lat.toFixed(5)},${cur.lng.toFixed(5)}`;
+  const body=[`**Street:** ${cur.name}`,`**Where:** https://www.openstreetmap.org/?mlat=${cur.lat.toFixed(5)}&mlon=${cur.lng.toFixed(5)}#map=19/${cur.lat.toFixed(5)}/${cur.lng.toFixed(5)}`,
+    `**When:** ${t.date} ${PF.fmt(t.min)} (London)`,`**ParkFree said:** ${v.head}. ${v.sub}`,`**Zone used:** ${cur.z||'none'} (${cur.sign?'scanned sign':cur.src||'unknown'})`,
+    `**Permits:** ${profile.permit?'Zone '+profile.permit:'none'}${profile.badge?', Blue Badge':''}`,`**Build:** ${build}`,'','**What the sign actually says:**',''].join('\n');
+  const reps=store.get('reports',[]);reps.unshift({ll,name:cur.name,at:t,said:v.head});store.set('reports',reps.slice(0,50));
+  const a=document.createElement('a');a.target='_blank';a.rel='noopener';
+  a.href=`https://github.com/ipancaldi/Parkfree/issues/new?title=${encodeURIComponent('Wrong answer: '+cur.name)}&body=${encodeURIComponent(body)}`;a.click();};
+$('r-susp').onclick=()=>{toast('Scan the yellow suspension notice. ParkFree will remember it for this spot.');setTimeout(openCamera,600);};
+
+// ================================================================
 //  REMOTE DATA
 // ================================================================
 (async()=>{for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/Parkfree/main/data/zones.json']){
@@ -770,6 +891,27 @@ $('cta').onclick=e=>{e.stopPropagation();const k=$('cta').dataset.k;
       if(cur&&cur.name&&cur.src!=='you'&&cur.src!=='council'&&cur.src!=='outside'&&cur.src!=='nostreet'&&cur.src!=='error'){const z=zoneFor(cur.name,cur.lat,cur.lng);Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});pickerOpen=!z.z&&!z.cands;}
       render();drawStreets();return;}}catch(e){}}})();
 fetch('https://www.gov.uk/bank-holidays.json').then(r=>r.json()).then(d=>{PF.setBankHols(d['england-and-wales'].events.map(e=>e.date));render();}).catch(()=>{});
+
+// ================================================================
+//  SPOT: zone rules, or a sign you scanned here
+// ================================================================
+const me=()=>({permit:profile.permit,badge:!!profile.badge});
+let scans=store.get('scans',[]), car=store.get('car',null);
+function scanFor(k,lat,lng){const today=PF.londonNow().date;
+  return scans.find(x=>x.k===k&&Math.hypot((x.lat-lat)*111000,(x.lng-lng)*69000)<45&&!(x.sign.suspended&&x.sign.dates&&x.sign.dates.to<today))||null;}
+function spotEval(sp,t){
+  if(sp.sign){const d=SIGN.decide(sp.sign,t,me());return {tone:d.tone,head:d.head,reason:d.reason,cls:d.tone==='free'?'free':d.tone==='stop'?'restricted':'matchday',free:d.tone==='free'};}
+  if(!sp.z)return null;const st=ST(sp.z,t),free=PF.isFree(st);
+  return {tone:free?(sp.src==='nearby'?'check':'free'):'stop',cls:st.state,free,state:st.state};
+}
+function spotNext(sp,t){const a=spotEval(sp,t);if(!a)return null;const start=t.min-(t.min%5);
+  for(let i=5;i<=8*1440;i+=5){const u=PF.mk(t.date,start+i);const b=spotEval(sp,u);if(b&&b.free!==a.free)return u;}return null;}
+function ribbonSpot(sp,date){const out=[];let prev=null;
+  for(let m=0;m<1440;m+=15){const e=spotEval(sp,PF.mk(date,m));const s=e?e.cls:'free';if(prev&&prev.s===s)prev.n++;else{prev={s,n:1,from:m};out.push(prev);}}return out;}
+function ringgoFor(name,z){const rg=RINGGO[norm(name)];if(!rg||!rg.codes)return null;
+  const codes=(z&&rg.codes[z])||Object.values(rg.codes).flat();if(!codes||!codes.length)return null;
+  const ms=rg.maxStay?+Object.entries(rg.maxStay).sort((a,b)=>b[1]-a[1])[0][0]:null;return {code:codes[0],maxStay:ms};}
+const hrs=m=>m%60?`${m} min`:`${m/60} hour${m===60?'':'s'}`;
 
 // ================================================================
 //  ANSWER
@@ -785,19 +927,23 @@ function compute(t){
   if(cur.src==='error')return {tone:'check',icon:'check',head:'Couldn’t check that',sub:'Check your signal and tap the street again'};
   if(cur.src==='outside')return {tone:'check',icon:'check',head:'Outside Islington',sub:'ParkFree only knows Islington’s zones'};
   if(cur.src==='nostreet')return {tone:'check',icon:'check',head:'No street here',sub:'Tap closer to a road'};
+  if(cur.sign){const e=spotEval(cur,t),nx=spotNext(cur,t);
+    const sub=e.free?(nx?`Until ${whenText(t,nx)}`:'All week'):(nx?`Free from ${whenText(t,nx)}`:'Not this week');
+    return {tone:e.tone,icon:e.tone==='free'?'free':e.tone==='stop'?'stop':'check',head:e.head,sub,then:e.reason,zone:cur.sign.zone||cur.z||'sign',zoneLabel:cur.sign.zone||cur.z||null,signBased:true};}
   if(!cur.z){
-    if(cur.cands){const sts=cur.cands.map(z=>PF.status(z,t,profile)),allFree=sts.every(PF.isFree),allStop=sts.every(s=>!PF.isFree(s));
+    if(cur.cands){const sts=cur.cands.map(z=>ST(z,t,profile)),allFree=sts.every(PF.isFree),allStop=sts.every(s=>!PF.isFree(s));
       return {tone:allStop?'stop':'check',icon:allStop?'stop':'check',head:allFree?'Probably free':allStop?'Not free now':'Check the sign',
         sub:allFree?`Zones ${cur.cands.join(' and ')} are both free now`:allStop?`Zones ${cur.cands.join(' and ')} are both controlled`:`Zones ${cur.cands.join(' and ')} meet here`,zone:cur.cands[0],zoneLabel:cur.cands.join('/')};}
     return {tone:'check',icon:'check',head:'Check the sign',sub:'We don’t know this street’s zone yet'};
   }
-  const st=PF.status(cur.z,t,profile),free=PF.isFree(st),nx=PF.nextChange(cur.z,t,profile);
+  const st=ST(cur.z,t,profile),free=PF.isFree(st),nx=NX(cur.z,t,profile);
   const guess=cur.src==='nearby';
   let sub;
   if(nx){sub=free?`Until ${whenText(t,nx)}`:`Free from ${whenText(t,nx)}`;}
   else sub=free?'All week':'All week, around the clock';
   let then='';
-  if(nx){const st2=PF.status(cur.z,nx,profile),nx2=PF.nextChange(cur.z,nx,profile);then=`Then ${thenWords(st2.state)}${nx2?` until ${whenText(t,nx2)}`:''}`;}
+  if(nx){const st2=ST(cur.z,nx,profile),nx2=NX(cur.z,nx,profile);then=`Then ${thenWords(st2.state)}${nx2?` until ${whenText(t,nx2)}`:''}`;}
+  if(st.badge)return {tone:'free',icon:'free',head:'You’re covered',sub:'Blue Badge, no time limit',then:'',state:st.state,zone:cur.z,zoneLabel:cur.z};
   if(guess)return {tone:free?'check':'stop',icon:free?'check':'stop',head:free?'Probably free':'Probably not free',sub,then,state:st.state,zone:cur.z,zoneLabel:cur.z};
   return {tone:free?'free':'stop',icon:free?'free':'stop',head:headline(st.state),sub,then,state:st.state,zone:cur.z,zoneLabel:cur.z};
 }
@@ -806,7 +952,7 @@ function compute(t){
 //  RENDER
 // ================================================================
 function ribbon(z,date){const out=[];let prev=null;
-  for(let m=0;m<1440;m+=15){const s=PF.status(z,PF.mk(date,m),profile).state;if(prev&&prev.s===s)prev.n++;else{prev={s,n:1,from:m};out.push(prev);}}return out;}
+  for(let m=0;m<1440;m+=15){const s=ST(z,PF.mk(date,m),profile).state;if(prev&&prev.s===s)prev.n++;else{prev={s,n:1,from:m};out.push(prev);}}return out;}
 function render(){
   const t=currentT(), v=compute(t);
   document.body.dataset.tone=v.tone;
@@ -816,7 +962,7 @@ function render(){
   const has=!!(cur&&cur.name&&!cur.loading&&!['error','outside','nostreet'].includes(cur.src));
   $('a-where').hidden=!has;
   if(has){$('a-street').textContent=cur.name;
-    const src={you:'confirmed',council:'council data',nearby:'estimated',multi:'zones meet'}[cur.src]||'';
+    const src=cur.sign?'your scan':({you:'confirmed',council:'council data',nearby:'estimated',multi:'zones meet'}[cur.src]||'');
     $('a-src').textContent=src;$('a-sep').hidden=!src;$('b-fix').hidden=pickerOpen;
     $('b-fix').textContent=(cur.src==='nearby'||cur.src==='multi')?'Confirm':'Wrong zone?';}
   // event flag
@@ -827,7 +973,7 @@ function render(){
   // timeline
   $('tl').hidden=!v.zone||pickerOpen;
   if(v.zone&&!pickerOpen){
-    const rib=ribbon(v.zone,t.date);
+    const rib=v.signBased?ribbonSpot(cur,t.date):ribbon(v.zone,t.date);
     $('bar').innerHTML=rib.map(r=>`<i class="${r.s}" style="width:${r.n/96*100}%"></i>`).join('');
     $('knob').style.left=(t.min/1440*100)+'%';$('slider').value=t.min;
     let marks=rib.slice(1).map(r=>r.from).filter(m=>m>=100&&m<=1340);marks=marks.filter((m,i)=>i===0||m-marks[i-1]>=140);
@@ -837,8 +983,13 @@ function render(){
   // primary button
   const cta=$('cta');
   if(!cur){cta.hidden=false;cta.dataset.k='gps';cta.innerHTML=SVG.idle.replace('22','18').replace('22','18')+'Check where I am';}
-  else if(has&&v.zone&&!PF.isFree(PF.status(v.zone,t,profile))&&!pickerOpen&&!openState){cta.hidden=false;cta.dataset.k='near';cta.textContent='Find a free street nearby';}
+  else if(has&&v.zone&&v.tone==='stop'&&!pickerOpen&&!openState){cta.hidden=false;cta.dataset.k='near';cta.textContent='Find a free street nearby';}
   else cta.hidden=true;
+  // pay by phone
+  const rg=has&&!pickerOpen&&v.tone!=='free'&&(!cur.sign||cur.sign.paid)?ringgoFor(cur.name,cur.z):null;
+  $('pay').hidden=!rg;
+  if(rg){$('pay').href=`https://myringgo.co.uk/islington/parkinglocator/${rg.code}`;
+    $('pay').innerHTML=`Pay with RingGo <small>location ${rg.code}${rg.maxStay?` · max ${hrs(rg.maxStay)}`:''}</small>`;}
   // picker
   $('picker').hidden=!(pickerOpen&&has);
   if(pickerOpen&&has){$('pk-msg').textContent=cur.cands?`Zones ${cur.cands.join(' and ')} both cover ${cur.name}. Which letter is on the nearest sign?`:`Which zone letter is on the sign for ${cur.name}? You only do this once.`;
@@ -848,7 +999,10 @@ function render(){
   if(hereLine){map.removeLayer(hereLine);hereLine=null;}
   if(has&&cur.segs)hereLine=L.layerGroup(cur.segs.map(s=>L.polyline(s,{renderer:canvas,color:colorOf(v.tone),weight:map.getZoom()>=17?5:9,opacity:.95,lineCap:'round',interactive:false}))).addTo(map);
   // expanded detail
-  $('actions').hidden=!has;
+  $('actions').hidden=!has;$('report').hidden=!has;
+  const parkedHere=!!(car&&cur&&has&&near(car,cur));
+  $('a-park').classList.toggle('on',parkedHere);$('a-park').querySelector('span').textContent=parkedHere?'Parked':'Park here';
+  renderCar();
   if(has){$('a-dir').href=`https://maps.apple.com/?daddr=${cur.lat.toFixed(5)},${cur.lng.toFixed(5)}&dirflg=d`;
     $('a-save').classList.toggle('on',isSaved());$('a-save').querySelector('span').textContent=isSaved()?'Saved':'Save';}
   renderNearby(t,has);renderDays(t,v);renderRules(v,has);
@@ -864,7 +1018,7 @@ function renderNearby(t,has){
     if(p[0]<b[0]-.006||p[0]>b[2]+.006||p[1]<b[1]-.009||p[1]>b[3]+.009)continue;
     const r=resolveZone(st.name,st.mid[0],st.mid[1]);if(!r.z)continue;
     const d=distTo(st,p);if(!d||d.d>650)continue;
-    const s=PF.status(r.z,t,profile);out.push({st,z:r.z,d:d.d,pt:d.p,s,free:PF.isFree(s),nx:PF.nextChange(r.z,t,profile)});}
+    const s=ST(r.z,t,profile);out.push({st,z:r.z,d:d.d,pt:d.p,s,free:PF.isFree(s),nx:NX(r.z,t,profile)});}
   const rows=out.sort((a,b)=>(b.free-a.free)||a.d-b.d).slice(0,5);
   const nFree=out.filter(x=>x.free).length;
   $('near-note').textContent=out.length?(nFree?`${nFree} free now`:'none free right now'):'';
@@ -883,11 +1037,19 @@ function renderDays(t,v){
   $('days').innerHTML=h;$('days').querySelectorAll('.day').forEach(b=>b.onclick=()=>setDay(b.dataset.d));
 }
 function renderRules(v,has){
+  if(has&&cur.sign){const g=cur.sign;$('s-rules').hidden=false;
+    const who=[g.permit&&`${g.zone?'Zone '+g.zone+' ':''}permit holders`,g.paid&&'pay by phone',g.disabled&&'Blue Badge holders',g.loading&&'loading',g.special].filter(Boolean).join(', ');
+    const rows=[['From your scan',g.suspended?`Suspended${g.dates?` ${SIGN.fmtDay(g.dates.from)}–${SIGN.fmtDay(g.dates.to)}`:''}`:(who||'Restrictions')],
+      ['Hours',g.windows.length?g.windows.map(SIGN.windowLabel).join('; '):(g.anyTime?'At any time':'Not read')]];
+    if(g.maxStay)rows.push(['Max stay',hrs(g.maxStay)+(g.noReturn?`, no return within ${hrs(g.noReturn)}`:'')]);
+    if(v.then)rows.unshift(['Now',v.then]);
+    $('rules').innerHTML=rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('');return;}
   $('s-rules').hidden=!(has&&cur.z); if(!(has&&cur.z))return;
   const z=cur.z,Z=PF.ZONES[z];
   const rows=[['Controlled',PF.zoneLabel(z)],['Event days',Z.md?PF.mdLabel(z).replace('Event days: ',''):'No extra controls'],
     ['Who can park',`Zone ${z} permits and pay-by-phone. Any Islington resident permit Mon–Sat 11:00–15:00.`]];
   if(v.then)rows.unshift(['After that',v.then.replace(/^Then /,'').replace(/^./,c=>c.toUpperCase())]);
+  const rg=ringgoFor(cur.name,z);if(rg)rows.push(['Pay by phone',`RingGo location ${rg.code}${rg.maxStay?`, max stay ${hrs(rg.maxStay)}`:''}`]);
   $('rules').innerHTML=rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('');
 }
 
@@ -902,13 +1064,19 @@ $('permit').value=profile.permit||'';
 $('permit').onchange=e=>{profile.permit=e.target.value||null;store.set('profile',profile);render();toast(profile.permit?`Permit set to Zone ${profile.permit}`:'Permit removed');};
 function renderMenu(){
   const t=currentT();
-  $('saved').innerHTML=saved.length?saved.map((s,i)=>{const st=s.z?PF.status(s.z,t,profile):null,tone=st?(PF.isFree(st)?'free':'stop'):'check';
+  $('scans').innerHTML=scans.length?scans.slice(0,20).map((x,i)=>{const g=x.sign;const what=g.suspended?`Suspended${g.dates?' until '+SIGN.fmtDay(g.dates.to):''}`:(g.windows.length?g.windows.map(SIGN.windowLabel).join('; '):'Hours not read');
+    return `<div class="row"><span class="zplate" style="background:${g.suspended?'var(--stop)':'var(--plate)'}">${g.zone||'•'}</span><span class="t"><b>${esc(x.name)}</b><span>${esc(what)}</span></span><button class="x" data-del="${i}" type="button" aria-label="Forget this scan">×</button></div>`;}).join('')
+    :'<div class="row"><span class="t"><b>No signs scanned yet</b><span>Scan a sign and tap “Use for this spot”.</span></span></div>';
+  $('scans').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{scans.splice(+b.dataset.del,1);store.set('scans',scans);renderMenu();if(cur&&cur.sign){delete cur.sign;checkPoint(cur.lat,cur.lng);}});
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  $('m-install').textContent=standalone?'':'Install ParkFree: in Safari tap Share, then Add to Home Screen. It opens full screen and keeps working with a weak signal.';
+  $('saved').innerHTML=saved.length?saved.map((s,i)=>{const st=s.z?ST(s.z,t,profile):null,tone=st?(PF.isFree(st)?'free':'stop'):'check';
     return `<button class="row" data-i="${i}" type="button"><span class="d bg-${tone}"></span><span class="t"><b>${esc(s.name)}</b><span>${st?label(st.state)+' now':'Zone not known'}${s.z?' · Zone '+s.z:''}</span></span><span class="r">›</span></button>`;}).join('')
     :'<div class="row"><span class="t"><b>Nothing saved yet</b><span>Open a street’s details and tap Save.</span></span></div>';
   $('saved').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const s=saved[+b.dataset.i];openMenu(false);visibleCentre(s.lat,s.lng,17);checkPoint(s.lat,s.lng);});
   const up=PF.EVENTS.filter(e=>e.date>=t.date).slice(0,8);
   $('events').innerHTML=up.map(e=>{const d=PF.mk(e.date,0);return `<div class="row"><span class="evd">${DN[d.dow]}<b>${+e.date.slice(8)}</b>${MN[+e.date.slice(5,7)-1]}</span><span class="t"><b>${esc(e.name)}</b><span>Kick-off ${e.ko}</span></span></div>`;}).join('')||'<div class="row"><span class="t"><b>No events listed</b></span></div>';
-  $('zones').innerHTML=PF.ZONE_IDS.map(z=>{const s=PF.status(z,t,profile),nx=PF.nextChange(z,t,profile),f=PF.isFree(s);
+  $('zones').innerHTML=PF.ZONE_IDS.map(z=>{const s=ST(z,t,profile),nx=NX(z,t,profile),f=PF.isFree(s);
     return `<div class="row"><span class="zplate">${z}</span><span class="t"><b style="white-space:normal">${PF.zoneLabel(z)}</b>${PF.ZONES[z].md?`<span>${PF.mdLabel(z)}</span>`:''}</span><span class="r c-${f?'free':'stop'}">${label(s.state)}${nx?`<br><span style="color:var(--ink-3)">${f?'until':'from'} ${PF.whenLabel(t,nx)}</span>`:''}</span></div>`;}).join('');
 }
 
@@ -920,9 +1088,26 @@ $('badge').onchange=e=>{profile.badge=e.target.checked;store.set('profile',profi
 let ocrWorker=null, scanSign=null, scanBusy=false;
 function openScan(v){$('scan').classList.toggle('open',v);$('scan').setAttribute('aria-hidden',String(!v));}
 $('s-close').onclick=()=>openScan(false);
-$('scanfab').onclick=()=>$('cam').click();
-$('pk-scan').onclick=e=>{e.stopPropagation();$('cam').click();};
-$('s-retake').onclick=()=>$('cam').click();
+$('scanfab').onclick=()=>openCamera();
+$('pk-scan').onclick=e=>{e.stopPropagation();openCamera();};
+$('s-retake').onclick=()=>openCamera();
+let camStream=null;
+async function openCamera(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('cam').click();return;}
+  try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1440}},audio:false});}
+  catch(e){$('cam').click();return;}
+  const v=$('cv-video');v.srcObject=camStream;$('camview').hidden=false;try{await v.play();}catch(e){}
+}
+function closeCamera(){if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}$('camview').hidden=true;}
+$('cv-close').onclick=closeCamera;
+$('cv-lib').onclick=()=>{closeCamera();$('lib').click();};
+$('lib').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)scanPhoto(f);};
+$('cv-shot').onclick=()=>{const v=$('cv-video'),vw=v.videoWidth,vh=v.videoHeight;if(!vw)return;
+  const er=v.getBoundingClientRect(),fr=$('cv-frame').getBoundingClientRect();
+  const k=Math.max(er.width/vw,er.height/vh),ox=(er.width-vw*k)/2,oy=(er.height-vh*k)/2;
+  let sx=Math.max(0,(fr.left-er.left-ox)/k),sy=Math.max(0,(fr.top-er.top-oy)/k);const sw=Math.min(vw-sx,fr.width/k),sh=Math.min(vh-sy,fr.height/k);
+  const c=document.createElement('canvas');c.width=Math.round(sw);c.height=Math.round(sh);c.getContext('2d').drawImage(v,sx,sy,sw,sh,0,0,c.width,c.height);
+  closeCamera();c.toBlob(b=>{if(b)scanPhoto(b);},'image/jpeg',.92);};
 $('cam').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)scanPhoto(f);};
 function setProg(txt,p){$('s-prog').hidden=false;$('s-ptxt').textContent=txt;$('s-pbar').style.width=Math.round((p||0)*100)+'%';}
 async function prepImage(file){
@@ -996,12 +1181,17 @@ function renderScan(){
   $('s-limits').textContent=lim.join(' · ');
   $('s-mine').innerHTML=`Checked for: ${profile.permit?`Zone ${profile.permit} resident permit`:'no permit'}${profile.badge?' and a Blue Badge':''}, ${dayWord(t.date).toLowerCase()} at ${PF.fmt(t.min)}. <button type="button" id="s-me">Change</button>`;
   $('s-me').onclick=()=>{openScan(false);openMenu(true);};
-  const canSave=!!(sg.zone&&cur&&cur.name&&!['outside','nostreet','error'].includes(cur.src));
+  const canSave=!!(cur&&cur.name&&!cur.loading&&!['outside','nostreet','error'].includes(cur.src));
   $('s-btns').hidden=false;$('s-use').hidden=!canSave;$('s-btns').style.gridTemplateColumns=canSave?'1fr 1fr':'1fr';
-  if(canSave)$('s-use').textContent=`Save Zone ${sg.zone} for ${cur.name}`;
+  if(canSave)$('s-use').textContent=`Use for ${cur.name}`;
 }
 $('s-addwin').onclick=()=>{if(!scanSign)return;scanSign.windows.push({days:[1,2,3,4,5,6],from:510,to:1110,event:false});renderScan();};
-$('s-use').onclick=()=>{if(scanSign&&scanSign.zone&&cur&&cur.name){confirmZone(scanSign.zone);openScan(false);}};
+$('s-use').onclick=()=>{if(!scanSign||!cur||!cur.name)return;
+  const sg={...scanSign};delete sg.text;const k=norm(cur.name);
+  scans=scans.filter(x=>!(x.k===k&&Math.hypot((x.lat-cur.lat)*111000,(x.lng-cur.lng)*69000)<45));
+  scans.unshift({k,name:cur.name,lat:+cur.lat.toFixed(5),lng:+cur.lng.toFixed(5),sign:sg,ts:Date.now()});store.set('scans',scans.slice(0,200));
+  if(sg.zone&&!sg.suspended)confirmZone(sg.zone);
+  cur.sign=sg;cur.scanTs=Date.now();pickerOpen=false;openScan(false);toast('Saved. This sign now sets the answer here.');render();};
 
 let toastT;function toast(m){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el);}
   el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2600);}
@@ -1009,6 +1199,7 @@ let toastT;function toast(m){let el=document.querySelector('.toast');if(!el){el=
 $('slider').addEventListener('input',e=>setMin(+e.target.value));
 if(innerWidth>=820)setOpen(true);
 render(); placeLocate();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 // Self-update: reload once when a newer build is published
 (async function checkUpdate(){

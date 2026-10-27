@@ -69,4 +69,17 @@ eq(SIGN.decide(s7, T('2026-10-27', '23:30'), {}).head, 'Loading only');
 // Unreadable
 eq(SIGN.decide(SIGN.parse('PERMIT HOLDERS ZONE L'), T('2026-10-27', '10:00'), {}).head, 'Couldn’t read the hours');
 
+// Yellow suspension notice
+const s8 = SIGN.parse(`PARKING SUSPENDED
+Bay suspended from 28/10/2026 to 30/10/2026
+8am - 6pm
+Vehicles parked in the suspended bay may be removed`);
+eq(s8.suspended, true); eq(s8.dates, { from: '2026-10-28', to: '2026-10-30' });
+eq(SIGN.decide(s8, T('2026-10-29', '10:00'), { permit: 'L' }).head, 'Bay suspended', 'permit does not help');
+eq(SIGN.decide(s8, T('2026-10-29', '19:00'), {}).tone, 'free', 'outside suspension hours');
+eq(SIGN.decide(s8, T('2026-10-27', '10:00'), {}).head, 'Suspension coming');
+const s9 = SIGN.parse(`Suspended 12th November 2026 - 14th November 2026 at any time`);
+eq(s9.dates, { from: '2026-11-12', to: '2026-11-14' });
+eq(SIGN.decide(s9, T('2026-11-13', '03:00'), {}).head, 'Bay suspended');
+
 console.log(`all ${n} sign tests passed`);
