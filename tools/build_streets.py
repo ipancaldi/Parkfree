@@ -21,6 +21,13 @@ out tags geom;"""
 Q_BOUNDARY = f"""[out:json][timeout:60];
 rel({BBOX})["boundary"="administrative"]["admin_level"="8"]["name"~"Islington"];
 out geom;"""
+Q_BAYS = f"""[out:json][timeout:120];
+(
+  way({BBOX})["highway"][~"^parking:(left|right|both|lane)"~"."];
+  nwr({BBOX})["amenity"="parking"]["parking"~"^(street_side|lane|on_kerb|half_on_kerb)$"];
+  nwr({BBOX})["amenity"="parking_space"];
+);
+out tags geom;"""
 LOG = []
 
 
@@ -121,6 +128,56 @@ def rings(rel):
     return out
 
 
+NO = {"no", "separate", "no_parking", "no_stopping", "no_standing", "fire_lane", "marked"}
+
+
+def side_info(tags, side):
+    """Return (present, kind) for one side of a street, from current or legacy OSM parking tags."""
+    v = tags.get(f"parking:{side}") or tags.get("parking:both") or tags.get(f"parking:lane:{side}") or tags.get("parking:lane:both")
+    if not v or v in NO:
+        return None
+    r = " ".join(filter(None, [
+        tags.get(f"parking:{side}:restriction"), tags.get("parking:both:restriction"),
+        tags.get(f"parking:{side}:access"), tags.get("parking:both:access"),
+        tags.get(f"parking:condition:{side}"), tags.get("parking:condition:both"),
+        tags.get(f"parking:{side}:fee"), tags.get("parking:both:fee"),
+    ])).lower()
+    if any(x in r for x in ("no_parking", "no_stopping", "no_standing")):
+        return None
+    if "disabled" in r:
+        return "disabled"
+    if "loading" in r or "delivery" in r:
+        return "loading"
+    if "customers" in r or "private" in r:
+        return "private"
+    return "bay"
+
+
+def build_bays(d):
+    kerbs, areas, spaces = [], [], []
+    for e in d.get("elements", []):
+        t = e.get("tags", {})
+        g = e.get("geometry")
+        if e.get("type") == "way" and t.get("highway") and g:
+            pts = flat(simplify([(p["lat"], p["lon"]) for p in g], 0.00001))
+            for side in ("left", "right"):
+                k = side_info(t, side)
+                if k:
+                    kerbs.append({"s": "l" if side == "left" else "r", "k": k, "n": t.get("name", ""), "g": pts})
+        elif t.get("amenity") == "parking" and g:
+            pts = flat([(p["lat"], p["lon"]) for p in g])
+            a = (t.get("access", "") + " " + t.get("parking_space", "")).lower()
+            areas.append({"k": "disabled" if "disabled" in a else "private" if ("private" in a or "customers" in a) else "bay",
+                          "cap": t.get("capacity"), "g": pts})
+        elif t.get("amenity") == "parking_space":
+            c = e.get("center") or (g[0] if g else None) or ({"lat": e["lat"], "lon": e["lon"]} if "lat" in e else None)
+            if c:
+                kind = (t.get("parking_space") or "").lower()
+                spaces.append({"k": "disabled" if kind == "disabled" else "loading" if kind in ("delivery", "loading") else "bay",
+                               "p": [round(c["lat"], 5), round(c["lon"], 5)]})
+    return kerbs, areas, spaces
+
+
 def build(d):
     streets = {}
     boundary = []
@@ -155,6 +212,15 @@ def main():
         with open("data/streets.json", "w") as f:
             json.dump(out, f, separators=(",", ":"), ensure_ascii=False)
         log("size", os.path.getsize("data/streets.json"), "bytes")
+        bd = fetch(Q_BAYS, "bays")
+        if bd:
+            kerbs, areas, spaces = build_bays(bd)
+            from collections import Counter
+            log(f"bays: {len(kerbs)} kerb sides {dict(Counter(k['k'] for k in kerbs))}, {len(areas)} areas, {len(spaces)} single spaces {dict(Counter(x['k'] for x in spaces))}")
+            with open("data/bays.json", "w") as f:
+                json.dump({"generated": out["generated"], "source": out["source"], "kerbs": kerbs, "areas": areas, "spaces": spaces},
+                          f, separators=(",", ":"), ensure_ascii=False)
+            log("bays size", os.path.getsize("data/bays.json"), "bytes")
     except SystemExit as e:
         log("stopped:", e)
         raise

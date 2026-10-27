@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "parkfree-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/streets.json data/debug/streets-log.txt 2>/dev/null || git add data/debug/streets-log.txt
+          git add -A data/
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "Update Islington street map from OpenStreetMap"
           for i in 1 2 3; do
