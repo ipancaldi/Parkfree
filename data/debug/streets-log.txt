@@ -1,9 +1,8 @@
-16:47:20 streets: https://overpass-api.de/api/interpreter attempt 1 failed after 1s: HTTP Error 502: Bad Gateway
-16:47:29 streets: https://overpass-api.de/api/interpreter attempt 2 failed after 0s: HTTP Error 502: Bad Gateway
-16:50:08 streets: https://overpass.private.coffee/api/interpreter attempt 1 failed after 151s: The read operation timed out
-16:52:46 streets: https://overpass.private.coffee/api/interpreter attempt 2 failed after 150s: The read operation timed out
-16:55:25 streets: https://overpass.kumi.systems/api/interpreter attempt 1 failed after 151s: The read operation timed out
-16:57:56 streets: https://overpass.kumi.systems/api/interpreter attempt 2 failed after 143s: HTTP Error 502: Bad Gateway
-16:58:05 streets: https://maps.mail.ru/osm/tools/overpass/api/interpreter attempt 1 failed after 1s: HTTP Error 504: Gateway Time-out
-16:59:02 streets: https://maps.mail.ru/osm/tools/overpass/api/interpreter attempt 2 failed after 48s: HTTP Error 504: Gateway Timeout
-16:59:10 stopped: All Overpass endpoints failed for streets
+17:02:47 bays: https://overpass-api.de/api/interpreter ok in 40s, 1005 elements, 739322 bytes
+17:02:47 bays: 212 kerb sides on 93 named streets {'bay': 212}, 83 parking areas, 235 single spaces {'bay': 222, 'disabled': 13}
+17:02:47 bays size 41467 bytes
+17:03:27 streets: https://overpass-api.de/api/interpreter ok in 40s, 10627 elements, 7597255 bytes
+17:03:28 boundary: https://overpass-api.de/api/interpreter attempt 1 failed after 0s: HTTP Error 502: Bad Gateway
+17:04:37 boundary: https://overpass-api.de/api/interpreter ok in 39s, 1 elements, 114353 bytes
+17:04:37 2594 named streets, 1 boundary rings
+17:04:37 size 510057 bytes
