@@ -23,7 +23,12 @@ rel({BBOX})["boundary"="administrative"]["admin_level"="8"]["name"~"Islington"];
 out geom;"""
 Q_BAYS = f"""[out:json][timeout:120];
 (
-  way({BBOX})["highway"][~"^parking:(left|right|both|lane)"~"."];
+  way({BBOX})["highway"]["parking:both"];
+  way({BBOX})["highway"]["parking:left"];
+  way({BBOX})["highway"]["parking:right"];
+  way({BBOX})["highway"]["parking:lane:both"];
+  way({BBOX})["highway"]["parking:lane:left"];
+  way({BBOX})["highway"]["parking:lane:right"];
   nwr({BBOX})["amenity"="parking"]["parking"~"^(street_side|lane|on_kerb|half_on_kerb)$"];
   nwr({BBOX})["amenity"="parking_space"];
 );
@@ -46,7 +51,7 @@ def save_log():
 def fetch(query, label):
     body = urllib.parse.urlencode({"data": query}).encode()
     for ep in ENDPOINTS:
-        for attempt in range(2):
+        for attempt in range(3 if ep == ENDPOINTS[0] else 1):
             t0 = time.time()
             try:
                 req = urllib.request.Request(ep, data=body, headers={"User-Agent": UA, "Accept": "application/json"})
@@ -59,7 +64,7 @@ def fetch(query, label):
                 return d
             except Exception as e:
                 log(f"{label}: {ep} attempt {attempt+1} failed after {time.time()-t0:.0f}s: {str(e)[:200]}")
-                time.sleep(8)
+                time.sleep(30 if "50" in str(e) else 8)
     return None
 
 
@@ -191,36 +196,43 @@ def build(d):
 
 
 def main():
+    ok = False
     try:
-        d = fetch(Q_STREETS, "streets")
-        if not d:
-            sys.exit("All Overpass endpoints failed for streets")
-        b = fetch(Q_BOUNDARY, "boundary") or {"elements": []}
-        streets, _ = build(d)
-        rels = [e for e in b.get("elements", []) if e.get("type") == "relation" and "Islington" in e.get("tags", {}).get("name", "")]
-        boundary = [flat(simplify(r, 0.00005)) for r in rings(rels[0])] if rels else []
-        log(f"{len(streets)} named streets, {len(boundary)} boundary rings")
-        if len(streets) < 300:
-            sys.exit("Too few streets; not overwriting data.")
-        out = {
-            "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "source": "OpenStreetMap contributors (ODbL)",
-            "boundary": boundary,
-            "streets": dict(sorted(streets.items())),
-        }
-        os.makedirs("data", exist_ok=True)
-        with open("data/streets.json", "w") as f:
-            json.dump(out, f, separators=(",", ":"), ensure_ascii=False)
-        log("size", os.path.getsize("data/streets.json"), "bytes")
+        # Bays first: smaller query, and useful even if the street refresh fails
         bd = fetch(Q_BAYS, "bays")
         if bd:
             kerbs, areas, spaces = build_bays(bd)
             from collections import Counter
-            log(f"bays: {len(kerbs)} kerb sides {dict(Counter(k['k'] for k in kerbs))}, {len(areas)} areas, {len(spaces)} single spaces {dict(Counter(x['k'] for x in spaces))}")
+            named = len({k["n"] for k in kerbs if k["n"]})
+            log(f"bays: {len(kerbs)} kerb sides on {named} named streets {dict(Counter(k['k'] for k in kerbs))}, "
+                f"{len(areas)} parking areas, {len(spaces)} single spaces {dict(Counter(x['k'] for x in spaces))}")
+            os.makedirs("data", exist_ok=True)
             with open("data/bays.json", "w") as f:
-                json.dump({"generated": out["generated"], "source": out["source"], "kerbs": kerbs, "areas": areas, "spaces": spaces},
+                json.dump({"generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                           "source": "OpenStreetMap contributors (ODbL)", "kerbs": kerbs, "areas": areas, "spaces": spaces},
                           f, separators=(",", ":"), ensure_ascii=False)
             log("bays size", os.path.getsize("data/bays.json"), "bytes")
+            ok = True
+        d = fetch(Q_STREETS, "streets")
+        if not d:
+            log("streets: all servers failed; keeping the existing street map")
+        else:
+            b = fetch(Q_BOUNDARY, "boundary") or {"elements": []}
+            streets, _ = build(d)
+            rels = [e for e in b.get("elements", []) if e.get("type") == "relation" and "Islington" in e.get("tags", {}).get("name", "")]
+            boundary = [flat(simplify(r, 0.00005)) for r in rings(rels[0])] if rels else []
+            log(f"{len(streets)} named streets, {len(boundary)} boundary rings")
+            if len(streets) >= 300 and boundary:
+                with open("data/streets.json", "w") as f:
+                    json.dump({"generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                               "source": "OpenStreetMap contributors (ODbL)", "boundary": boundary,
+                               "streets": dict(sorted(streets.items()))}, f, separators=(",", ":"), ensure_ascii=False)
+                log("size", os.path.getsize("data/streets.json"), "bytes")
+                ok = True
+            else:
+                log("streets: result incomplete; keeping the existing street map")
+        if not ok:
+            sys.exit("Nothing updated")
     except SystemExit as e:
         log("stopped:", e)
         raise
