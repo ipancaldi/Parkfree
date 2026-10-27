@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ParkFree">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="theme-color" content="#F2F4F7">
@@ -18,417 +19,281 @@
 <link rel="stylesheet" href="vendor/leaflet.css">
 <script src="vendor/leaflet.js"></script>
 <style>
-/* Layout: brand + search float over a full-bleed map; one answer card docks at the bottom (side panel on wide screens).
-   The whole app takes on the answer's tone: green when you can park, amber when you should check the sign, red when you can't. */
+/* Phone-first: the map fills the screen. A search pill floats at the top; one answer card sits at the bottom
+   and expands for detail. The whole screen takes the answer's tone: green, amber or red. */
 :root{
-  --canvas:#F2F4F7; --surface:#FFFFFF; --raised:#F4F6F9;
+  --canvas:#F2F4F7; --surface:#FFFFFF; --raised:#F3F5F8;
   --ink:#121826; --ink-2:#4B5565; --ink-3:#8A94A6; --line:#E4E8EE;
   --plate:#2B54D6;
-  --go:#16A34A; --go-ink:#0E7A37; --go-tint:#E9F8EF; --go-wash:#F3FBF6;
-  --check:#E59A0B; --check-ink:#A86A00; --check-tint:#FFF4DF; --check-wash:#FFFAF0;
-  --stop:#E5483A; --stop-ink:#C2321F; --stop-tint:#FDEBE9; --stop-wash:#FFF6F5;
-  --tone:var(--ink-3); --tone-ink:var(--ink-2); --tone-tint:var(--raised); --tone-wash:var(--canvas);
-  --shadow:0 1px 2px rgba(18,24,38,.06),0 10px 30px rgba(18,24,38,.10);
+  --go:#16A34A; --go-ink:#0E7A37; --go-tint:#E6F6EC;
+  --check:#E59A0B; --check-ink:#9A6200; --check-tint:#FFF2D9;
+  --stop:#E5483A; --stop-ink:#C2321F; --stop-tint:#FDE8E5;
+  --tone:var(--ink-3); --tone-ink:var(--ink); --tone-tint:var(--raised);
+  --shadow:0 1px 2px rgba(18,24,38,.08),0 8px 26px rgba(18,24,38,.14);
   --font:'Schibsted Grotesk',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --gutter:max(12px,env(safe-area-inset-left,0px));
 }
 @media (prefers-color-scheme:dark){:root{
-  --canvas:#0E131B; --surface:#161C26; --raised:#1D2430;
+  --canvas:#0E131B; --surface:#161C26; --raised:#1F2632;
   --ink:#EEF1F6; --ink-2:#B4BCCA; --ink-3:#7E889B; --line:#2A3241; --plate:#5B7FF0;
-  --go:#34C46D; --go-ink:#5BD98C; --go-tint:#12301F; --go-wash:#0F1E17;
-  --check:#F2AE35; --check-ink:#F6C266; --check-tint:#35280F; --check-wash:#1F1A10;
-  --stop:#FF6A5C; --stop-ink:#FF8D82; --stop-tint:#3A1B18; --stop-wash:#221413;
-  --tone:var(--ink-3); --tone-ink:var(--ink-2); --tone-tint:var(--raised); --tone-wash:var(--canvas);
-  --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 32px rgba(0,0,0,.5); color-scheme:dark }}
-body[data-tone="free"]{--tone:var(--go);--tone-ink:var(--go-ink);--tone-tint:var(--go-tint);--tone-wash:var(--go-wash)}
-body[data-tone="check"]{--tone:var(--check);--tone-ink:var(--check-ink);--tone-tint:var(--check-tint);--tone-wash:var(--check-wash)}
-body[data-tone="stop"]{--tone:var(--stop);--tone-ink:var(--stop-ink);--tone-tint:var(--stop-tint);--tone-wash:var(--stop-wash)}
+  --go:#34C46D; --go-ink:#6BE09A; --go-tint:#123322;
+  --check:#F2AE35; --check-ink:#F8C870; --check-tint:#3A2C10;
+  --stop:#FF6A5C; --stop-ink:#FF968C; --stop-tint:#3D1C19;
+  --tone:var(--ink-3); --tone-ink:var(--ink); --tone-tint:var(--raised);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.55); color-scheme:dark }}
+body[data-tone="free"]{--tone:var(--go);--tone-ink:var(--go-ink);--tone-tint:var(--go-tint)}
+body[data-tone="check"]{--tone:var(--check);--tone-ink:var(--check-ink);--tone-tint:var(--check-tint)}
+body[data-tone="stop"]{--tone:var(--stop);--tone-ink:var(--stop-ink);--tone-tint:var(--stop-tint)}
 
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
 html,body{height:100%;overflow:hidden}
-body{background:var(--tone-wash);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45;
-  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;transition:background .5s}
-.scale,.bubble,.day b,.item .r,.evd b{font-variant-numeric:tabular-nums}
-button,input,select,textarea{font:inherit;color:inherit}
+body{background:var(--canvas);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.4;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+input,select{-webkit-user-select:auto;user-select:auto}
+button,input,select{font:inherit;color:inherit}
 button{cursor:pointer;border:none;background:none}
-a{color:var(--plate);text-decoration:none}
-:focus-visible{outline:3px solid color-mix(in srgb,var(--plate) 55%,transparent);outline-offset:2px;border-radius:10px}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--plate) 55%,transparent);outline-offset:2px;border-radius:12px}
+.num{font-variant-numeric:tabular-nums}
 
+/* Map */
 #map{position:fixed;inset:0;z-index:0;background:var(--canvas)}
-#wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:var(--tone);opacity:0;transition:opacity .5s,background .5s}
-body[data-tone="free"] #wash,body[data-tone="check"] #wash,body[data-tone="stop"] #wash{opacity:.11}
 .leaflet-container{font-family:var(--font);background:var(--canvas)}
-.leaflet-tile-pane{filter:saturate(.55) brightness(1.04) contrast(.92)}
-.leaflet-control-attribution{font-size:10px!important;background:color-mix(in srgb,var(--surface) 80%,transparent)!important;color:var(--ink-3)!important}
+.leaflet-tile-pane{filter:saturate(.35) brightness(1.06) contrast(.9)}
+@media (prefers-color-scheme:dark){.leaflet-tile-pane{filter:invert(.92) hue-rotate(180deg) saturate(.3) brightness(.85) contrast(.9)}}
+.leaflet-control-attribution{font-size:9.5px!important;background:color-mix(in srgb,var(--surface) 75%,transparent)!important;color:var(--ink-3)!important;border-radius:6px 0 0 0}
 .leaflet-control-attribution a{color:var(--ink-2)!important}
-.leaflet-tooltip{font-family:var(--font);font-size:12px;border-radius:8px;border:none;box-shadow:var(--shadow);background:var(--surface);color:var(--ink)}
-.pin{position:relative;width:52px;height:62px}
-.pin .head{position:absolute;left:0;top:0;width:52px;height:52px;border-radius:50%;background:var(--surface);
-  box-shadow:0 0 0 4px var(--tone),0 6px 18px rgba(0,0,0,.25);display:grid;place-items:center;color:var(--tone);transition:color .4s,box-shadow .4s}
-.pin .tail{position:absolute;left:21px;top:48px;width:10px;height:10px;background:var(--tone);transform:rotate(45deg);border-radius:2px;transition:background .4s}
-.halo{width:22px;height:22px;border-radius:50%;background:var(--plate);border:4px solid #fff;box-shadow:0 0 0 10px color-mix(in srgb,var(--plate) 18%,transparent)}
+#wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:var(--tone);opacity:0;transition:opacity .5s,background .5s}
+body[data-tone="free"] #wash,body[data-tone="check"] #wash,body[data-tone="stop"] #wash{opacity:.09}
+.pin{position:relative;width:46px;height:56px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.28))}
+.pin .h{position:absolute;inset:0 0 10px 0;border-radius:50%;background:var(--tone);display:grid;place-items:center;color:#fff;transition:background .4s}
+.pin .t{position:absolute;left:17px;top:34px;width:12px;height:12px;background:var(--tone);transform:rotate(45deg);border-radius:2px;transition:background .4s}
+.me{width:20px;height:20px;border-radius:50%;background:var(--plate);border:3px solid #fff;box-shadow:0 0 0 8px color-mix(in srgb,var(--plate) 20%,transparent)}
+.ndot{width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 
-#top{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;flex-direction:column;gap:10px;
-  padding:calc(10px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));pointer-events:none}
-#top>*{pointer-events:auto}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{width:36px;height:36px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:var(--tone);display:grid;place-items:center;transition:background .5s;flex:none}
+/* Top: search pill + menu */
+#top{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 10px);left:var(--gutter);right:max(12px,env(safe-area-inset-right,0px));display:flex;gap:8px}
+.pillwrap{flex:1;min-width:0;position:relative}
+.pill{display:flex;align-items:center;gap:10px;height:48px;padding:0 6px 0 8px;background:var(--surface);border-radius:24px;box-shadow:var(--shadow)}
+.logo{width:32px;height:32px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:var(--tone);display:grid;place-items:center;flex:none;transition:background .5s}
 body[data-tone="idle"] .logo{background:var(--go)}
-.logo span{transform:rotate(45deg);color:#fff;font-weight:800;font-size:17px}
-.brand h1{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1}
-.brand small{display:block;font-size:12.5px;color:var(--ink-2);font-weight:500;margin-top:2px}
-.brand .sp{flex:1}
-.round{width:44px;height:44px;border-radius:50%;background:var(--surface);box-shadow:var(--shadow);display:grid;place-items:center;color:var(--ink);flex:none}
-.searchwrap{position:relative;max-width:560px}
-.search{display:flex;align-items:center;gap:10px;height:50px;padding:0 8px 0 16px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
-.search svg{flex:none;color:var(--ink-2)}
-.search input{flex:1;min-width:0;border:none;background:none;outline:none;font-size:16px}
-.search input::placeholder{color:var(--ink-3)}
-.search .clear{width:34px;height:34px;border-radius:50%;color:var(--ink-3);font-size:18px}
-#results{position:absolute;top:58px;left:0;right:0;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
-#results button{display:block;width:100%;text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);font-size:14.5px}
+.logo b{transform:rotate(45deg);color:#fff;font-weight:800;font-size:15px}
+.pill input{flex:1;min-width:0;border:none;background:none;outline:none;font-size:16px;height:100%}
+.pill input::placeholder{color:var(--ink-3)}
+.pill .x{width:36px;height:36px;border-radius:50%;color:var(--ink-3);font-size:20px;flex:none}
+.fab{width:48px;height:48px;border-radius:50%;background:var(--surface);box-shadow:var(--shadow);display:grid;place-items:center;flex:none;color:var(--ink)}
+#results{position:absolute;top:56px;left:0;right:0;background:var(--surface);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;max-height:55vh;overflow-y:auto}
+#results button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
 #results button:last-child{border-bottom:none}
-#results button small{display:block;color:var(--ink-3);font-size:12.5px}
-#results .msg{padding:12px 16px;color:var(--ink-2);font-size:14px}
-#rail{position:fixed;z-index:15;right:max(14px,env(safe-area-inset-right,0px));bottom:60vh;display:flex;flex-direction:column;gap:10px}
-#rail .round.on{color:var(--plate)}
-#rail .round.busy svg{animation:spin 1s linear infinite}
+#results .ic{width:30px;height:30px;border-radius:50%;background:var(--raised);display:grid;place-items:center;flex:none;color:var(--ink-2);font-size:13px;font-weight:700}
+#results .t{min-width:0}
+#results b{display:block;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#results small{display:block;color:var(--ink-3);font-size:13px}
+#results .msg{padding:14px 16px;color:var(--ink-2);font-size:14px}
+
+#locate{position:fixed;z-index:15;right:max(12px,env(safe-area-inset-right,0px))}
+#locate.on{color:var(--plate)}
+#locate.busy svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-#sheet{position:fixed;z-index:10;left:0;right:0;bottom:0;background:var(--surface);border-radius:26px 26px 0 0;
-  box-shadow:0 -10px 34px rgba(18,24,38,.16);max-height:60vh;display:flex;flex-direction:column;transition:max-height .32s cubic-bezier(.2,.8,.2,1)}
-#sheet.tall{max-height:calc(100% - 140px - env(safe-area-inset-top,0px))}
-.handle{flex:none;display:flex;justify-content:center;padding:10px 0 2px;width:100%}
-.handle span{width:40px;height:5px;border-radius:3px;background:var(--line)}
-.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
-  padding:6px max(18px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));
-  display:flex;flex-direction:column;gap:16px}
+/* Answer card */
+#card{position:fixed;z-index:10;left:0;right:0;bottom:0;background:var(--surface);border-radius:24px 24px 0 0;box-shadow:0 -8px 30px rgba(18,24,38,.18);
+  display:flex;flex-direction:column;max-height:calc(100% - 72px - env(safe-area-inset-top,0px));overflow:hidden}
+.head{background:var(--tone-tint);transition:background .4s;padding:8px var(--gutter) 14px;flex:none;cursor:pointer}
+.grab{width:38px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--ink) 18%,transparent);margin:0 auto 10px}
+.ans{display:flex;align-items:center;gap:12px}
+.ans .ic{width:44px;height:44px;border-radius:50%;background:var(--tone);color:#fff;display:grid;place-items:center;flex:none;transition:background .4s}
+body[data-tone="idle"] .ans .ic{background:var(--ink-3)}
+.ans .txt{flex:1;min-width:0}
+.ans h2{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:var(--tone-ink)}
+.ans p{font-size:15.5px;font-weight:600;color:var(--ink);margin-top:2px}
+.zp{min-width:46px;height:46px;padding:0 6px;border-radius:12px;background:var(--plate);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;line-height:1}
+.zp small{font-size:8.5px;font-weight:600;letter-spacing:.05em;opacity:.85}
+.zp b{font-size:20px;font-weight:800;margin-top:2px}
+.where{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13.5px;color:var(--ink-2);min-width:0}
+.where span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.where .sep{flex:none}
+.where button{color:var(--plate);font-weight:600;font-size:13.5px;flex:none;margin-left:auto;padding:4px 0 4px 8px}
+.flag{margin-top:10px;font-size:13.5px;color:var(--ink);background:color-mix(in srgb,var(--surface) 70%,transparent);border-radius:12px;padding:8px 10px}
+.flag b{color:var(--check-ink)}
 
-.place{display:flex;align-items:flex-start;gap:10px}
-.place .t{flex:1;min-width:0}
-.place h2{font-size:19px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.place p{color:var(--ink-2);font-size:14px}
-.place .chip{width:40px;height:40px;border-radius:50%;background:var(--raised);display:grid;place-items:center;color:var(--ink-2);flex:none}
-.place .chip.on{color:var(--stop)}
-.place .chip.on svg{fill:currentColor}
-
-.status{display:flex;gap:14px;align-items:center;padding:16px;border-radius:18px;background:var(--tone-tint);transition:background .4s}
-.status .ic{width:46px;height:46px;border-radius:50%;background:var(--tone);color:#fff;display:grid;place-items:center;flex:none;transition:background .4s}
-.status h3{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:var(--tone-ink)}
-.status p{font-size:14px;color:var(--tone-ink);opacity:.85;margin-top:2px}
-
-.when h4{font-size:19px;font-weight:700;letter-spacing:-.01em}
-.when p{color:var(--ink-2);font-size:14px;margin-top:2px}
-.when p.alert{color:var(--stop-ink)}
-
-.timeline{display:flex;flex-direction:column;gap:6px}
-.track{position:relative;height:44px;margin-top:16px}
-.bar{position:absolute;left:0;right:0;top:16px;height:12px;border-radius:6px;overflow:hidden;display:flex;background:var(--raised)}
+/* Timeline (always visible once there's a zone) */
+.tl{margin-top:12px}
+.track{position:relative;height:30px;touch-action:none}
+.bar{position:absolute;left:0;right:0;top:10px;height:10px;border-radius:5px;overflow:hidden;display:flex;background:var(--line)}
 .bar i{display:block;height:100%}
 .bar i.free,.bar i.roamer,.bar i.permit{background:var(--go)}
 .bar i.restricted{background:var(--stop)}
 .bar i.matchday{background:var(--check)}
-.knob{position:absolute;top:8px;width:28px;height:28px;margin-left:-14px;border-radius:50%;background:var(--surface);
-  box-shadow:0 0 0 3px var(--tone),0 3px 10px rgba(0,0,0,.25);pointer-events:none;transition:box-shadow .4s}
-.bubble{position:absolute;bottom:40px;transform:translateX(-50%);background:var(--ink);color:var(--surface);font-size:12.5px;font-weight:600;
-  padding:4px 9px;border-radius:8px;white-space:nowrap;pointer-events:none}
-.track input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;margin:0}
-.scale{position:relative;height:16px;color:var(--ink-3);font-size:11.5px}
-.scale span{position:absolute;transform:translateX(-50%)}
+.knob{position:absolute;top:3px;width:24px;height:24px;margin-left:-12px;border-radius:50%;background:var(--surface);box-shadow:0 0 0 3px var(--ink),0 2px 8px rgba(0,0,0,.25);pointer-events:none}
+.track input{position:absolute;inset:-6px 0;width:100%;height:42px;opacity:0;margin:0;cursor:pointer}
+.scale{position:relative;height:16px;font-size:11.5px;color:var(--ink-2)}
+.scale span{position:absolute;transform:translateX(-50%);white-space:nowrap}
 .scale span.l{transform:none}.scale span.r{transform:translateX(-100%)}
-.days{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.tlrow{display:flex;justify-content:space-between;align-items:center;margin-top:4px;font-size:13px;color:var(--ink-2)}
+.tlrow button{font-weight:600;color:var(--plate);font-size:13px;padding:4px 0}
+
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:50px;border-radius:16px;background:var(--ink);color:var(--surface);font-weight:600;font-size:16px;margin-top:12px}
+
+/* Picker */
+.picker{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.picker p{font-size:14px;color:var(--ink-2)}
+.plates{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.plates button{height:40px;border-radius:10px;background:var(--surface);color:var(--plate);font-weight:800;font-size:15px;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--plate) 30%,transparent)}
+.plates button.likely{background:var(--plate);color:#fff;box-shadow:none}
+.picker .later{align-self:flex-start;font-weight:600;color:var(--ink-2);font-size:14px;padding:4px 0}
+
+/* Expanded detail */
+.more{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:14px var(--gutter) calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px}
+#card:not(.open) .more{display:none}
+#card:not(.open) .head{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.act{height:64px;border-radius:16px;background:var(--raised);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:600}
+.act.on{color:var(--go-ink)}
+.sec h3{font-size:15px;font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline}
+.sec h3 span{font-size:13px;font-weight:500;color:var(--ink-3)}
+.days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .days::-webkit-scrollbar{display:none}
-.day{flex:none;min-width:56px;height:54px;border-radius:14px;background:var(--raised);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--ink-2);position:relative}
-.day b{font-size:16px;color:var(--ink);font-weight:700;line-height:1.1}
-.day.on{background:var(--ink);color:var(--surface)}
-.day.on b{color:var(--surface)}
-.day .ev{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--check)}
-.daysrow{display:flex;gap:8px;align-items:center;margin-top:6px}
-.daysrow .days{flex:1;min-width:0}
-.nowbtn{height:54px;padding:0 14px;border-radius:14px;background:var(--tone-tint);color:var(--tone-ink);font-weight:600;font-size:14px;flex:none}
-
-.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.act{height:72px;border-radius:16px;background:var(--raised);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--ink)}
-.act:active{transform:scale(.97)}
-.act.on{background:var(--tone-tint);color:var(--tone-ink)}
-
-.notice{border-radius:16px;padding:12px 14px;font-size:14px;background:var(--check-tint);color:var(--ink)}
-.notice b{color:var(--check-ink)}
-
-#picker{border-radius:18px;background:var(--check-tint);padding:16px;display:flex;flex-direction:column;gap:12px}
-#picker h3{font-size:16px;font-weight:700}
-#picker p{font-size:14px;color:var(--ink-2)}
-.plates{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.plates button{aspect-ratio:1;max-width:100%;border-radius:12px;background:var(--surface);color:var(--plate);font-weight:800;font-size:18px}
-.plates button.likely{background:var(--plate);color:#fff}
-.plates button:active{transform:scale(.95)}
-
-.sec{display:flex;flex-direction:column;gap:10px}
-.sec-h{display:flex;justify-content:space-between;align-items:baseline}
-.sec-h h3{font-size:16px;font-weight:700}
-.sec-h span{color:var(--ink-3);font-size:13px}
-.list{display:flex;flex-direction:column;border-radius:18px;background:var(--raised);overflow:hidden}
-.item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;width:100%}
-.item:last-child{border-bottom:none}
-.item .t{min-width:0}
-.item .t b{display:block;font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item .t span{display:block;font-size:13px}
-#zone-rows .item .t b{white-space:normal}
-.item .r{color:var(--ink-3);font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:6px}
-.item .r.col{flex-direction:column;align-items:flex-end;gap:0}
-.dotc{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:700;flex:none}
-.c-free{color:var(--go-ink)} .c-stop{color:var(--stop-ink)} .c-check{color:var(--check-ink)} .c-idle{color:var(--ink-3)}
+.day{flex:none;width:52px;height:52px;border-radius:14px;background:var(--raised);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11.5px;color:var(--ink-2);position:relative}
+.day b{font-size:16px;color:var(--ink);font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.day.on{background:var(--ink);color:var(--surface)} .day.on b{color:var(--surface)}
+.day .ev{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--check)}
+.list{border-radius:16px;background:var(--raised);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row .d{width:12px;height:12px;border-radius:50%;flex:none}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t span{display:block;font-size:13px;color:var(--ink-2)}
+.row .r{color:var(--ink-3);font-size:13px;white-space:nowrap;flex:none}
+.rules{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:14px;padding:12px 14px;border-radius:16px;background:var(--raised)}
+.rules dt{color:var(--ink-3)}
+.rules dd{color:var(--ink)}
+.fine{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+.fine a{text-decoration:underline;text-underline-offset:2px}
 .bg-free{background:var(--go)} .bg-stop{background:var(--stop)} .bg-check{background:var(--check)}
-.plate{width:38px;height:38px;border-radius:10px;background:var(--plate);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none}
-.plate.unk{background:var(--ink-3)}
-.mini{height:6px;border-radius:3px;overflow:hidden;display:flex;margin-top:7px;background:var(--surface)}
-.mini i{display:block;height:100%}
-.mini i.free,.mini i.roamer,.mini i.permit{background:var(--go)} .mini i.restricted{background:var(--stop)} .mini i.matchday{background:var(--check)}
-.cta{height:52px;border-radius:16px;background:var(--ink);color:var(--surface);font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
-.btn{height:44px;padding:0 16px;border-radius:12px;font-weight:600;font-size:14.5px;background:var(--raised);display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn.primary{background:var(--plate);color:#fff}
+.c-free{color:var(--go-ink)} .c-stop{color:var(--stop-ink)} .c-check{color:var(--check-ink)}
 
-.seg{display:grid;grid-template-columns:repeat(4,1fr);background:var(--raised);border-radius:14px;padding:4px}
-.seg button{height:38px;border-radius:10px;font-size:14px;font-weight:600;color:var(--ink-2)}
-.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(18,24,38,.12)}
-.pane{display:flex;flex-direction:column;gap:12px}
-.pane h3{font-size:15px;font-weight:700}
-.pane p{color:var(--ink-2);font-size:14px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:13px;color:var(--ink-2);font-weight:500}
-.field input,.field select,.field textarea{height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface);padding:0 12px;font-size:15px}
-.field textarea{height:96px;padding:10px 12px;font-size:12px;font-family:ui-monospace,Menlo,monospace}
-.inline{display:flex;gap:8px;flex-wrap:wrap}
-.inline>*{flex:1;min-width:130px}
-.fine{color:var(--ink-3);font-size:12.5px;line-height:1.55}
-.fine a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
-.evd{width:44px;height:44px;border-radius:12px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10.5px;color:var(--ink-3);flex:none}
-.evd b{font-size:16px;color:var(--ink);line-height:1.1}
-.item.next .evd{background:var(--check-tint)} .item.next .evd b{color:var(--check-ink)}
-.item.past{opacity:.45}
-.x{width:32px;height:32px;border-radius:50%;color:var(--ink-3);font-size:18px}
+/* Menu */
+#menu{position:fixed;z-index:40;inset:0;background:var(--canvas);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+#menu.open{transform:none;visibility:visible}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 14px) var(--gutter) 10px}
+.mhead h2{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.mbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px var(--gutter) calc(30px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
+.mbody select{width:100%;height:50px;border-radius:14px;border:none;background:var(--surface);padding:0 14px;font-size:16px;box-shadow:inset 0 0 0 1px var(--line)}
+.mbody .list{background:var(--surface)}
+.mbody p.help{font-size:13.5px;color:var(--ink-2);margin-top:8px}
+.zplate{min-width:34px;height:34px;padding:0 4px;border-radius:9px;background:var(--plate);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.evd{width:42px;text-align:center;flex:none;font-size:11px;color:var(--ink-3);line-height:1.15}
+.evd b{display:block;font-size:17px;color:var(--ink)}
+details summary{list-style:none;cursor:pointer}
+details summary::-webkit-details-marker{display:none}
 
-.toast{position:fixed;z-index:50;left:50%;transform:translateX(-50%);top:calc(130px + env(safe-area-inset-top,0px));
-  background:var(--ink);color:var(--surface);padding:11px 16px;border-radius:999px;font-size:14px;font-weight:500;box-shadow:var(--shadow);max-width:88vw;text-align:center}
+.toast{position:fixed;z-index:60;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 68px);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;box-shadow:var(--shadow);max-width:88vw;text-align:center}
 
-/* Map overlays (desktop) */
-#legend,#findcard,#side,.tools,#a-sv{display:none}
-.rules{display:flex;flex-direction:column;border-radius:18px;background:var(--raised);padding:4px 14px}
-.rules div{display:grid;grid-template-columns:22px 110px 1fr;gap:10px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
-.rules div:last-child{border-bottom:none}
-.rules svg{color:var(--ink-3);margin-top:2px}
-.rules b{font-weight:600}
-.rules span{color:var(--ink-2)}
-.warn{display:flex;gap:12px;padding:14px;border-radius:16px;background:var(--check-tint);font-size:13.5px;color:var(--ink-2)}
-.warn .dotc{width:26px;height:26px}
-.warn b{display:block;color:var(--ink);font-size:14px}
-
-@media (min-width:1024px){
-  :root{--sideW:232px;--panelW:410px;--topH:72px}
-  #side{display:flex;flex-direction:column;gap:4px;position:fixed;z-index:30;left:0;top:0;bottom:0;width:var(--sideW);
-    padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(18px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:var(--surface);border-right:1px solid var(--line)}
-  #side .brand{margin:0 6px 22px}
-  #side .brand small{font-size:12px}
-  .nav{display:flex;align-items:center;gap:14px;height:48px;padding:0 14px;border-radius:14px;font-size:15px;font-weight:500;color:var(--ink);text-align:left;width:100%}
-  .nav svg{color:var(--ink-2);flex:none}
-  .nav.on{background:var(--tone-tint);color:var(--tone-ink)} .nav.on svg{color:var(--tone-ink)}
-  body[data-tone="idle"] .nav.on{background:var(--go-tint);color:var(--go-ink)} body[data-tone="idle"] .nav.on svg{color:var(--go-ink)}
-  .nav:hover{background:var(--raised)}
-  #side hr{border:none;border-top:1px solid var(--line);margin:14px 6px}
-  #side .area{margin-top:auto;padding:12px 14px;border-radius:14px;background:var(--raised);font-size:13px;color:var(--ink-2)}
-  #side .area b{display:block;font-size:15px;color:var(--ink)}
-  #top{left:var(--sideW);height:var(--topH);flex-direction:row;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);pointer-events:auto}
-  #top .brand{display:none}
-  #top .searchwrap{flex:1;max-width:520px}
-  .search{box-shadow:none;border:1px solid var(--line);height:46px;border-radius:14px}
-  #results{top:54px}
-  .tools{display:flex;gap:10px;align-items:center}
-  .tools label{display:flex;align-items:center;gap:8px;height:46px;padding:0 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
-  .tools label svg{color:var(--ink-2)}
-  .tools select{border:none;background:none;font-size:14.5px;font-weight:500;outline:none;cursor:pointer}
-  .tools .sp{flex:1}
-  #b-you{box-shadow:none;border:1px solid var(--line)}
-  #map{inset:calc(var(--topH) + 14px) calc(var(--panelW) + 30px) 16px calc(var(--sideW) + 16px);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
-  #wash{inset:calc(var(--topH) + 14px) calc(var(--panelW) + 30px) 16px calc(var(--sideW) + 16px);border-radius:22px}
-  #rail{right:calc(var(--panelW) + 46px)!important;bottom:32px!important}
-  #sheet{left:auto;right:16px;top:calc(var(--topH) + 14px);bottom:16px;width:var(--panelW);max-height:none!important;border-radius:22px;box-shadow:var(--shadow)}
-  .handle{display:none}
-  .scroll{padding:20px 20px 24px}
-  #legend{display:flex;gap:16px;position:fixed;z-index:12;left:calc(var(--sideW) + 32px);top:calc(var(--topH) + 30px);background:var(--surface);
-    padding:10px 14px;border-radius:14px;box-shadow:var(--shadow);font-size:13px;font-weight:500}
-  #legend span{display:flex;align-items:center;gap:7px}
-  #legend i{width:11px;height:11px;border-radius:50%}
-  #findcard{display:flex;align-items:center;gap:14px;position:fixed;z-index:12;left:calc(var(--sideW) + 32px);bottom:32px;width:min(420px,calc(100% - var(--sideW) - var(--panelW) - 140px));
-    background:var(--surface);padding:12px 16px;border-radius:16px;box-shadow:var(--shadow);text-align:left}
-  #findcard .ic{width:40px;height:40px;border-radius:50%;background:var(--raised);display:grid;place-items:center;flex:none}
-  #findcard b{display:block;font-size:15px}
-  #findcard .t>span{display:block;color:var(--ink-3);font-size:13px}
-  #findcard>span:last-child{color:var(--ink-3);font-size:18px}
-  #findcard .t{flex:1;min-width:0}
-  .daysrow{display:none}
-  .seg{display:none}
-  .actions{grid-template-columns:repeat(5,1fr)}
-  .act{height:76px;background:none;border:1px solid var(--line)}
-  #a-sv{display:flex}
+@media (min-width:820px){
+  #top{right:auto;width:400px;left:16px}
+  #card{left:16px;right:auto;bottom:16px;width:400px;border-radius:24px;box-shadow:var(--shadow);max-height:calc(100% - 92px)}
+  #card .more{display:flex!important}
+  #card:not(.open) .head{padding-bottom:14px}
+  .grab{display:none}
+  #locate{bottom:24px!important}
+  #menu{left:auto;width:420px;box-shadow:var(--shadow)}
 }
-.toast{top:calc(130px + env(safe-area-inset-top,0px))}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body data-tone="idle">
-<div id="map" aria-label="Map. Tap any street to check it."></div>
+<div id="map" aria-label="Map of Islington. Tap a street to check it."></div>
 <div id="wash"></div>
 
-<nav id="side" aria-label="Main">
-  <div class="brand"><div class="logo" aria-hidden="true"><span>P</span></div><div><h1>ParkFree</h1><small>Park smarter in Islington</small></div></div>
-  <button class="nav on" data-go="map"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Map</button>
-  <button class="nav" data-go="find"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Find parking</button>
-  <button class="nav" data-go="events"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Events</button>
-  <button class="nav" data-go="permit"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 10h4M7 14h7"/></svg>My permit</button>
-  <button class="nav" data-go="saved"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved places</button>
-  <hr>
-  <button class="nav" data-go="zones"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Rules &amp; zones</button>
-  <button class="nav" data-go="how"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01" stroke-linecap="round"/></svg>How it works</button>
-  <div class="area"><b>Islington</b>24 zones · London time</div>
-</nav>
-<div id="legend" aria-hidden="true"><span><i style="background:var(--go)"></i>Free to park</span><span><i style="background:var(--check)"></i>Check the sign</span><span><i style="background:var(--stop)"></i>Restricted</span></div>
-<button id="findcard"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg></span><span class="t"><b>Find somewhere to park</b><span>Free streets near the pin, for the time you choose</span></span><span>›</span></button>
-
 <header id="top">
-  <div class="brand">
-    <div class="logo" aria-hidden="true"><span>P</span></div>
-    <div><h1>ParkFree</h1><small>Islington</small></div>
-    <div class="sp"></div>
-    <button class="round" id="b-you" aria-label="Your permit and saved places">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
-    </button>
-  </div>
-  <div class="searchwrap">
-    <form class="search" id="f-search" autocomplete="off" role="search">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Where are you parking?" aria-label="Search an Islington street" enterkeyhint="search">
-      <button type="button" class="clear" id="q-clear" aria-label="Clear search" hidden>×</button>
+  <div class="pillwrap">
+    <form class="pill" id="f-search" autocomplete="off" role="search">
+      <span class="logo" aria-hidden="true"><b>P</b></span>
+      <input id="q" type="search" placeholder="Search a street in Islington" aria-label="Search a street in Islington" enterkeyhint="search">
+      <button type="button" class="x" id="q-clear" aria-label="Clear search" hidden>×</button>
     </form>
     <div id="results" hidden></div>
   </div>
-  <div class="tools">
-    <label><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><select id="d-sel" aria-label="Day"></select></label>
-    <label><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg><select id="t-sel" aria-label="Time"></select></label>
-  </div>
+  <button class="fab" id="b-menu" aria-label="Permit, saved places and events">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
 </header>
 
-<div id="rail">
-  <button class="round" id="b-gps" aria-label="Use my location">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>
-  </button>
-  <button class="round" id="b-centre" aria-label="Show all of Islington">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/></svg>
-  </button>
-</div>
+<button class="fab" id="locate" aria-label="Check where I am">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>
+</button>
 
-<section id="sheet" aria-label="Parking answer">
-  <button class="handle" id="handle" aria-label="Expand or collapse"><span></span></button>
-  <div class="scroll" id="scroll">
+<section id="card" aria-label="Parking answer">
+  <div class="head" id="head">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="ans" aria-live="polite">
+      <div class="ic" id="a-ic"></div>
+      <div class="txt"><h2 id="a-head">Can I park here?</h2><p id="a-sub">Find out where you are, right now</p></div>
+      <div class="zp" id="a-zone" hidden><small>ZONE</small><b id="a-zl"></b></div>
+    </div>
+    <div class="where" id="a-where" hidden><span id="a-street"></span><span class="sep" id="a-sep">·</span><span id="a-src"></span><button id="b-fix" type="button">Wrong zone?</button></div>
+    <div class="flag" id="a-flag" hidden></div>
 
-    <div class="place">
-      <div class="t"><h2 id="p-name">Can I park here?</h2><p id="p-sub">Tap the map, search, or use your location</p></div>
-      <button class="chip" id="b-save-top" aria-label="Save this place" hidden>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
-      </button>
+    <div class="tl" id="tl" hidden>
+      <div class="track"><div class="bar" id="bar"></div><div class="knob" id="knob"></div>
+        <input type="range" id="slider" min="0" max="1435" step="5" aria-label="Check another time today"></div>
+      <div class="scale num" id="scale"></div>
+      <div class="tlrow" id="tlrow" hidden><span class="num" id="tl-when"></span><button id="b-now" type="button">Back to now</button></div>
     </div>
 
-    <div class="status" id="status" aria-live="polite">
-      <div class="ic" id="s-ic"></div>
-      <div><h3 id="s-head">Find out in a tap</h3><p id="s-sub">We check the zone, the hours and Arsenal event days.</p></div>
-    </div>
+    <button class="cta" id="cta" type="button" hidden></button>
 
-    <button class="cta" id="b-start"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>Use my location</button>
-
-    <div class="when" id="when" hidden><h4 id="w-head"></h4><p id="w-sub"></p></div>
-
-    <div id="picker" hidden>
-      <h3 id="pk-title">Which zone is on the sign?</h3>
-      <p id="pk-msg">Look for the zone letter on the entry sign at the end of the street. You only do this once.</p>
+    <div class="picker" id="picker" hidden>
+      <p id="pk-msg">Which zone letter is on the street sign? You only need to do this once.</p>
       <div class="plates" id="pk-grid"></div>
-      <div><button class="btn" id="pk-cancel">Not now</button></div>
+      <button class="later" id="pk-later" type="button">Not now</button>
     </div>
+  </div>
 
-    <div class="timeline" id="timeline" hidden>
-      <div class="track">
-        <div class="bar" id="bar"></div>
-        <div class="knob" id="knob"></div>
-        <div class="bubble" id="bubble" hidden></div>
-        <input type="range" id="slider" min="0" max="1435" step="5" aria-label="Time of day">
-      </div>
-      <div class="scale" id="scale"></div>
-      <div class="daysrow"><div class="days" id="days"></div><button class="nowbtn" id="b-now" hidden>Now</button></div>
-    </div>
-
-    <div class="notice" id="banner" hidden></div>
-
-    <div class="actions" id="actions" hidden>
+  <div class="more" id="more">
+    <div class="actions" id="actions">
       <a class="act" id="a-dir" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>Directions</a>
-      <button class="act" id="a-save"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span>Save</span></button>
-      <button class="act" id="a-share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>Share</button>
-      <a class="act" id="a-sv" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Street view</a>
-      <button class="act" id="a-near"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/></svg>Nearby</button>
+      <button class="act" id="a-save" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span>Save</span></button>
+      <button class="act" id="a-share" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>Share</button>
     </div>
 
-    <div class="sec" id="nearby" hidden>
-      <div class="sec-h"><h3>Nearby streets</h3><span id="near-note"></span></div>
+    <div class="sec" id="s-near" hidden>
+      <h3>Nearby streets <span id="near-note"></span></h3>
       <div class="list" id="near-list"></div>
     </div>
 
-    <div class="warn" id="signwarn" hidden><span class="dotc bg-check">!</span><div><b>Always check the street signs</b>We show Islington's CPZ rules. Single bays can carry their own limits, suspensions or disabled-only use.</div></div>
-
-    <div class="sec" id="rules-sec" hidden>
-      <div class="sec-h"><h3>Parking rules here</h3></div>
-      <div class="rules" id="rules"></div>
+    <div class="sec" id="s-days" hidden>
+      <h3>Plan for another day</h3>
+      <div class="days" id="days"></div>
     </div>
 
-    <nav class="seg" role="tablist" aria-label="More">
-      <button class="on" data-tab="zones" role="tab">Zones</button>
-      <button data-tab="events" role="tab">Events</button>
-      <button data-tab="you" role="tab">You</button>
-      <button data-tab="how" role="tab">How</button>
-    </nav>
-
-    <div class="pane" id="t-zones">
-      <p>Every Islington zone at the time on the slider.</p>
-      <div class="list" id="zone-rows"></div>
+    <div class="sec" id="s-rules" hidden>
+      <h3>Rules for this street</h3>
+      <dl class="rules" id="rules"></dl>
     </div>
 
-    <div class="pane" id="t-events" hidden>
-      <p>Extra controls run in zones E, F, G, H, J, L, N, Q, V and Y for every Arsenal men's and women's home game and every concert at the Emirates.</p>
-      <div class="list" id="ev-rows"></div>
-      <h3>Add an event</h3>
-      <div class="inline">
-        <div class="field"><label for="ev-date">Date</label><input type="date" id="ev-date"></div>
-        <div class="field"><label for="ev-name">Name</label><input id="ev-name" placeholder="Concert, cup tie"></div>
-      </div>
-      <div><button class="btn primary" id="ev-add">Add event</button></div>
-      <p class="fine">Dates move for TV. Check <a href="https://help.arsenal.com/support/solutions/articles/101000594163-fixture-and-event-timings-for-local-residents" target="_blank" rel="noopener">Arsenal's residents list</a>.</p>
-    </div>
+    <p class="fine">Always check the signs. Bays can be suspended, and yellow lines, loading bans and disabled bays aren't shown here.</p>
+  </div>
+</section>
 
-    <div class="pane" id="t-you" hidden>
-      <div class="field"><label for="permit">Your parking permit</label><select id="permit"></select></div>
-      <p>With a resident permit, your zone shows as covered, and you can use resident bays in any zone Monday to Saturday, 11:00 to 15:00.</p>
-      <h3>Saved places</h3>
-      <div class="list" id="saved-rows"></div>
-      <h3>Streets you've confirmed</h3>
-      <div class="list" id="learn-rows"></div>
-      <h3>Back up or share</h3>
-      <div class="field"><label for="io">Copy this to keep your confirmed streets, or paste a backup and import it.</label><textarea id="io"></textarea></div>
-      <div class="inline"><button class="btn" id="b-copy">Copy backup</button><button class="btn" id="b-import">Import backup</button></div>
+<section id="menu" aria-label="Menu" aria-hidden="true">
+  <div class="mhead"><h2>ParkFree</h2><button class="fab" id="m-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+  <div class="mbody">
+    <div class="sec">
+      <h3>Your permit</h3>
+      <select id="permit" aria-label="Your parking permit"></select>
+      <p class="help">With an Islington resident permit, your zone shows as covered, and you can also use resident bays in any zone Monday to Saturday, 11:00 to 15:00.</p>
     </div>
-
-    <div class="pane" id="t-how" hidden>
-      <h3>Where the answer comes from</h3>
-      <p>We match your position to the nearest street, then find its zone: one you confirmed, Islington's pay-by-phone records (refreshed monthly), or map data. If we can't tell, we ask you to read the sign once.</p>
-      <p>Hours come from Islington Council's published rules, checked 26 October 2026. Times are always London time.</p>
-      <h3>What it can't see</h3>
-      <p>Suspended bays, yellow lines, loading bans, disabled and car-club bays, and pay-by-phone time limits. Double yellow lines are never free. The signs on the street always win.</p>
-      <p class="fine">Sources: <a href="https://www.islington.gov.uk/parking/parking-restrictions/controlled-parking-zones" target="_blank" rel="noopener">CPZ hours</a>, <a href="https://www.islington.gov.uk/parking/parking-restrictions/emirates-stadium-restrictions" target="_blank" rel="noopener">Emirates restrictions</a>, <a href="https://www.islington.gov.uk/parking/parking-restrictions/resident-roamer-scheme" target="_blank" rel="noopener">Roamer scheme</a>, <a href="https://myringgo.co.uk/islington/parkinglocator" target="_blank" rel="noopener">RingGo locations</a>. Map data © OpenStreetMap contributors, © CARTO.</p>
+    <div class="sec"><h3>Saved places</h3><div class="list" id="saved"></div></div>
+    <div class="sec"><h3>Emirates events <span>extra controls nearby</span></h3><div class="list" id="events"></div></div>
+    <details class="sec"><summary><h3>All 24 zones <span>tap to show</span></h3></summary><div class="list" id="zones"></div></details>
+    <div class="sec">
+      <h3>About</h3>
+      <p class="fine">Zones come from Islington's pay-by-phone records, refreshed monthly. Hours come from Islington Council's published rules, checked 26 October 2026, and use London time. Where a street's zone isn't known, you read the sign once and ParkFree remembers it on this phone.</p>
+      <p class="fine" style="margin-top:8px">Sources: <a href="https://www.islington.gov.uk/parking/parking-restrictions/controlled-parking-zones" target="_blank" rel="noopener">CPZ hours</a>, <a href="https://www.islington.gov.uk/parking/parking-restrictions/emirates-stadium-restrictions" target="_blank" rel="noopener">Emirates restrictions</a>, <a href="https://www.islington.gov.uk/parking/parking-restrictions/resident-roamer-scheme" target="_blank" rel="noopener">Roamer scheme</a>, <a href="https://help.arsenal.com/support/solutions/articles/101000594163-fixture-and-event-timings-for-local-residents" target="_blank" rel="noopener">Arsenal fixtures</a>. Map © OpenStreetMap contributors.</p>
     </div>
   </div>
 </section>
@@ -440,7 +305,7 @@ body[data-tone="idle"] .logo{background:var(--go)}
 // ================================================================
 //  DATA
 // ================================================================
-const ARSENAL = [
+const ARSENAL=[
   ['2026-09-06','16:30','Arsenal v Chelsea'],['2026-09-13','14:45','Arsenal Women v Crystal Palace'],
   ['2026-09-19','17:30','Arsenal Women v Man United'],['2026-10-10','12:30','Arsenal v Leeds United'],
   ['2026-10-13','20:00','Arsenal v Lille'],['2026-10-17','12:45','Arsenal Women v Birmingham City'],
@@ -455,18 +320,18 @@ const ARSENAL = [
   ['2027-03-03','20:00','Arsenal v Crystal Palace'],['2027-03-20','15:00','Arsenal v Sunderland'],
   ['2027-04-17','15:00','Arsenal v Aston Villa'],['2027-05-01','15:00','Arsenal v Tottenham'],
   ['2027-05-15','15:00','Arsenal v Nottingham Forest'],['2027-05-30','16:00','Arsenal v Brighton'],
-].map(([date,ko,name])=>({date,ko,name,src:'arsenal'}));
+].map(([date,ko,name])=>({date,ko,name}));
 const VERIFIED={'alwyne road':'L','easton street':'A','domingo street':'C','corinne road':'R','christopher street':'C','fonthill road':'J'};
-const ISL_CENTRE=[51.5465,-0.1058], EMIRATES=[51.5549,-0.1084];
+const ISL_CENTRE=[51.5465,-0.1058];
 const OVERPASS=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
 const DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const ICON={
+const SVG={
   free:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
   check:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 6v8M12 18.5v.01"/></svg>',
   stop:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m7 7 10 10M17 7 7 17"/></svg>',
   idle:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>',
   busy:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="animation:spin 1s linear infinite"><path d="M12 3a9 9 0 1 1-9 9"/></svg>',
-  car:'<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11a2 2 0 0 1 2 2v4a1 1 0 0 1-1 1h-1a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H4a1 1 0 0 1-1-1v-4a2 2 0 0 1 2-2zm2.2 0h9.6l-1.2-3.3a.5.5 0 0 0-.5-.3h-6.2a.5.5 0 0 0-.5.3z"/></svg>'
+  car:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11a2 2 0 0 1 2 2v4a1 1 0 0 1-1 1h-1a2 2 0 0 1-4 0H9a2 2 0 0 1-4 0H4a1 1 0 0 1-1-1v-4a2 2 0 0 1 2-2zm2.2 0h9.6l-1.2-3.3a.5.5 0 0 0-.5-.3h-6.2a.5.5 0 0 0-.5.3z"/></svg>'
 };
 
 // ================================================================
@@ -474,489 +339,427 @@ const ICON={
 // ================================================================
 const store={get(k,d){try{const v=localStorage.getItem('pf.'+k);return v?JSON.parse(v):d}catch(e){return d}},
   set(k,v){try{localStorage.setItem('pf.'+k,JSON.stringify(v))}catch(e){}}};
-let learned=store.get('learned',[]), profile=store.get('profile',{permit:null}), custom=store.get('events',[]), saved=store.get('saved',[]);
+let learned=store.get('learned',[]), profile=store.get('profile',{permit:null}), saved=store.get('saved',[]);
 let RINGGO=store.get('ringgo',{});
-const norm=s=>(s||'').toLowerCase().replace(/\(\d+\)/g,' ').replace(/[,.]/g,' ').replace(/\b(n|ec|wc)\d+[a-z]?\b/g,'').replace(/\s+/g,' ').trim();
+const norm=s=>(s||'').toLowerCase().replace(/\(\d+\)/g,' ').replace(/[,.']/g,' ').replace(/\b(n|ec|wc)\d+[a-z]?\b/g,'').replace(/\s+/g,' ').trim();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
-function loadEvents(){PF.setEvents([...ARSENAL,...custom.map(e=>({...e,src:'custom'}))]);}
-loadEvents();
+PF.setEvents(ARSENAL);
 
 // ================================================================
-//  TIME — London wall clock; live follows real time
+//  TIME — London wall clock; "live" follows real time
 // ================================================================
 let live=true, when=PF.londonNow();
 const currentT=()=>live?PF.londonNow():when;
 const fmtDate=d=>{const t=PF.mk(d,0);return `${DN[t.dow]} ${+d.slice(8)} ${MN[+d.slice(5,7)-1]}`;};
-function setDay(date){const t=currentT();live=false;when=PF.mk(date,t.min);render();}
+const dayWord=d=>{const today=PF.londonNow().date;if(d===today)return 'Today';if(d===PF.mk(today,1440).date)return 'Tomorrow';return fmtDate(d);};
+function setDay(date){const t=currentT();live=false;when=PF.mk(date,date===PF.londonNow().date?PF.londonNow().min:t.min);render();}
 function setMin(min){const t=currentT();live=false;when=PF.mk(t.date,Math.max(0,Math.min(1435,min)));render();}
-$('b-now').onclick=()=>{live=true;render();};
+$('b-now').onclick=e=>{e.stopPropagation();live=true;render();};
 setInterval(()=>{if(live)render();},30000);
 
 // ================================================================
 //  MAP
 // ================================================================
-const dark=matchMedia('(prefers-color-scheme: dark)').matches;
-const map=L.map('map',{zoomControl:false}).setView(ISL_CENTRE,14);
+const map=L.map('map',{zoomControl:false,attributionControl:true}).setView(ISL_CENTRE,15);
 map.attributionControl.setPrefix(false);
-// Free basemaps, no API key. If one provider doesn't answer, switch to the next.
 const OSMA='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 const BASES=[
   ['https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:OSMA}],
-  ['https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,attribution:OSMA+' · OSM France'}],
+  ['https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',{subdomains:'abc',maxZoom:19,attribution:OSMA}],
 ];
 let baseIdx=0, baseLayer=null;
 function useBase(i){
   if(baseLayer)map.removeLayer(baseLayer);
-  baseIdx=i; let ok=0, bad=0;
-  baseLayer=L.tileLayer(BASES[i][0],BASES[i][1])
-    .on('tileload',()=>{ok++;})
-    .on('tileerror',()=>{bad++; if(!ok&&bad>=3&&baseIdx<BASES.length-1)useBase(baseIdx+1);})
-    .addTo(map);
-  if(dark)document.querySelector('.leaflet-tile-pane')?.style.setProperty('filter','invert(.92) hue-rotate(180deg) brightness(.9)');
-  else document.querySelector('.leaflet-tile-pane')?.style.removeProperty('filter');
+  baseIdx=i;let ok=0,bad=0;
+  baseLayer=L.tileLayer(BASES[i][0],BASES[i][1]).on('tileload',()=>ok++)
+    .on('tileerror',()=>{bad++;if(!ok&&bad>=3&&baseIdx<BASES.length-1)useBase(baseIdx+1);}).addTo(map);
 }
 useBase(0);
-setTimeout(()=>{if(baseLayer&&!document.querySelector('.leaflet-tile-loaded')&&baseIdx<BASES.length-1)useBase(baseIdx+1);},6000);
-L.marker(EMIRATES,{icon:L.divIcon({className:'',html:'<div style="font:600 12px var(--font);color:var(--ink-2);background:var(--surface);padding:4px 8px;border-radius:8px;box-shadow:var(--shadow);white-space:nowrap">Emirates Stadium</div>',iconSize:[110,24],iconAnchor:[55,12]}),interactive:false}).addTo(map);
-const knownLayer=L.layerGroup().addTo(map), nearLayer=L.layerGroup().addTo(map);
-let pinMarker=null, gpsMarker=null, accCircle=null, hereLine=null, here=null;
 const css=v=>getComputedStyle(document.body).getPropertyValue(v).trim();
+const canvas=L.canvas({padding:.4});
+const streetLayer=L.layerGroup().addTo(map), nearLayer=L.layerGroup().addTo(map);
+const pinIcon=busy=>L.divIcon({className:'',html:`<div class="pin"><div class="h">${busy?SVG.busy:SVG.car}</div><div class="t"></div></div>`,iconSize:[46,56],iconAnchor:[23,56]});
+let pin=null, meDot=null, meAcc=null, hereLine=null;
 const toneOf=s=>({free:'free',roamer:'free',permit:'free',restricted:'stop',matchday:'stop'})[s]||'check';
 const colorOf=t=>css({free:'--go',stop:'--stop',check:'--check'}[t]||'--ink-3');
-const wide=()=>innerWidth>=1024;
-function padMap(){return wide()?{tl:[0,60],br:[0,80]}:{tl:[20,140],br:[20,$('sheet').offsetHeight+10]};}
-function focusOn(lat,lng,z=17){const p=padMap();map.setView([lat,lng],z,{animate:false});map.panBy([-(p.tl[0]-p.br[0])/2,-(p.tl[1]-p.br[1])/2],{animate:false});}
-function placeRail(){$('rail').style.bottom=(wide()?32:$('sheet').offsetHeight+14)+'px';}
-if(window.ResizeObserver)new ResizeObserver(placeRail).observe($('sheet')); addEventListener('resize',placeRail);
-let anchorGeoms=store.get('anchorGeom',[]);
-function drawKnown(t){
-  knownLayer.clearLayers();
-  [...learned.filter(x=>x.g&&x.g.length),...anchorGeoms].forEach(x=>{
-    if(cur&&cur.name&&norm(cur.name)===norm(x.name))return;
-    const st=PF.status(x.z,t,profile);
-    x.g.forEach(seg=>L.polyline(seg,{color:colorOf(toneOf(st.state)),weight:5,opacity:.75,lineCap:'round'})
-      .bindTooltip(`${esc(x.name)} · Zone ${x.z}`).addTo(knownLayer));
-  });
+function cardH(){return $('card').offsetHeight;}
+function placeLocate(){$('locate').style.bottom=(innerWidth>=820?24:cardH()+12)+'px';}
+if(window.ResizeObserver)new ResizeObserver(()=>{placeLocate();}).observe($('card'));
+addEventListener('resize',placeLocate);
+function visibleCentre(lat,lng,z){ // put the point in the middle of the map area above the card
+  z=z||Math.max(map.getZoom(),17);
+  map.setView([lat,lng],z,{animate:false});
+  if(innerWidth>=820)map.panBy([-210,0],{animate:false});
+  else{const top=70, bottom=Math.min(cardH(),innerHeight*.55);map.panBy([0,(bottom-top)/2],{animate:false});}
 }
-function drawHere(tone){
-  if(hereLine)map.removeLayer(hereLine); hereLine=null;
-  if(cur&&cur.segs)hereLine=L.layerGroup(cur.segs.map(s=>L.polyline(s,{color:colorOf(tone),weight:11,opacity:.85,lineCap:'round'}))).addTo(map);
-  if(pinMarker)pinMarker.setIcon(L.divIcon({className:'',html:`<div class="pin"><div class="head">${cur&&cur.loading?ICON.busy:ICON.car}</div><div class="tail"></div></div>`,iconSize:[52,62],iconAnchor:[26,62]}));
-}
-map.on('click',e=>{hideResults();checkPoint(e.latlng.lat,e.latlng.lng);});
-$('b-centre').onclick=()=>map.setView(ISL_CENTRE,14);
 
 // ================================================================
-//  OVERPASS + ZONE LOOKUP
+//  STREETS (shipped with the app; falls back to live lookup)
 // ================================================================
-async function overpass(q){
-  let lastErr;
-  for(const ep of OVERPASS){
-    try{const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),20000);
-      const r=await fetch(ep,{method:'POST',body:'data='+encodeURIComponent(q),signal:ctl.signal,headers:{'Content-Type':'application/x-www-form-urlencoded'}});
-      clearTimeout(to);if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}catch(e){lastErr=e;}
-  }
-  throw lastErr;
-}
-const ROADS='^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service)$';
-function segDist(p,a,b){const k=Math.cos(p[0]*Math.PI/180),R=6371000*Math.PI/180;
+let STREETS=null, BOUND=null;
+const dataReady=(async()=>{
+  try{
+    const r=await fetch('data/streets.json',{cache:'no-cache'}); if(!r.ok)throw 0;
+    const d=await r.json();
+    STREETS=Object.entries(d.streets).map(([name,ways])=>{
+      const segs=ways.map(f=>{const a=[];for(let i=0;i<f.length;i+=2)a.push([f[i],f[i+1]]);return a;});
+      let s=90,n=-90,w=180,e=-180;segs.forEach(sg=>sg.forEach(([la,lo])=>{s=Math.min(s,la);n=Math.max(n,la);w=Math.min(w,lo);e=Math.max(e,lo);}));
+      return {name,k:norm(name),segs,box:[s,w,n,e],mid:segs[0][Math.floor(segs[0].length/2)]};
+    });
+    BOUND=(d.boundary||[]).map(f=>{const a=[];for(let i=0;i<f.length;i+=2)a.push([f[i],f[i+1]]);return a;});
+  }catch(e){STREETS=null;}
+  drawStreets();
+})();
+function segDist(p,a,b){const k=Math.cos(p[0]*Math.PI/180),R=111320;
   const ax=(a[1]-p[1])*k*R,ay=(a[0]-p[0])*R,bx=(b[1]-p[1])*k*R,by=(b[0]-p[0])*R,dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy;
   let t=l?-(ax*dx+ay*dy)/l:0;t=Math.max(0,Math.min(1,t));return {d:Math.hypot(ax+t*dx,ay+t*dy),p:[a[0]+t*(b[0]-a[0]),a[1]+t*(b[1]-a[1])]};}
-function zoneFromTags(tags){
-  for(const [k,v] of Object.entries(tags||{})){if(!/zone/i.test(k)||!/park/i.test(k))continue;
-    const toks=String(v).toUpperCase().split(/[^A-Z]+/).filter(x=>PF.ZONES[x]);if(toks.length)return toks[toks.length-1];}
-  return null;
+function distTo(st,p){let best=null;st.segs.forEach(sg=>{for(let i=1;i<sg.length;i++){const r=segDist(p,sg[i-1],sg[i]);if(!best||r.d<best.d)best=r;}});return best;}
+function inIslington(lat,lng){
+  if(!BOUND||!BOUND.length)return true;
+  let inside=false;
+  BOUND.forEach(ring=>{for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [yi,xi]=ring[i],[yj,xj]=ring[j];
+    if(((yi>lat)!==(yj>lat))&&(lng<(xj-xi)*(lat-yi)/(yj-yi)+xi))inside=!inside;}});
+  return inside;
 }
-async function lookupPoint(lat,lng){
-  const q=`[out:json][timeout:20];is_in(${lat},${lng})->.a;area.a["admin_level"="8"]->.b;.b out tags;
-way(around:45,${lat},${lng})["highway"~"${ROADS}"]["name"];out tags geom;`;
-  const d=await overpass(q);
-  const borough=(d.elements.find(e=>e.type==='area')||{}).tags?.name||null;
-  let best=null;
-  d.elements.filter(e=>e.type==='way'&&e.geometry).forEach(w=>{const pts=w.geometry.map(g=>[g.lat,g.lon]);
-    for(let i=1;i<pts.length;i++){const r=segDist([lat,lng],pts[i-1],pts[i]);if(!best||r.d<best.dist)best={dist:r.d,snap:r.p,name:w.tags.name,tags:w.tags};}});
-  if(best)best.segs=d.elements.filter(e=>e.type==='way'&&e.tags&&e.tags.name===best.name&&e.geometry)
-    .map(w=>w.geometry.map(g=>[+g.lat.toFixed(5),+g.lon.toFixed(5)]));
-  return {borough,street:best};
+function nearestLocal(lat,lng,maxD=70){
+  let best=null;const dLa=0.0008,dLo=0.0013;
+  for(const st of STREETS){const b=st.box;if(lat<b[0]-dLa||lat>b[2]+dLa||lng<b[1]-dLo||lng>b[3]+dLo)continue;
+    const r=distTo(st,[lat,lng]);if(r&&r.d<=maxD&&(!best||r.d<best.d))best={...r,st};}
+  return best;
 }
-function resolveZone(name,lat,lng,tags){
+async function overpass(q){let lastErr;
+  for(const ep of OVERPASS){try{const c=new AbortController(),to=setTimeout(()=>c.abort(),15000);
+    const r=await fetch(ep,{method:'POST',body:'data='+encodeURIComponent(q),signal:c.signal,headers:{'Content-Type':'application/x-www-form-urlencoded'}});
+    clearTimeout(to);if(!r.ok)throw new Error(r.status);return await r.json();}catch(e){lastErr=e;}}
+  throw lastErr;}
+async function lookupLive(lat,lng){ // fallback only, until the shipped street map exists
+  try{
+    const d=await overpass(`[out:json][timeout:15];way(around:50,${lat},${lng})["highway"]["name"];out tags geom;`);
+    let best=null;d.elements.forEach(w=>{const pts=w.geometry.map(g=>[g.lat,g.lon]);for(let i=1;i<pts.length;i++){const r=segDist([lat,lng],pts[i-1],pts[i]);if(!best||r.d<best.d)best={...r,name:w.tags.name};}});
+    if(best)return {name:best.name,snap:best.p,segs:d.elements.filter(w=>w.tags.name===best.name).map(w=>w.geometry.map(g=>[g.lat,g.lon]))};
+  }catch(e){}
+  try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=17&lat=${lat}&lon=${lng}`);const d=await r.json();
+    const road=d.address&&(d.address.road||d.address.pedestrian);if(road)return {name:road,snap:[lat,lng],segs:null,borough:JSON.stringify(d.address)};}catch(e){}
+  throw new Error('lookup failed');
+}
+function resolveZone(name,lat,lng){
   const key=norm(name), mine=learned.filter(x=>x.s===key);
   if(mine.length){mine.sort((a,b)=>Math.hypot(a.lat-lat,a.lng-lng)-Math.hypot(b.lat-lat,b.lng-lng));return {z:mine[0].z,src:'you'};}
   const rg=RINGGO[key];
-  if(rg){const zs=Object.keys(rg.zones).sort((a,b)=>rg.zones[b]-rg.zones[a]);
-    return zs.length===1?{z:zs[0],src:'verified'}:{z:null,src:'multi',cands:zs};}
-  if(VERIFIED[key])return {z:VERIFIED[key],src:'verified'};
-  const t=zoneFromTags(tags);if(t)return {z:t,src:'osm'};
+  if(rg){const zs=Object.keys(rg.zones).sort((a,b)=>rg.zones[b]-rg.zones[a]);return zs.length===1?{z:zs[0],src:'council'}:{z:null,src:'multi',cands:zs};}
+  if(VERIFIED[key])return {z:VERIFIED[key],src:'council'};
   return {z:null,src:null};
 }
 
+// Colour every street whose zone is known, for the chosen time
+let drawQueued=false;
+function drawStreets(){if(drawQueued)return;drawQueued=true;requestAnimationFrame(()=>{drawQueued=false;paintStreets();});}
+function paintStreets(){
+  streetLayer.clearLayers(); if(!STREETS||map.getZoom()<14)return;
+  const t=currentT(), b=map.getBounds().pad(.25), curK=cur&&cur.name?norm(cur.name):null;
+  const cache={};
+  for(const st of STREETS){
+    const bx=st.box; if(bx[2]<b.getSouth()||bx[0]>b.getNorth()||bx[3]<b.getWest()||bx[1]>b.getEast())continue;
+    if(st.k===curK)continue;
+    const r=resolveZone(st.name,st.mid[0],st.mid[1]);
+    let tone=null;
+    if(r.z){cache[r.z]=cache[r.z]||toneOf(PF.status(r.z,t,profile).state);tone=cache[r.z];}
+    else if(r.cands)tone='check';
+    if(!tone)continue;
+    st.segs.forEach(sg=>L.polyline(sg,{renderer:canvas,color:colorOf(tone),weight:map.getZoom()>=16?5:3.5,opacity:.85,lineCap:'round',interactive:false}).addTo(streetLayer));
+  }
+}
+map.on('moveend zoomend',drawStreets);
+
 // ================================================================
-//  CHECK A POINT
+//  CHECK A SPOT
 // ================================================================
-let cur=null, reqId=0, pickerOpen=false, nearbyOpen=false, nearby=[];
-async function checkPoint(lat,lng){
-  const id=++reqId; here=[lat,lng];
-  if(!pinMarker)pinMarker=L.marker(here,{interactive:false,zIndexOffset:900}).addTo(map); else pinMarker.setLatLng(here);
-  cur={lat,lng,loading:true}; nearbyOpen=false; render();
+let cur=null, reqId=0, pickerOpen=false;
+async function checkPoint(lat,lng,opts={}){
+  const id=++reqId;
+  if(!pin)pin=L.marker([lat,lng],{interactive:false,zIndexOffset:900,icon:pinIcon(true)}).addTo(map);else pin.setLatLng([lat,lng]);
+  cur={lat,lng,loading:true}; render();
+  await dataReady; if(id!==reqId)return;
   try{
-    const {borough,street}=await lookupPoint(lat,lng); if(id!==reqId)return;
-    if(borough&&!/Islington/i.test(borough)){cur={lat,lng,src:'outside',borough,name:street?.name};render();return;}
-    if(!street){cur={lat,lng,src:'nostreet'};render();return;}
-    if(street.snap)pinMarker.setLatLng(street.snap);
-    const r=resolveZone(street.name,lat,lng,street.tags);
-    cur={lat,lng,name:street.name,z:r.z,src:r.src,cands:r.cands||null,segs:street.segs};
-    pickerOpen=!r.z; render();
+    let name,snap,segs;
+    if(STREETS){
+      if(!inIslington(lat,lng)){cur={lat,lng,src:'outside'};render();return;}
+      const n=nearestLocal(lat,lng);
+      if(!n){cur={lat,lng,src:'nostreet'};render();return;}
+      name=n.st.name;snap=n.p;segs=n.st.segs;
+    }else{
+      const r=await lookupLive(lat,lng); if(id!==reqId)return;
+      name=r.name;snap=r.snap;segs=r.segs;
+    }
+    pin.setLatLng(snap);
+    const z=resolveZone(name,lat,lng);
+    cur={lat:snap[0],lng:snap[1],name,segs,z:z.z,src:z.src,cands:z.cands||null};
+    pickerOpen=!z.z;
+    render();
   }catch(e){if(id===reqId){cur={lat,lng,src:'error'};render();}}
 }
+map.on('click',e=>{hideResults();$('q').blur();checkPoint(e.latlng.lat,e.latlng.lng);});
 
 // ================================================================
 //  GPS
 // ================================================================
-let watchId=null;
+let watchId=null, lastFix=null;
 function startGps(){
-  if(!navigator.geolocation){toast('This browser can’t share your location. Search a street instead.');return;}
-  const b=$('b-gps');b.classList.add('busy');let first=true;
+  if(!navigator.geolocation){toast('Location isn’t available here. Search a street instead.');return;}
+  const b=$('locate');b.classList.add('busy');let first=true;
   if(watchId!==null)navigator.geolocation.clearWatch(watchId);
   watchId=navigator.geolocation.watchPosition(p=>{
     b.classList.remove('busy');b.classList.add('on');
     const {latitude:la,longitude:lo,accuracy:ac}=p.coords;
-    if(accCircle)accCircle.setLatLng([la,lo]).setRadius(ac);else accCircle=L.circle([la,lo],{radius:ac,color:css('--plate'),weight:1,fillOpacity:.08,interactive:false}).addTo(map);
-    if(gpsMarker)gpsMarker.setLatLng([la,lo]);else gpsMarker=L.marker([la,lo],{icon:L.divIcon({className:'',html:'<div class="halo"></div>',iconSize:[22,22],iconAnchor:[11,11]}),interactive:false,zIndexOffset:800}).addTo(map);
-    if(first||!here||Math.hypot((la-here[0])*111000,(lo-here[1])*69000)>25){if(first)focusOn(la,lo);first=false;live=true;checkPoint(la,lo);}
+    if(meAcc)meAcc.setLatLng([la,lo]).setRadius(ac);else meAcc=L.circle([la,lo],{radius:ac,color:css('--plate'),weight:1,fillOpacity:.07,interactive:false}).addTo(map);
+    if(meDot)meDot.setLatLng([la,lo]);else meDot=L.marker([la,lo],{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[20,20],iconAnchor:[10,10]}),interactive:false,zIndexOffset:800}).addTo(map);
+    const moved=!lastFix||Math.hypot((la-lastFix[0])*111000,(lo-lastFix[1])*69000)>25;
+    if(first||moved){lastFix=[la,lo];if(first)visibleCentre(la,lo,17);first=false;live=true;checkPoint(la,lo);}
   },err=>{b.classList.remove('busy','on');
-    toast(err.code===1?'Location is off for this site. Turn it on in Settings › Privacy › Location Services › Safari.':'No location fix yet. Try again in a moment.');
+    toast(err.code===1?'Location is off. Allow it for this site in Settings › Privacy › Location Services.':'Couldn’t get your location yet. Try again in a moment.');
   },{enableHighAccuracy:true,maximumAge:10000,timeout:20000});
 }
-$('b-gps').onclick=startGps; $('b-start').onclick=startGps;
+$('locate').onclick=startGps;
+try{navigator.permissions&&navigator.permissions.query({name:'geolocation'}).then(p=>{if(p.state==='granted')startGps();}).catch(()=>{});}catch(e){}
 
 // ================================================================
-//  SEARCH
+//  SEARCH — local streets instantly, places from OpenStreetMap
 // ================================================================
 let sTimer=null;
 const hideResults=()=>{$('results').hidden=true;};
-$('q').addEventListener('input',e=>{$('q-clear').hidden=!e.target.value;clearTimeout(sTimer);
-  if(e.target.value.trim().length>=3)sTimer=setTimeout(()=>search(e.target.value.trim()),450);else hideResults();});
-$('q-clear').onclick=()=>{$('q').value='';$('q-clear').hidden=true;hideResults();};
-$('f-search').addEventListener('submit',e=>{e.preventDefault();const v=$('q').value.trim();if(v)search(v);});
-async function search(q){
-  const box=$('results');box.hidden=false;box.innerHTML='<div class="msg">Searching…</div>';
-  try{
-    const u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&bounded=1&countrycodes=gb&viewbox=-0.1440,51.5760,-0.0770,51.5150&q='+encodeURIComponent(q);
-    const d=await (await fetch(u,{headers:{'Accept-Language':'en-GB'}})).json();
-    if(!d.length){box.innerHTML='<div class="msg">No Islington street matches that. Try the full name, like “Highbury Hill”.</div>';return;}
-    box.innerHTML='';
-    d.forEach(x=>{const parts=x.display_name.split(',').map(s=>s.trim());const b=document.createElement('button');
-      b.innerHTML=`${esc(parts[0])}<small>${esc(parts.slice(1,3).join(', '))}</small>`;
-      b.onclick=()=>{hideResults();$('q').blur();focusOn(+x.lat,+x.lon);checkPoint(+x.lat,+x.lon);};box.appendChild(b);});
-  }catch(e){box.innerHTML='<div class="msg">Search isn’t responding. Tap the street on the map instead.</div>';}
+$('q').addEventListener('input',e=>{const v=e.target.value.trim();$('q-clear').hidden=!v;clearTimeout(sTimer);
+  if(v.length>=2){showLocal(v);sTimer=setTimeout(()=>searchRemote(v),600);}else hideResults();});
+$('q').addEventListener('focus',()=>{if($('q').value.trim().length>=2)showLocal($('q').value.trim());});
+$('q-clear').onclick=()=>{$('q').value='';$('q-clear').hidden=true;hideResults();$('q').focus();};
+$('f-search').addEventListener('submit',e=>{e.preventDefault();const first=$('results').querySelector('button');if(first)first.click();});
+function resultBtn(title,sub,badge,go){const b=document.createElement('button');b.type='button';
+  b.innerHTML=`<span class="ic">${badge}</span><span class="t"><b>${esc(title)}</b><small>${esc(sub)}</small></span>`;
+  b.onclick=()=>{hideResults();$('q').blur();go();};return b;}
+function showLocal(v){
+  const box=$('results');box.hidden=false;box.innerHTML='';
+  const k=norm(v);
+  const hits=(STREETS||[]).filter(s=>s.k.includes(k)).sort((a,b)=>(a.k.startsWith(k)?0:1)-(b.k.startsWith(k)?0:1)||a.k.length-b.k.length).slice(0,6);
+  const t=currentT();
+  hits.forEach(s=>{const r=resolveZone(s.name,s.mid[0],s.mid[1]);let sub='Zone not known yet',badge='?';
+    if(r.z){const st=PF.status(r.z,t,profile);sub=`Zone ${r.z} · ${label(st.state)}`;badge=r.z;}else if(r.cands){sub=`Zones ${r.cands.join(' / ')}`;badge=r.cands[0];}
+    box.appendChild(resultBtn(s.name,sub,badge,()=>{visibleCentre(s.mid[0],s.mid[1],17);checkPoint(s.mid[0],s.mid[1]);}));});
+  box.dataset.local=hits.length;
+  if(!hits.length)box.innerHTML='<div class="msg">Searching…</div>';
 }
+async function searchRemote(v){
+  try{
+    const u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&bounded=1&countrycodes=gb&viewbox=-0.1440,51.5760,-0.0770,51.5150&q='+encodeURIComponent(v);
+    const d=await (await fetch(u,{headers:{'Accept-Language':'en-GB'}})).json();
+    if($('q').value.trim()!==v)return;
+    const box=$('results');if(box.querySelector('.msg'))box.innerHTML='';
+    const have=new Set([...box.querySelectorAll('b')].map(b=>norm(b.textContent)));
+    d.filter(x=>!have.has(norm(x.display_name.split(',')[0]))).slice(0,4).forEach(x=>{const parts=x.display_name.split(',').map(s=>s.trim());
+      box.appendChild(resultBtn(parts[0],parts.slice(1,3).join(', '),'⌖',()=>{visibleCentre(+x.lat,+x.lon,17);checkPoint(+x.lat,+x.lon);}));});
+    if(!box.children.length)box.innerHTML='<div class="msg">No match in Islington. Try a street name or postcode.</div>';
+  }catch(e){const box=$('results');if(box.querySelector('.msg'))box.innerHTML='<div class="msg">Search is offline. Tap the street on the map instead.</div>';}
+}
+
+// ================================================================
+//  CARD: open / close
+// ================================================================
+let openState=false;
+function setOpen(v){openState=!!v;$('card').classList.toggle('open',openState);placeLocate();}
+$('head').addEventListener('click',e=>{if(e.target.closest('button,input,a,.track,.plates'))return;if(cur&&!cur.loading)setOpen(!openState);});
+let y0=null;
+$('head').addEventListener('touchstart',e=>{if(e.target.closest('.track,.plates'))return;y0=e.touches[0].clientY;},{passive:true});
+$('head').addEventListener('touchend',e=>{if(y0===null)return;const dy=e.changedTouches[0].clientY-y0;y0=null;if(dy<-35)setOpen(true);else if(dy>35)setOpen(false);},{passive:true});
 
 // ================================================================
 //  PICKER
 // ================================================================
-PF.ZONE_IDS.forEach(z=>{const b=document.createElement('button');b.textContent=z;b.setAttribute('aria-label','Zone '+z);b.onclick=()=>confirmZone(z);$('pk-grid').appendChild(b);});
-$('pk-cancel').onclick=()=>{pickerOpen=false;render();};
+PF.ZONE_IDS.forEach(z=>{const b=document.createElement('button');b.type='button';b.textContent=z;b.setAttribute('aria-label','Zone '+z);b.onclick=e=>{e.stopPropagation();confirmZone(z);};$('pk-grid').appendChild(b);});
+$('pk-later').onclick=e=>{e.stopPropagation();pickerOpen=false;render();};
+$('b-fix').onclick=e=>{e.stopPropagation();pickerOpen=true;render();};
 function confirmZone(z){
   const key=norm(cur.name);
   learned=learned.filter(x=>!(x.s===key&&Math.hypot(x.lat-cur.lat,x.lng-cur.lng)<0.004));
-  learned.push({s:key,name:cur.name,z,lat:+cur.lat.toFixed(5),lng:+cur.lng.toFixed(5),ts:Date.now(),g:cur.segs||[]});
-  store.set('learned',learned); cur.z=z; cur.src='you'; pickerOpen=false; toast(`Saved. ${cur.name} is Zone ${z}.`); render();
+  learned.push({s:key,name:cur.name,z,lat:+cur.lat.toFixed(5),lng:+cur.lng.toFixed(5),ts:Date.now()});
+  store.set('learned',learned);cur.z=z;cur.src='you';cur.cands=null;pickerOpen=false;toast(`Saved. ${cur.name} is Zone ${z}.`);render();drawStreets();
 }
 
 // ================================================================
-//  NEARBY — streets within a short walk, free ones first
+//  ACTIONS
 // ================================================================
-async function findNearby(){
-  if(!cur||!cur.lat)return;
-  nearbyOpen=true; nearby=null; render();
-  try{
-    const d=await overpass(`[out:json][timeout:25];way(around:500,${cur.lat},${cur.lng})["highway"~"^(tertiary|unclassified|residential|living_street)$"]["name"];out tags geom;`);
-    const by={};
-    d.elements.forEach(w=>{const pts=w.geometry.map(g=>[g.lat,g.lon]);const k=norm(w.tags.name);if(cur.name&&k===norm(cur.name))return;
-      for(let i=1;i<pts.length;i++){const r=segDist([cur.lat,cur.lng],pts[i-1],pts[i]);
-        if(!by[k]||r.d<by[k].d)by[k]={k,name:w.tags.name,d:r.d,p:r.p,tags:w.tags};}});
-    nearby=Object.values(by).map(x=>{const z=resolveZone(x.name,x.p[0],x.p[1],x.tags);return {...x,z:z.z};})
-      .filter(x=>x.z).sort((a,b)=>a.d-b.d).slice(0,12);
-  }catch(e){nearby=[];}
-  render();
-}
-$('a-near').onclick=()=>{if(nearbyOpen){nearbyOpen=false;render();}else findNearby();};
-
-// ================================================================
-//  SAVE / SHARE / DIRECTIONS
-// ================================================================
-const near=(a,b)=>Math.abs(a.lat-b.lat)<0.0003&&Math.abs(a.lng-b.lng)<0.0003;
+const near=(a,b)=>Math.abs(a.lat-b.lat)<0.0004&&Math.abs(a.lng-b.lng)<0.0004;
 const isSaved=()=>!!(cur&&cur.name&&saved.some(s=>near(s,cur)));
-function toggleSave(){
-  if(!cur||!cur.name)return;
+$('a-save').onclick=()=>{if(!cur||!cur.name)return;
   if(isSaved()){saved=saved.filter(s=>!near(s,cur));toast('Removed from saved places');}
-  else{saved.unshift({name:cur.name,lat:+cur.lat.toFixed(5),lng:+cur.lng.toFixed(5),z:cur.z||null,ts:Date.now()});toast('Saved. Find it under You.');}
-  store.set('saved',saved);render();
-}
-$('a-save').onclick=toggleSave; $('b-save-top').onclick=toggleSave;
-$('a-share').onclick=async()=>{
-  if(!cur||!cur.name)return;
-  const v=compute(currentT());
-  const text=`${cur.name}${cur.z?`, Zone ${cur.z}`:''}: ${v.head}${v.when?`. ${v.when}`:''}.`;
+  else{saved.unshift({name:cur.name,lat:+cur.lat.toFixed(5),lng:+cur.lng.toFixed(5),z:cur.z||null});toast('Saved. Find it in the menu.');}
+  store.set('saved',saved);render();};
+$('a-share').onclick=async()=>{if(!cur||!cur.name)return;const v=compute(currentT());
+  const text=`${cur.name}${cur.z?`, Zone ${cur.z}`:''}: ${v.head}. ${v.sub}.`;
   const url=`https://maps.apple.com/?ll=${cur.lat.toFixed(5)},${cur.lng.toFixed(5)}&q=${encodeURIComponent(cur.name)}`;
   try{if(navigator.share){await navigator.share({title:'ParkFree',text,url});return;}}catch(e){if(e.name==='AbortError')return;}
-  try{await navigator.clipboard.writeText(text+' '+url);toast('Copied, ready to paste');}catch(e){toast(text);}
-};
-$('b-you').onclick=()=>{showTab('you');$('sheet').classList.add('tall');setTimeout(()=>$('t-you').scrollIntoView({block:'start',behavior:'smooth'}),50);};
+  try{await navigator.clipboard.writeText(text+' '+url);toast('Copied, ready to paste');}catch(e){toast(text);}};
+$('cta').onclick=e=>{e.stopPropagation();const k=$('cta').dataset.k;
+  if(k==='gps')startGps();
+  if(k==='near'){setOpen(true);setTimeout(()=>$('s-near').scrollIntoView({block:'start',behavior:'smooth'}),80);}};
 
 // ================================================================
 //  REMOTE DATA
 // ================================================================
-async function loadAnchors(){
-  if(anchorGeoms.length)return render();
-  const names=Object.keys(VERIFIED).map(k=>k.replace(/\b\w/g,c=>c.toUpperCase()));
-  try{const d=await overpass(`[out:json][timeout:25];area["name"="London Borough of Islington"]["admin_level"="8"]->.i;way(area.i)["highway"]["name"~"^(${names.join('|')})$"];out tags geom;`);
-    const by={};d.elements.forEach(w=>{const k=norm(w.tags.name);(by[k]=by[k]||[]).push(w.geometry.map(g=>[+g.lat.toFixed(5),+g.lon.toFixed(5)]));});
-    anchorGeoms=Object.entries(by).map(([k,g])=>({name:k.replace(/\b\w/g,c=>c.toUpperCase()),z:VERIFIED[k],g}));store.set('anchorGeom',anchorGeoms);render();}catch(e){}
-}
-async function loadZoneTable(){
-  for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/Parkfree/main/data/zones.json']){
-    try{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)continue;const d=await r.json();
-      if(d&&d.streets&&Object.keys(d.streets).length){RINGGO=d.streets;store.set('ringgo',RINGGO);
-        if(cur&&cur.name&&!cur.z&&!['outside','error','nostreet','you'].includes(cur.src)){const z=resolveZone(cur.name,cur.lat,cur.lng,{});Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});pickerOpen=!z.z;}
-        render();return;}}catch(e){}
-  }
-}
+(async()=>{for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/Parkfree/main/data/zones.json']){
+  try{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)continue;const d=await r.json();
+    if(d&&d.streets&&Object.keys(d.streets).length){RINGGO=d.streets;store.set('ringgo',RINGGO);
+      if(cur&&cur.name&&!cur.z&&cur.src!=='you'){const z=resolveZone(cur.name,cur.lat,cur.lng);Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});pickerOpen=!z.z;}
+      render();drawStreets();return;}}catch(e){}}})();
 fetch('https://www.gov.uk/bank-holidays.json').then(r=>r.json()).then(d=>{PF.setBankHols(d['england-and-wales'].events.map(e=>e.date));render();}).catch(()=>{});
+
+// ================================================================
+//  ANSWER
+// ================================================================
+const label=s=>({free:'Free',roamer:'Free with Roamer',permit:'Your zone',restricted:'Permit or paid',matchday:'Event controls'})[s];
+const headline=s=>({free:'Free to park',roamer:'Free with Roamer',permit:'You’re covered',restricted:'Not free now',matchday:'Event-day controls'})[s];
+const thenWords=s=>({free:'free',roamer:'free with Roamer',permit:'covered by your permit',restricted:'permit or paid',matchday:'event-day controls'})[s];
+function whenText(t,u){if(!u)return '';const lbl=PF.whenLabel(t,u);return lbl.startsWith('tomorrow')?lbl.replace('tomorrow ','')+' tomorrow':lbl;}
+function compute(t){
+  const idle={tone:'idle',icon:'idle',head:'Can I park here?',sub:'Find out where you are, right now'};
+  if(!cur)return idle;
+  if(cur.loading)return {...idle,icon:'busy',head:'Checking…',sub:'Finding your street'};
+  if(cur.src==='error')return {tone:'check',icon:'check',head:'Couldn’t check that',sub:'Check your signal and tap the street again'};
+  if(cur.src==='outside')return {tone:'check',icon:'check',head:'Outside Islington',sub:'ParkFree only knows Islington’s zones'};
+  if(cur.src==='nostreet')return {tone:'check',icon:'check',head:'No street here',sub:'Tap closer to a road'};
+  if(!cur.z){
+    if(cur.cands){const sts=cur.cands.map(z=>PF.status(z,t,profile)),allFree=sts.every(PF.isFree),allStop=sts.every(s=>!PF.isFree(s));
+      return {tone:allStop?'stop':'check',icon:allStop?'stop':'check',head:allFree?'Probably free':allStop?'Not free now':'Check the sign',
+        sub:allFree?`Zones ${cur.cands.join(' and ')} are both free now`:allStop?`Zones ${cur.cands.join(' and ')} are both controlled`:`Zones ${cur.cands.join(' and ')} meet here`,zone:cur.cands[0],zoneLabel:cur.cands.join('/')};}
+    return {tone:'check',icon:'check',head:'Check the sign',sub:'We don’t know this street’s zone yet'};
+  }
+  const st=PF.status(cur.z,t,profile),free=PF.isFree(st),nx=PF.nextChange(cur.z,t,profile);
+  let sub;
+  if(nx){sub=free?`Until ${whenText(t,nx)}`:`Free from ${whenText(t,nx)}`;}
+  else sub=free?'All week':'All week, around the clock';
+  let then='';
+  if(nx){const st2=PF.status(cur.z,nx,profile),nx2=PF.nextChange(cur.z,nx,profile);then=`Then ${thenWords(st2.state)}${nx2?` until ${whenText(t,nx2)}`:''}`;}
+  return {tone:free?'free':'stop',icon:free?'free':'stop',head:headline(st.state),sub,then,state:st.state,zone:cur.z,zoneLabel:cur.z};
+}
 
 // ================================================================
 //  RENDER
 // ================================================================
-function ribbon(zone,date){const out=[];let prev=null;
-  for(let m=0;m<1440;m+=15){const s=PF.status(zone,PF.mk(date,m),profile).state;if(prev&&prev.s===s)prev.n++;else{prev={s,n:1,from:m};out.push(prev);}}
-  return out;}
-const ribbonHTML=(zone,date)=>ribbon(zone,date).map(r=>`<i class="${r.s}" style="width:${r.n/96*100}%"></i>`).join('');
-const label=s=>({free:'Free',roamer:'Free with Roamer',permit:'Your zone',restricted:'Permit or paid',matchday:'Event controls'})[s];
-const headline=st=>({free:'Free to park',roamer:'Free with Roamer',permit:'You’re covered',restricted:'No free parking now',matchday:'Event-day controls'})[st.state];
-const stateWords=s=>({free:'free',roamer:'free with Roamer',permit:'covered by your permit',restricted:'permit or paid',matchday:'event-day controls'})[s];
-
-function compute(t){
-  const base={tone:'idle',icon:'idle',name:'Can I park here?',sub:'Tap the map, search, or use your location',head:'Find out in a tap',hsub:'We check the zone, the hours and Arsenal event days.'};
-  if(!cur)return base;
-  if(cur.loading)return {...base,icon:'busy',name:'Checking…',sub:'Finding the nearest street',head:'One moment',hsub:'Looking up the street and its zone.'};
-  if(cur.src==='error')return {...base,tone:'check',icon:'check',name:'Couldn’t check this spot',sub:'The map service didn’t answer',head:'Try that again',hsub:'Check your connection, then tap the street again.'};
-  if(cur.src==='outside')return {...base,tone:'check',icon:'check',name:cur.name||'Outside Islington',sub:(cur.borough||'Another borough').replace('London Borough of ',''),head:'Outside Islington',hsub:'ParkFree covers Islington zones only. Check the local signs.'};
-  if(cur.src==='nostreet')return {...base,tone:'check',icon:'check',name:'No street here',sub:'Tap closer to a road',head:'Pick a street',hsub:'Tap a road on the map or search for it.'};
-  if(!cur.z){
-    if(cur.cands){const sts=cur.cands.map(z=>PF.status(z,t,profile)),allFree=sts.every(PF.isFree),allStop=sts.every(s=>!PF.isFree(s));
-      return {tone:allStop?'stop':'check',icon:allStop?'stop':'check',name:cur.name,sub:`Islington · Zones ${cur.cands.join(' / ')}`,
-        head:allFree?'Likely free now':allStop?'No free parking now':'Check the sign',
-        hsub:allFree?'Both zones here are free now. Check the sign to be sure.':allStop?'Both zones on this street are controlled now.':`Zones ${cur.cands.join(' and ')} meet on this street.`,zone:cur.cands[0]};}
-    return {tone:'check',icon:'check',name:cur.name,sub:'Islington · Zone unknown',head:'Check the sign',hsub:'Tap the zone letter from the street sign below.'};
-  }
-  const st=PF.status(cur.z,t,profile), free=PF.isFree(st), nx=PF.nextChange(cur.z,t,profile);
-  const unsure=cur.src==='osm';
-  const tone=free?(unsure?'check':'free'):'stop';
-  const head=unsure&&free?'Likely free now':headline(st);
-  const hsub=unsure?'Zone from map data. Check the sign to be sure.':
-    ({free:'Under Islington CPZ rules',roamer:'Resident bays only, until 15:00',permit:`Your Zone ${cur.z} permit applies`,restricted:'Permit holders or pay-by-phone only',matchday:'Arsenal event controls are in force'})[st.state];
-  let w,wsub,walert=false;
-  if(nx){
-    w=free?`Free until ${PF.whenLabel(t,nx)}`:`Free from ${PF.whenLabel(t,nx)}`;
-    const st2=PF.status(cur.z,nx,profile), nx2=PF.nextChange(cur.z,nx,profile);
-    wsub=`Then ${stateWords(st2.state)}${nx2?` until ${PF.whenLabel(t,nx2)}`:''}`;
-    if(!free){walert=true;wsub=`${label(st.state)} now`;}
-  }else{w=free?'Free all week':'Controlled all week';wsub=free?'No controls in the next 7 days':`Zone ${cur.z} is controlled around the clock`;walert=!free;}
-  return {tone,icon:tone,name:cur.name,sub:`Islington · Zone ${cur.z}`,head,hsub,when:w,wsub,walert,zone:cur.z};
-}
-
+function ribbon(z,date){const out=[];let prev=null;
+  for(let m=0;m<1440;m+=15){const s=PF.status(z,PF.mk(date,m),profile).state;if(prev&&prev.s===s)prev.n++;else{prev={s,n:1,from:m};out.push(prev);}}return out;}
 function render(){
   const t=currentT(), v=compute(t);
   document.body.dataset.tone=v.tone;
-  $('theme-color').setAttribute('content',css('--tone-wash')||'#F2F4F7');
-  $('p-name').textContent=v.name; $('p-sub').textContent=v.sub;
-  $('s-ic').innerHTML=ICON[v.icon]; $('s-head').textContent=v.head; $('s-sub').textContent=v.hsub;
-  $('b-start').hidden=!!cur;
-  const hasPlace=!!(cur&&cur.name&&!cur.loading&&!['error','nostreet','outside'].includes(cur.src));
-  $('b-save-top').hidden=!hasPlace; $('b-save-top').classList.toggle('on',isSaved());
-  $('when').hidden=!v.when; if(v.when){$('w-head').textContent=v.when;$('w-sub').textContent=v.wsub;$('w-sub').className=v.walert?'alert':'';}
-  renderPicker(); renderTimeline(t,v.zone||null); renderBanner(t);
-  $('actions').hidden=!hasPlace;
-  if(hasPlace){$('a-dir').href=`https://maps.apple.com/?daddr=${cur.lat.toFixed(5)},${cur.lng.toFixed(5)}&dirflg=d`;
-    $('a-save').classList.toggle('on',isSaved()); $('a-save').querySelector('span').textContent=isSaved()?'Saved':'Save';
-    $('a-near').classList.toggle('on',nearbyOpen);}
-  if(hasPlace)$('a-sv').href=`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${cur.lat.toFixed(6)},${cur.lng.toFixed(6)}`;
-  $('signwarn').hidden=!hasPlace; renderRules(t,v);
-  renderTools(t); renderNearby(t); drawHere(v.tone); drawKnown(t); drawViewport(t);
-  renderZones(t); renderEvents(t); renderYou(t);
+  $('theme-color').setAttribute('content',v.tone==='idle'?css('--canvas'):css('--tone-tint'));
+  $('a-ic').innerHTML=SVG[v.icon];$('a-head').textContent=v.head;$('a-sub').textContent=v.sub;
+  $('a-zone').hidden=!v.zoneLabel;if(v.zoneLabel)$('a-zl').textContent=v.zoneLabel;
+  const has=!!(cur&&cur.name&&!cur.loading&&!['error','outside','nostreet'].includes(cur.src));
+  $('a-where').hidden=!has;
+  if(has){$('a-street').textContent=cur.name;
+    const src={you:'confirmed by you',council:'council records'}[cur.src]||'';
+    $('a-src').textContent=src;$('a-sep').hidden=!src;$('b-fix').hidden=pickerOpen;}
+  // event flag
+  const ev=PF.eventOn(t.date), md=v.zone&&PF.ZONES[v.zone]&&PF.ZONES[v.zone].md;
+  if(ev&&md){const dt=(t.dow===0||PF.isBH(t))?'sun':t.dow===6?'sat':'wk';const w=PF.MD[PF.ZONES[v.zone].md][dt];
+    $('a-flag').hidden=false;$('a-flag').innerHTML=`<b>${esc(ev.name)}</b>${ev.ko?`, ${ev.ko}`:''}. Extra controls ${w[0]}–${w[1]}.`;}
+  else $('a-flag').hidden=true;
+  // timeline
+  $('tl').hidden=!v.zone||pickerOpen;
+  if(v.zone&&!pickerOpen){
+    const rib=ribbon(v.zone,t.date);
+    $('bar').innerHTML=rib.map(r=>`<i class="${r.s}" style="width:${r.n/96*100}%"></i>`).join('');
+    $('knob').style.left=(t.min/1440*100)+'%';$('slider').value=t.min;
+    let marks=rib.slice(1).map(r=>r.from).filter(m=>m>=100&&m<=1340);marks=marks.filter((m,i)=>i===0||m-marks[i-1]>=140);
+    $('scale').innerHTML='<span class="l" style="left:0">00:00</span>'+marks.map(m=>`<span style="left:${m/1440*100}%">${PF.fmt(m)}</span>`).join('')+'<span class="r" style="left:100%">24:00</span>';
+    $('tlrow').hidden=live;$('tl-when').textContent=`Showing ${dayWord(t.date)}, ${PF.fmt(t.min)}`;
+  }
+  // primary button
+  const cta=$('cta');
+  if(!cur){cta.hidden=false;cta.dataset.k='gps';cta.innerHTML=SVG.idle.replace('22','18').replace('22','18')+'Check where I am';}
+  else if(has&&v.zone&&!PF.isFree(PF.status(v.zone,t,profile))&&!pickerOpen&&!openState){cta.hidden=false;cta.dataset.k='near';cta.textContent='Find a free street nearby';}
+  else cta.hidden=true;
+  // picker
+  $('picker').hidden=!(pickerOpen&&has);
+  if(pickerOpen&&has){$('pk-msg').textContent=cur.cands?`Zones ${cur.cands.join(' and ')} both cover ${cur.name}. Which letter is on the nearest sign?`:`Which zone letter is on the sign for ${cur.name}? You only do this once.`;
+    $('pk-grid').querySelectorAll('button').forEach(b=>b.classList.toggle('likely',!!(cur.cands&&cur.cands.includes(b.textContent))));}
+  // pin + street highlight
+  if(pin)pin.setIcon(pinIcon(cur&&cur.loading));
+  if(hereLine){map.removeLayer(hereLine);hereLine=null;}
+  if(has&&cur.segs)hereLine=L.layerGroup(cur.segs.map(s=>L.polyline(s,{renderer:canvas,color:colorOf(v.tone),weight:9,opacity:.95,lineCap:'round',interactive:false}))).addTo(map);
+  // expanded detail
+  $('actions').hidden=!has;
+  if(has){$('a-dir').href=`https://maps.apple.com/?daddr=${cur.lat.toFixed(5)},${cur.lng.toFixed(5)}&dirflg=d`;
+    $('a-save').classList.toggle('on',isSaved());$('a-save').querySelector('span').textContent=isSaved()?'Saved':'Save';}
+  renderNearby(t,has);renderDays(t,v);renderRules(v,has);
+  drawStreets();
+  if(menuOpen)renderMenu();
 }
-function renderRules(t,v){
-  const z=cur&&cur.z, sec=$('rules-sec'); sec.hidden=!z; if(!z)return;
-  const Z=PF.ZONES[z];
-  const sunday=Z.special==='K'?'Controlled all day':Z.special==='C'?'Controlled until 06:00, then free':'Free (check the sign)';
-  const src={you:'Confirmed by you',verified:'Islington pay-by-phone records',osm:'Map data, check the sign'}[cur.src]||'';
-  const ic={zone:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 8h3a2.5 2.5 0 0 1 0 5h-3V8zm0 5v3" stroke-linecap="round"/></svg>',
-    who:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
-    clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>',
-    ev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/></svg>',
-    info:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01" stroke-linecap="round"/></svg>'};
-  const rows=[[ic.zone,'Zone',`Islington CPZ ${z}`],[ic.who,'Who can park',`Zone ${z} permits, pay-by-phone, and Roamer permits Mon–Sat 11:00–15:00`],
-    [ic.clock,'Controlled',PF.zoneLabel(z)],[ic.ev,'Event days',Z.md?PF.mdLabel(z).replace('Event days: ',''):'No extra controls'],
-    [ic.clock,'Sundays',sunday],[ic.info,'Zone source',src]];
-  $('rules').innerHTML=rows.map(r=>`<div>${r[0]}<b>${r[1]}</b><span>${esc(r[2])}</span></div>`).join('');
-}
-function renderTools(t){
-  const today=PF.londonNow(), d=$('d-sel'), tm=$('t-sel');
-  let o='';for(let i=0;i<14;i++){const x=PF.mk(today.date,i*1440);const ev=PF.eventOn(x.date);o+=`<option value="${x.date}">${i===0?'Today':i===1?'Tomorrow':fmtDate(x.date)}${ev?' · event':''}</option>`;}
-  if(d.dataset.k!==today.date){d.innerHTML=o;d.dataset.k=today.date;} d.value=t.date;
-  if(!tm.options.length){let h='<option value="now">Now</option>';for(let m=0;m<1440;m+=30)h+=`<option value="${m}">${PF.fmt(m)}</option>`;tm.innerHTML=h;}
-  if(live)tm.value='now'; else {const m=Math.round(t.min/30)*30%1440; tm.value=String(m);}
-}
-$('d-sel').onchange=e=>setDay(e.target.value);
-$('t-sel').onchange=e=>{if(e.target.value==='now'){live=true;render();}else setMin(+e.target.value);};
-
-// Colour every street in view whose zone we know (zoom 15+)
-const vpLayer=L.layerGroup().addTo(map), vpWays=new Map(), vpDone=new Set(); let vpTimer=null, vpBusy=false;
-map.on('moveend',()=>{clearTimeout(vpTimer);vpTimer=setTimeout(loadViewport,600);});
-async function loadViewport(){
-  if(map.getZoom()<15||vpBusy){drawViewport(currentT());return;}
-  const b=map.getBounds(), cells=[];
-  for(let la=Math.floor(b.getSouth()*100);la<=Math.floor(b.getNorth()*100);la++)for(let lo=Math.floor(b.getWest()*100);lo<=Math.floor(b.getEast()*100);lo++){const k=la+':'+lo;if(!vpDone.has(k))cells.push([la,lo,k]);}
-  if(!cells.length||cells.length>12){drawViewport(currentT());return;}
-  vpBusy=true;
-  try{
-    const parts=cells.map(([la,lo])=>`way(${la/100},${lo/100},${(la+1)/100},${(lo+1)/100})["highway"~"^(primary|secondary|tertiary|unclassified|residential|living_street)$"]["name"];`).join('');
-    const d=await overpass(`[out:json][timeout:25];(${parts});out tags geom;`);
-    d.elements.forEach(w=>{if(w.geometry)vpWays.set(w.id,{name:w.tags.name,tags:w.tags,g:w.geometry.map(p=>[+p.lat.toFixed(5),+p.lon.toFixed(5)])});});
-    cells.forEach(c=>vpDone.add(c[2]));
-  }catch(e){}
-  vpBusy=false; drawViewport(currentT());
-}
-const vpRenderer=L.canvas({padding:.3});
-function drawViewport(t){
-  vpLayer.clearLayers(); if(map.getZoom()<15)return;
-  const b=map.getBounds().pad(.2), curKey=cur&&cur.name?norm(cur.name):null;
-  vpWays.forEach(w=>{
-    const k=norm(w.name); if(k===curKey)return;
-    const mid=w.g[Math.floor(w.g.length/2)]; if(!b.contains(mid))return;
-    const r=resolveZone(w.name,mid[0],mid[1],w.tags);
-    let tone=null;
-    if(r.z)tone=r.src==='osm'&&PF.isFree(PF.status(r.z,t,profile))?'check':toneOf(PF.status(r.z,t,profile).state);
-    else if(r.cands)tone='check';
-    if(!tone)return;
-    L.polyline(w.g,{renderer:vpRenderer,color:colorOf(tone),weight:4,opacity:.8,lineCap:'round'}).addTo(vpLayer);
-  });
-}
-
-function renderPicker(){
-  const show=pickerOpen&&cur&&cur.name&&!cur.loading; $('picker').hidden=!show; if(!show)return;
-  $('pk-title').textContent=cur.cands?'Which zone is on the nearest sign?':`Which zone is ${cur.name} in?`;
-  $('pk-msg').textContent=cur.cands?`Zones ${cur.cands.join(' and ')} both cover this street. Tap the letter on the closest sign.`:'Look for the zone letter on the entry sign at the end of the street. You only do this once.';
-  $('pk-grid').querySelectorAll('button').forEach(b=>b.classList.toggle('likely',!!(cur.cands&&cur.cands.includes(b.textContent))));
-}
-function renderTimeline(t,z){
-  $('timeline').hidden=!z; if(!z)return;
-  const rib=ribbon(z,t.date);
-  $('bar').innerHTML=ribbonHTML(z,t.date);
-  const pct=t.min/1440*100;
-  $('knob').style.left=pct+'%'; $('slider').value=t.min;
-  const b=$('bubble'); b.hidden=live; b.style.left=Math.min(82,Math.max(18,pct))+'%'; b.textContent=`${fmtDate(t.date)}, ${PF.fmt(t.min)}`;
-  // scale: the zone's real change times, plus the ends
-  let marks=rib.slice(1).map(r=>r.from).filter(m=>m>=120&&m<=1320);
-  marks=marks.filter((m,i)=>i===0||m-marks[i-1]>=150);
-  $('scale').innerHTML=`<span class="l" style="left:0">00:00</span>`+marks.map(m=>`<span style="left:${m/1440*100}%">${PF.fmt(m)}</span>`).join('')+`<span class="r" style="left:100%">24:00</span>`;
-  const today=PF.londonNow(); let html='';
-  for(let i=0;i<7;i++){const d=PF.mk(today.date,i*1440),ev=PF.eventOn(d.date);
-    html+=`<button class="day${d.date===t.date?' on':''}" data-d="${d.date}" aria-label="${fmtDate(d.date)}${ev?', event day':''}">${ev?'<i class="ev"></i>':''}${i===0?'Today':DN[d.dow]}<b>${+d.date.slice(8)}</b></button>`;}
-  $('days').innerHTML=html;
-  $('days').querySelectorAll('.day').forEach(b=>b.onclick=()=>setDay(b.dataset.d));
-  $('b-now').hidden=live;
-}
-$('slider').addEventListener('input',e=>setMin(+e.target.value));
-function renderBanner(t){
-  const ev=PF.eventOn(t.date),b=$('banner');
-  if(!ev){const nxt=PF.EVENTS.find(e=>e.date>t.date);
-    if(nxt&&(Date.parse(nxt.date)-Date.parse(t.date))/864e5<=2){b.hidden=false;b.innerHTML=`<b>Event coming up.</b> ${esc(nxt.name)} on ${fmtDate(nxt.date)} brings extra controls near the Emirates.`;}
-    else b.hidden=true;return;}
-  const dt=(t.dow===0||PF.isBH(t))?'sun':t.dow===6?'sat':'wk', w=k=>PF.MD[k][dt].join('–');
-  b.hidden=false;
-  b.innerHTML=`<b>${esc(ev.name)}${ev.ko?`, ${ev.ko}`:''}.</b> Extra controls ${w('E')} in zones E, F, H, J, L, N, V and Y; ${w('G')} in G; ${w('Q')} in Q. Roamer doesn’t apply then, and bays near the stadium may be suspended.`;
-}
-function renderNearby(t){
+function renderNearby(t,has){
   nearLayer.clearLayers();
-  $('nearby').hidden=!nearbyOpen; if(!nearbyOpen)return;
-  const list=$('near-list');
-  if(nearby===null){$('near-note').textContent='';list.innerHTML='<div class="item"><span class="dotc bg-check">…</span><div class="t"><b>Looking around</b><span class="c-idle">Streets within a 6-minute walk</span></div><span></span></div>';return;}
-  if(!nearby.length){$('near-note').textContent='';list.innerHTML='<div class="item"><span class="dotc bg-check">!</span><div class="t"><b>No known zones nearby yet</b><span class="c-idle">Confirm a few street signs and they’ll show here.</span></div><span></span></div>';return;}
-  const rows=nearby.map(x=>{const st=PF.status(x.z,t,profile);return {...x,st,tone:toneOf(st.state),nx:PF.nextChange(x.z,t,profile)};})
-    .sort((a,b)=>(PF.isFree(b.st)-PF.isFree(a.st))||a.d-b.d).slice(0,6);
-  $('near-note').textContent=`${rows.filter(r=>PF.isFree(r.st)).length} free now`;
-  list.innerHTML=rows.map((r,i)=>`<button class="item" data-i="${i}"><span class="dotc bg-${r.tone}">${PF.isFree(r.st)?'✓':'×'}</span>
-    <div class="t"><b>${esc(r.name)}</b><span class="c-${r.tone}">${PF.isFree(r.st)?(r.nx?'Free until '+PF.whenLabel(t,r.nx):'Free'):(r.nx?'Free from '+PF.whenLabel(t,r.nx):'Controlled')} · Zone ${r.z}</span></div>
-    <span class="r">${Math.max(1,Math.round(r.d/80))} min walk ›</span></button>`).join('');
-  rows.forEach(r=>L.circleMarker(r.p,{radius:8,color:'#fff',weight:3,fillColor:colorOf(r.tone),fillOpacity:1}).bindTooltip(esc(r.name)).addTo(nearLayer));
-  list.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const r=rows[+b.dataset.i];focusOn(r.p[0],r.p[1]);checkPoint(r.p[0],r.p[1]);});
+  const show=has&&STREETS; $('s-near').hidden=!show; if(!show)return;
+  const p=[cur.lat,cur.lng], curK=norm(cur.name), out=[];
+  for(const st of STREETS){if(st.k===curK)continue;const b=st.box;
+    if(p[0]<b[0]-.006||p[0]>b[2]+.006||p[1]<b[1]-.009||p[1]>b[3]+.009)continue;
+    const r=resolveZone(st.name,st.mid[0],st.mid[1]);if(!r.z)continue;
+    const d=distTo(st,p);if(!d||d.d>650)continue;
+    const s=PF.status(r.z,t,profile);out.push({st,z:r.z,d:d.d,pt:d.p,s,free:PF.isFree(s),nx:PF.nextChange(r.z,t,profile)});}
+  const rows=out.sort((a,b)=>(b.free-a.free)||a.d-b.d).slice(0,5);
+  const nFree=out.filter(x=>x.free).length;
+  $('near-note').textContent=out.length?(nFree?`${nFree} free now`:'none free right now'):'';
+  if(!rows.length){$('near-list').innerHTML='<div class="row"><span class="d bg-check"></span><span class="t"><b>No known streets nearby</b><span>Confirm a sign or two and they’ll show here.</span></span></div>';return;}
+  $('near-list').innerHTML=rows.map((r,i)=>`<button class="row" data-i="${i}" type="button"><span class="d bg-${r.free?'free':'stop'}"></span>
+    <span class="t"><b>${esc(r.st.name)}</b><span class="c-${r.free?'free':'stop'}">${r.free?(r.nx?'Free until '+whenText(t,r.nx):'Free'):(r.nx?'Free from '+whenText(t,r.nx):'Controlled')} · Zone ${r.z}</span></span>
+    <span class="r num">${Math.max(1,Math.round(r.d/80))} min</span></button>`).join('');
+  $('near-list').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const r=rows[+b.dataset.i];visibleCentre(r.pt[0],r.pt[1]);checkPoint(r.pt[0],r.pt[1]);});
+  if(openState)rows.filter(r=>r.free).forEach(r=>L.marker(r.pt,{interactive:false,icon:L.divIcon({className:'',html:`<div class="ndot" style="background:${colorOf('free')}"></div>`,iconSize:[16,16],iconAnchor:[8,8]})}).addTo(nearLayer));
 }
-function renderZones(t){
-  $('zone-rows').innerHTML=PF.ZONE_IDS.map(z=>{const s=PF.status(z,t,profile),nx=PF.nextChange(z,t,profile),tone=toneOf(s.state);
-    return `<div class="item"><span class="plate">${z}</span><div class="t"><b>${PF.zoneLabel(z)}</b>${PF.ZONES[z].md?`<span class="c-idle">${PF.mdLabel(z)}</span>`:''}<div class="mini">${ribbonHTML(z,t.date)}</div></div>
-      <span class="r col"><b class="c-${tone}" style="font-weight:600">${label(s.state)}</b>${nx?(PF.isFree(s)?'until ':'from ')+PF.whenLabel(t,nx):''}</span></div>`;}).join('');
+function renderDays(t,v){
+  $('s-days').hidden=!v.zone; if(!v.zone)return;
+  const today=PF.londonNow();let h='';
+  for(let i=0;i<7;i++){const d=PF.mk(today.date,i*1440),ev=PF.eventOn(d.date);
+    h+=`<button class="day${d.date===t.date?' on':''}" data-d="${d.date}" type="button" aria-label="${fmtDate(d.date)}${ev?', Emirates event':''}">${ev?'<i class="ev"></i>':''}${i===0?'Today':DN[d.dow]}<b>${+d.date.slice(8)}</b></button>`;}
+  $('days').innerHTML=h;$('days').querySelectorAll('.day').forEach(b=>b.onclick=()=>setDay(b.dataset.d));
 }
-function renderEvents(t){
-  const nxt=PF.EVENTS.find(e=>e.date>=t.date);
-  $('ev-rows').innerHTML=PF.EVENTS.map(e=>{const d=PF.mk(e.date,0);
-    return `<div class="item${e.date<t.date?' past':''}${e===nxt?' next':''}"><div class="evd">${DN[d.dow]}<b>${+e.date.slice(8)}</b>${MN[+e.date.slice(5,7)-1]}</div>
-    <div class="t"><b>${esc(e.name)}</b><span class="c-idle">${e.ko?`Kick-off ${e.ko}`:'Event at the Emirates'}${e.src==='custom'?', added by you':''}</span></div>
-    ${e.src==='custom'?`<button class="x" data-del="${esc(e.date)}|${esc(e.name)}" aria-label="Remove ${esc(e.name)}">×</button>`:'<span></span>'}</div>`;}).join('');
-  $('ev-rows').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const [d,n]=b.dataset.del.split('|');
-    custom=custom.filter(e=>!(e.date===d&&e.name===n));store.set('events',custom);loadEvents();render();toast('Event removed');});
-}
-function renderYou(t){
-  $('saved-rows').innerHTML=saved.length?saved.map((s,i)=>{const st=s.z?PF.status(s.z,t,profile):null,tone=st?toneOf(st.state):'check';
-    return `<button class="item" data-go="${i}"><span class="dotc bg-${tone}">${st?(PF.isFree(st)?'✓':'×'):'?'}</span><div class="t"><b>${esc(s.name)}</b><span class="c-${tone}">${st?label(st.state):'Zone not known'}${s.z?' · Zone '+s.z:''}</span></div><span class="r">›</span></button>`;}).join('')
-    :'<div class="item"><span class="dotc bg-check">+</span><div class="t"><b>Nothing saved yet</b><span class="c-idle">Tap Save on any street to keep it here.</span></div><span></span></div>';
-  $('saved-rows').querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const s=saved[+b.dataset.go];focusOn(s.lat,s.lng);checkPoint(s.lat,s.lng);});
-  $('learn-rows').innerHTML=learned.length?learned.map((x,i)=>`<div class="item"><span class="plate">${x.z}</span><div class="t"><b>${esc(x.name)}</b></div>
-    <button class="btn" data-forget="${i}">Forget</button></div>`).reverse().join('')
-    :'<div class="item"><span class="plate unk">?</span><div class="t"><b>None yet</b><span class="c-idle">When you tap a zone letter for a street, it’s saved here.</span></div><span></span></div>';
-  $('learn-rows').querySelectorAll('[data-forget]').forEach(b=>b.onclick=()=>{learned.splice(+b.dataset.forget,1);store.set('learned',learned);render();toast('Street forgotten');});
-  if(document.activeElement!==$('io'))$('io').value=JSON.stringify(learned.map(({g,...r})=>r));
+function renderRules(v,has){
+  $('s-rules').hidden=!(has&&cur.z); if(!(has&&cur.z))return;
+  const z=cur.z,Z=PF.ZONES[z];
+  const rows=[['Controlled',PF.zoneLabel(z)],['Event days',Z.md?PF.mdLabel(z).replace('Event days: ',''):'No extra controls'],
+    ['Who can park',`Zone ${z} permits and pay-by-phone. Any Islington resident permit Mon–Sat 11:00–15:00.`]];
+  if(v.then)rows.unshift(['After that',v.then.replace(/^Then /,'').replace(/^./,c=>c.toUpperCase())]);
+  $('rules').innerHTML=rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('');
 }
 
 // ================================================================
-//  CONTROLS
+//  MENU
 // ================================================================
-function showTab(k){document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x.dataset.tab===k));
-  ['zones','events','you','how'].forEach(n=>$('t-'+n).hidden=n!==k);}
-document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
-$('handle').onclick=()=>$('sheet').classList.toggle('tall');
-let ty=null;$('handle').addEventListener('touchstart',e=>ty=e.touches[0].clientY,{passive:true});
-$('handle').addEventListener('touchend',e=>{if(ty===null)return;const dy=e.changedTouches[0].clientY-ty;ty=null;
-  if(dy<-30)$('sheet').classList.add('tall');else if(dy>30)$('sheet').classList.remove('tall');},{passive:true});
+let menuOpen=false;
+function openMenu(v){menuOpen=v;$('menu').classList.toggle('open',v);$('menu').setAttribute('aria-hidden',String(!v));if(v)renderMenu();}
+$('b-menu').onclick=()=>openMenu(true);$('m-close').onclick=()=>openMenu(false);
 $('permit').innerHTML='<option value="">No permit (visitor)</option>'+PF.ZONE_IDS.map(z=>`<option value="${z}">Resident permit, Zone ${z}</option>`).join('');
 $('permit').value=profile.permit||'';
 $('permit').onchange=e=>{profile.permit=e.target.value||null;store.set('profile',profile);render();toast(profile.permit?`Permit set to Zone ${profile.permit}`:'Permit removed');};
-$('ev-add').onclick=()=>{const d=$('ev-date').value,n=$('ev-name').value.trim()||'Event at the Emirates';
-  if(!d){toast('Choose a date first.');return;}custom.push({date:d,ko:'',name:n});store.set('events',custom);loadEvents();$('ev-name').value='';render();toast('Event added');};
-$('b-copy').onclick=()=>{const t=$('io');(navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).then(()=>toast('Backup copied'),()=>{t.select();toast('Selected. Copy it from the menu.');});};
-$('b-import').onclick=()=>{try{const arr=JSON.parse($('io').value);if(!Array.isArray(arr))throw 0;let n=0;
-  arr.forEach(x=>{if(x&&x.s&&PF.ZONES[x.z]&&typeof x.lat==='number'){learned.push({...x,g:x.g||[]});n++;}});
-  store.set('learned',learned);render();toast(`Imported ${n} street${n===1?'':'s'}`);}catch(e){toast('That backup isn’t readable. Paste the full text you copied.');}};
-let toastT;function toast(m){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el);}
-  el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2800);}
-
-function go(k){
-  document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('on',n.dataset.go===k));
-  const pane={events:'events',permit:'you',saved:'you',zones:'zones',how:'how'}[k];
-  if(k==='find'){if(cur&&cur.lat)findNearby();else toast('Tap the map or search a street first.');setTimeout(()=>$('nearby').scrollIntoView({block:'start',behavior:'smooth'}),60);return;}
-  if(k==='map'){['zones','events','you','how'].forEach(n=>$('t-'+n).hidden=true);$('scroll').scrollTo({top:0,behavior:'smooth'});return;}
-  showTab(pane); setTimeout(()=>$('t-'+pane).scrollIntoView({block:'start',behavior:'smooth'}),60);
+function renderMenu(){
+  const t=currentT();
+  $('saved').innerHTML=saved.length?saved.map((s,i)=>{const st=s.z?PF.status(s.z,t,profile):null,tone=st?(PF.isFree(st)?'free':'stop'):'check';
+    return `<button class="row" data-i="${i}" type="button"><span class="d bg-${tone}"></span><span class="t"><b>${esc(s.name)}</b><span>${st?label(st.state)+' now':'Zone not known'}${s.z?' · Zone '+s.z:''}</span></span><span class="r">›</span></button>`;}).join('')
+    :'<div class="row"><span class="t"><b>Nothing saved yet</b><span>Open a street’s details and tap Save.</span></span></div>';
+  $('saved').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const s=saved[+b.dataset.i];openMenu(false);visibleCentre(s.lat,s.lng,17);checkPoint(s.lat,s.lng);});
+  const up=PF.EVENTS.filter(e=>e.date>=t.date).slice(0,8);
+  $('events').innerHTML=up.map(e=>{const d=PF.mk(e.date,0);return `<div class="row"><span class="evd">${DN[d.dow]}<b>${+e.date.slice(8)}</b>${MN[+e.date.slice(5,7)-1]}</span><span class="t"><b>${esc(e.name)}</b><span>Kick-off ${e.ko}</span></span></div>`;}).join('')||'<div class="row"><span class="t"><b>No events listed</b></span></div>';
+  $('zones').innerHTML=PF.ZONE_IDS.map(z=>{const s=PF.status(z,t,profile),nx=PF.nextChange(z,t,profile),f=PF.isFree(s);
+    return `<div class="row"><span class="zplate">${z}</span><span class="t"><b style="white-space:normal">${PF.zoneLabel(z)}</b>${PF.ZONES[z].md?`<span>${PF.mdLabel(z)}</span>`:''}</span><span class="r c-${f?'free':'stop'}">${label(s.state)}${nx?`<br><span style="color:var(--ink-3)">${f?'until':'from'} ${PF.whenLabel(t,nx)}</span>`:''}</span></div>`;}).join('');
 }
-document.querySelectorAll('.nav').forEach(n=>n.onclick=()=>go(n.dataset.go));
-$('findcard').onclick=()=>go('find');
-if(wide())['zones','events','you','how'].forEach(n=>$('t-'+n).hidden=true);
-render(); placeRail(); loadAnchors(); loadZoneTable(); setTimeout(loadViewport,800);
-// Self-update: home-screen apps and browser caches can hold an old copy; reload once when a newer build is published
+
+let toastT;function toast(m){let el=document.querySelector('.toast');if(!el){el=document.createElement('div');el.className='toast';el.setAttribute('role','status');document.body.appendChild(el);}
+  el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2600);}
+
+$('slider').addEventListener('input',e=>setMin(+e.target.value));
+if(innerWidth>=820)setOpen(true);
+render(); placeLocate();
+
+// Self-update: reload once when a newer build is published
 (async function checkUpdate(){
   const mine=document.querySelector('meta[name="parkfree-build"]').content;
-  try{const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const v=await r.json();
-    if(v.build&&v.build!==mine){const k='pf.reloaded.'+v.build;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+v.build);}}}catch(e){}
+  try{const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(r.ok){const v=await r.json();
+    if(v.build&&v.build!==mine){const k='pf.reloaded.'+v.build;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');location.replace(location.pathname+'?v='+v.build);}}}}catch(e){}
   setTimeout(checkUpdate,10*60*1000);
 })();
 </script>
