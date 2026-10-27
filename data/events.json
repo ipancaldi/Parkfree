@@ -1,0 +1,233 @@
+{
+ "generated": "2026-10-27T17:19:22+00:00",
+ "events": [
+  {
+   "date": "2026-08-21",
+   "ko": "20:00",
+   "name": "Arsenal v Coventry",
+   "src": "feed"
+  },
+  {
+   "date": "2026-09-06",
+   "ko": "16:30",
+   "name": "Arsenal v Chelsea",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-09-13",
+   "ko": "14:45",
+   "name": "Arsenal Women v Crystal Palace Women",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-09-19",
+   "ko": "17:30",
+   "name": "Arsenal Women v Man United Women",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-10-10",
+   "ko": "12:30",
+   "name": "Arsenal v Leeds United",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-10-13",
+   "ko": "20:00",
+   "name": "Arsenal v Lille",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-10-17",
+   "ko": "12:45",
+   "name": "Arsenal Women v Birmingham City WFC",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-10-24",
+   "ko": "15:00",
+   "name": "Arsenal v Everton",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-01",
+   "ko": "12:00",
+   "name": "Arsenal Women v Aston Villa Women",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-07",
+   "ko": "15:00",
+   "name": "Arsenal v Hull City",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-14",
+   "ko": "17:30",
+   "name": "Arsenal v London City Lionesses",
+   "src": "feed"
+  },
+  {
+   "date": "2026-11-15",
+   "ko": "16:30",
+   "name": "Arsenal Women v London City Lionesses",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-22",
+   "ko": "14:30",
+   "name": "Arsenal Women v West Ham Women",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-24",
+   "ko": "20:00",
+   "name": "Arsenal v Borussia Dortmund",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-28",
+   "ko": "",
+   "name": "Arsenal v Real Madrid",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-11-29",
+   "ko": "16:30",
+   "name": "Arsenal v Man City",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-12-09",
+   "ko": "20:00",
+   "name": "Arsenal v Real Madrid",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-12-13",
+   "ko": "14:00",
+   "name": "Arsenal v Bournemouth",
+   "src": "arsenal"
+  },
+  {
+   "date": "2026-12-20",
+   "ko": "16:30",
+   "name": "Arsenal v Man United",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-01-02",
+   "ko": "15:00",
+   "name": "Arsenal v Ipswich Town",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-01-05",
+   "ko": "19:30",
+   "name": "Arsenal v Brentford",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-01-10",
+   "ko": "12:30",
+   "name": "Arsenal v Brighton & Hove Albion",
+   "src": "feed"
+  },
+  {
+   "date": "2027-01-21",
+   "ko": "19:00",
+   "name": "Arsenal v Liverpool",
+   "src": "feed"
+  },
+  {
+   "date": "2027-01-23",
+   "ko": "15:00",
+   "name": "Arsenal v Newcastle",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-01-27",
+   "ko": "20:00",
+   "name": "Arsenal v Sabah",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-01-30",
+   "ko": "17:30",
+   "name": "Arsenal v Manchester City",
+   "src": "feed"
+  },
+  {
+   "date": "2027-02-06",
+   "ko": "15:00",
+   "name": "Arsenal v Liverpool",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-02-20",
+   "ko": "15:00",
+   "name": "Arsenal v Fulham",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-03-03",
+   "ko": "20:00",
+   "name": "Arsenal v Crystal Palace",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-03-13",
+   "ko": "17:30",
+   "name": "Arsenal v Tottenham Hotspur",
+   "src": "feed"
+  },
+  {
+   "date": "2027-03-20",
+   "ko": "15:00",
+   "name": "Arsenal v Sunderland",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-03-28",
+   "ko": "14:00",
+   "name": "Arsenal v Chelsea",
+   "src": "feed"
+  },
+  {
+   "date": "2027-04-04",
+   "ko": "14:00",
+   "name": "Arsenal v Everton",
+   "src": "feed"
+  },
+  {
+   "date": "2027-04-17",
+   "ko": "15:00",
+   "name": "Arsenal v Aston Villa",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-05-01",
+   "ko": "15:00",
+   "name": "Arsenal v Tottenham Hotspur",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-05-15",
+   "ko": "15:00",
+   "name": "Arsenal v Nottingham Forest",
+   "src": "arsenal"
+  },
+  {
+   "date": "2027-05-22",
+   "ko": "01:00",
+   "name": "Arsenal v Charlton Athletic",
+   "src": "feed"
+  },
+  {
+   "date": "2027-05-30",
+   "ko": "16:00",
+   "name": "Arsenal v Brighton",
+   "src": "arsenal"
+  }
+ ]
+}
