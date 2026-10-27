@@ -1,116 +1,8 @@
 {
- "generated": "2026-10-26T20:43:29+00:00",
+ "generated": "2026-10-27T17:46:33+00:00",
  "source": "https://myringgo.co.uk/islington/parkinglocator",
  "locations": 1245,
  "failed": [
-  "54000",
-  "54001",
-  "54002",
-  "54003",
-  "54004",
-  "54005",
-  "54006",
-  "54007",
-  "54008",
-  "54009",
-  "54010",
-  "54011",
-  "54012",
-  "54013",
-  "54014",
-  "54015",
-  "54016",
-  "54017",
-  "54018",
-  "54019",
-  "54020",
-  "54021",
-  "54022",
-  "54023",
-  "54024",
-  "54025",
-  "54026",
-  "54027",
-  "54028",
-  "54029",
-  "54049",
-  "54050",
-  "54051",
-  "54052",
-  "54053",
-  "54054",
-  "54055",
-  "54056",
-  "54057",
-  "54058",
-  "54059",
-  "54060",
-  "54061",
-  "54062",
-  "54063",
-  "54064",
-  "54065",
-  "54066",
-  "54091",
-  "54092",
-  "54093",
-  "54094",
-  "54095",
-  "54096",
-  "54097",
-  "54098",
-  "54099",
-  "54100",
-  "54101",
-  "54102",
-  "54103",
-  "54104",
-  "54105",
-  "54106",
-  "54107",
-  "54108",
-  "54109",
-  "54117",
-  "54118",
-  "54119",
-  "54120",
-  "54121",
-  "54122",
-  "54123",
-  "54124",
-  "54125",
-  "54126",
-  "54127",
-  "54128",
-  "54129",
-  "54130",
-  "54137",
-  "54138",
-  "54139",
-  "54140",
-  "54141",
-  "54142",
-  "54143",
-  "54144",
-  "54167",
-  "54168",
-  "54169",
-  "54170",
-  "54171",
-  "54172",
-  "54173",
-  "54174",
-  "54175",
-  "54176",
-  "54187",
-  "54188",
-  "54189",
-  "54190",
-  "54191",
-  "54192",
-  "54193",
-  "54194",
-  "54216",
   "62399"
  ],
  "streets": {
@@ -118,234 +10,591 @@
    "name": "",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61210"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "agdon street": {
    "name": "Agdon Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61001"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "albion place": {
    "name": "Albion Place",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61291"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "alexander road": {
    "name": "Alexander Road",
    "zones": {
     "TW": 2
+   },
+   "codes": {
+    "TW": [
+     "62150",
+     "62151"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "all saints street": {
    "name": "All Saints Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61200"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "almeida street": {
    "name": "Almeida Street",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61471",
+     "61472"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "almington street": {
    "name": "Almington Street",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61708"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "alwyne place": {
    "name": "Alwyne Place",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61822"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "alwyne road": {
    "name": "Alwyne Road",
    "zones": {
     "L": 3
+   },
+   "codes": {
+    "L": [
+     "61823",
+     "61824",
+     "61825"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "alwyne square": {
    "name": "Alwyne Square",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61826",
+     "61827"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "amwell street": {
    "name": "Amwell Street",
    "zones": {
     "A": 5
+   },
+   "codes": {
+    "A": [
+     "61002",
+     "61003",
+     "61004",
+     "61005",
+     "61006"
+    ]
+   },
+   "maxStay": {
+    "120": 4,
+    "240": 1
    }
   },
   "andover road": {
    "name": "Andover Road",
    "zones": {
     "J": 3
+   },
+   "codes": {
+    "J": [
+     "61709",
+     "61710",
+     "61711"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "annette road": {
    "name": "Annette Road",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61589"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "anson road": {
    "name": "Anson Road",
    "zones": {
     "R": 3
+   },
+   "codes": {
+    "R": [
+     "62039",
+     "62040",
+     "62041"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "archibald road": {
    "name": "Archibald Road",
    "zones": {
     "W": 2
+   },
+   "codes": {
+    "W": [
+     "62237",
+     "62238"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "arlington avenue": {
    "name": "Arlington Avenue",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61473"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "arlington square": {
    "name": "Arlington Square",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61474",
+     "61475"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "arlington way": {
    "name": "Arlington Way",
    "zones": {
     "A": 4
+   },
+   "codes": {
+    "A": [
+     "61007",
+     "61008",
+     "61009",
+     "61010"
+    ]
+   },
+   "maxStay": {
+    "240": 4
    }
   },
   "arran walk": {
    "name": "Arran Walk",
    "zones": {
     "L": 4
+   },
+   "codes": {
+    "L": [
+     "61828",
+     "61829",
+     "61830",
+     "61831"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "arundel square": {
    "name": "Arundel Square",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61476",
+     "61477"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "arvon road": {
    "name": "Arvon Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61478"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "ashbrook road": {
    "name": "Ashbrook Road",
    "zones": {
     "P": 2
+   },
+   "codes": {
+    "P": [
+     "61942",
+     "61943"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "ashby grove": {
    "name": "Ashby Grove",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61832"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "ashby street": {
    "name": "Ashby Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61011"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "ashley road": {
    "name": "Ashley Road",
    "zones": {
     "HE": 3
+   },
+   "codes": {
+    "HE": [
+     "61686",
+     "61687",
+     "61688"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "ashmount road": {
    "name": "Ashmount Road",
    "zones": {
     "Z": 2
+   },
+   "codes": {
+    "Z": [
+     "62272",
+     "62273"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "attneave street": {
    "name": "Attneave Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61012",
+     "61013"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "aubert park": {
    "name": "Aubert Park",
    "zones": {
     "G": 8
+   },
+   "codes": {
+    "G": [
+     "61633",
+     "61634",
+     "61635",
+     "61636",
+     "61637",
+     "61638",
+     "61639",
+     "61640"
+    ]
+   },
+   "maxStay": {
+    "120": 8
    }
   },
   "axminster road": {
    "name": "Axminster Road",
    "zones": {
     "F": 2
+   },
+   "codes": {
+    "F": [
+     "61590",
+     "61591"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "aylesbury street": {
    "name": "Aylesbury Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61014",
+     "61015"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "bakers row": {
    "name": "Bakers Row",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61016",
+     "61017"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "baldwin street": {
    "name": "Baldwin Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61294",
+     "61295"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "baldwin terrace": {
    "name": "Baldwin Terrace",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61201"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "balfe street": {
    "name": "Balfe Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61202"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "baltic street west": {
    "name": "Baltic Street West",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61296",
+     "61297"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "banner street": {
    "name": "Banner Street",
    "zones": {
     "C": 5
+   },
+   "codes": {
+    "C": [
+     "61298",
+     "61299",
+     "61300",
+     "61302",
+     "61303"
+    ]
+   },
+   "maxStay": {
+    "120": 3,
+    "240": 2
    }
   },
   "barford street": {
    "name": "Barford Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61479"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "baring street": {
    "name": "Baring Street",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61833"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "barnsbury park": {
    "name": "Barnsbury Park",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61480"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "barnsbury road": {
@@ -353,162 +602,415 @@
    "zones": {
     "B": 3,
     "E": 1
+   },
+   "codes": {
+    "B": [
+     "61203",
+     "61204",
+     "61205"
+    ],
+    "E": [
+     "61481"
+    ]
+   },
+   "maxStay": {
+    "240": 3,
+    "120": 1
    }
   },
   "barnsbury square": {
    "name": "Barnsbury Square",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61482",
+     "61483"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "barnsbury street": {
    "name": "Barnsbury Street",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61484",
+     "61485"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "baron street": {
    "name": "Baron Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61206",
+     "61207"
+    ]
+   },
+   "maxStay": {
+    "120": 1,
+    "240": 1
    }
   },
   "basire street": {
    "name": "Basire Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61486"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "bastwick street": {
    "name": "Bastwick Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61018",
+     "61019"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "batchelor street": {
    "name": "Batchelor Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61208"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "bath street": {
    "name": "Bath Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61305"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "bavaria road": {
    "name": "Bavaria Road",
    "zones": {
     "TW": 2
+   },
+   "codes": {
+    "TW": [
+     "62152",
+     "62153"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "beaumont rise": {
    "name": "Beaumont Rise",
    "zones": {
     "Z": 2
+   },
+   "codes": {
+    "Z": [
+     "62274",
+     "62275"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "bemerton street": {
    "name": "Bemerton Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62078"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "benjamin street": {
    "name": "Benjamin Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61306",
+     "61307"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "benwell road": {
    "name": "Benwell Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61487",
+     "61488"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "berriman road": {
    "name": "Berriman Road",
    "zones": {
     "F": 2
+   },
+   "codes": {
+    "F": [
+     "61592",
+     "61593"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "berry street": {
    "name": "Berry Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61020",
+     "61021"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "bickerton road": {
    "name": "Bickerton Road",
    "zones": {
     "P": 3
+   },
+   "codes": {
+    "P": [
+     "61944",
+     "61945",
+     "61946"
+    ]
+   },
+   "maxStay": {
+    "120": 1,
+    "240": 2
    }
   },
   "biddestone road": {
    "name": "Biddestone Road",
    "zones": {
     "Y": 1
+   },
+   "codes": {
+    "Y": [
+     "62257"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "biggerstaff street": {
    "name": "Biggerstaff Street",
    "zones": {
     "J": 4
+   },
+   "codes": {
+    "J": [
+     "61712",
+     "61715",
+     "61716",
+     "61717"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "bingfield street": {
    "name": "Bingfield Street",
    "zones": {
     "S": 2
+   },
+   "codes": {
+    "S": [
+     "62065",
+     "62066"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "bingham street": {
    "name": "Bingham Street",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61834"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "blackstock road": {
    "name": "Blackstock Road",
    "zones": {
     "H": 8
+   },
+   "codes": {
+    "H": [
+     "61651",
+     "61652",
+     "61653",
+     "61655",
+     "61656",
+     "61657",
+     "61658",
+     "61659"
+    ]
+   },
+   "maxStay": {
+    "120": 8
    }
   },
   "blundell street": {
    "name": "Blundell Street",
    "zones": {
     "S": 3
+   },
+   "codes": {
+    "S": [
+     "62067",
+     "62068",
+     "62069"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "blythwood road": {
    "name": "Blythwood Road",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61689"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "bonhill street": {
    "name": "Bonhill Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61308"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "bowling green lane": {
    "name": "Bowling Green Lane",
    "zones": {
     "A": 5
+   },
+   "codes": {
+    "A": [
+     "61022",
+     "61023",
+     "61024",
+     "61025",
+     "61026"
+    ]
+   },
+   "maxStay": {
+    "240": 5
    }
   },
   "braes street": {
    "name": "Braes Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61489"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "brandon road": {
    "name": "Brandon Road",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62070"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "brecknock road": {
@@ -516,78 +1018,207 @@
    "zones": {
     "R": 3,
     "W": 2
+   },
+   "codes": {
+    "R": [
+     "62042",
+     "62043",
+     "62044"
+    ],
+    "W": [
+     "62239",
+     "62314"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "bredgar road": {
    "name": "Bredgar Road",
    "zones": {
     "P": 3
+   },
+   "codes": {
+    "P": [
+     "61948",
+     "61949",
+     "61950"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "brewery road": {
    "name": "Brewery Road",
    "zones": {
     "D": 7
+   },
+   "codes": {
+    "D": [
+     "61428",
+     "61429",
+     "61430",
+     "61431",
+     "61432",
+     "61433",
+     "61434"
+    ]
+   },
+   "maxStay": {
+    "120": 7
    }
   },
   "bride street": {
    "name": "Bride Street",
    "zones": {
     "N": 2
+   },
+   "codes": {
+    "N": [
+     "61905",
+     "61906"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "bridgeman road": {
    "name": "Bridgeman Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61490",
+     "61491"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "britannia row": {
    "name": "Britannia Row",
    "zones": {
     "E": 3
+   },
+   "codes": {
+    "E": [
+     "61492",
+     "61493",
+     "61494"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "britton street": {
    "name": "Britton Street",
    "zones": {
     "C": 3
+   },
+   "codes": {
+    "C": [
+     "61309",
+     "61310",
+     "61311"
+    ]
+   },
+   "maxStay": {
+    "120": 2,
+    "240": 1
    }
   },
   "bromfield street": {
    "name": "Bromfield Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61209"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "brooksby street": {
    "name": "Brooksby Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61495"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "bunhill row": {
    "name": "Bunhill Row",
    "zones": {
     "C": 4
+   },
+   "codes": {
+    "C": [
+     "61313",
+     "61314",
+     "61315",
+     "61316"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "bunning way": {
    "name": "Bunning Way",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62071"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "burder road": {
    "name": "Burder Road",
    "zones": {
     "V": 2
+   },
+   "codes": {
+    "V": [
+     "62192",
+     "62193"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "calabria road": {
    "name": "Calabria Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61496"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "caledonian road": {
@@ -596,66 +1227,203 @@
     "N": 7,
     "S": 15,
     "Y": 5
+   },
+   "codes": {
+    "N": [
+     "61907",
+     "61908",
+     "61909",
+     "61910",
+     "61911",
+     "61912",
+     "61913"
+    ],
+    "S": [
+     "62072",
+     "62073",
+     "62074",
+     "62075",
+     "62076",
+     "62080",
+     "62081",
+     "62082",
+     "62083",
+     "62084",
+     "62085",
+     "62086",
+     "62087",
+     "62088",
+     "62089"
+    ],
+    "Y": [
+     "62259",
+     "62260",
+     "62261",
+     "62262",
+     "62263"
+    ]
+   },
+   "maxStay": {
+    "120": 26,
+    "240": 1
    }
   },
   "calshot street": {
    "name": "Calshot Street",
    "zones": {
     "B": 4
+   },
+   "codes": {
+    "B": [
+     "61211",
+     "61212",
+     "61213",
+     "61214"
+    ]
+   },
+   "maxStay": {
+    "120": 2,
+    "240": 2
    }
   },
   "campdale road": {
    "name": "Campdale Road",
    "zones": {
     "U": 2
+   },
+   "codes": {
+    "U": [
+     "62179",
+     "62180"
+    ]
+   },
+   "maxStay": {
+    "60": 2
    }
   },
   "canonbury grove": {
    "name": "Canonbury Grove",
    "zones": {
     "L": 3
+   },
+   "codes": {
+    "L": [
+     "61835",
+     "61836",
+     "61837"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "canonbury lane": {
    "name": "Canonbury Lane",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61497",
+     "61498"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "canonbury park north": {
    "name": "Canonbury Park North",
    "zones": {
     "L": 4
+   },
+   "codes": {
+    "L": [
+     "61838",
+     "61839",
+     "61840",
+     "61842"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "canonbury park south": {
    "name": "Canonbury Park South",
    "zones": {
     "L": 6
+   },
+   "codes": {
+    "L": [
+     "61843",
+     "61844",
+     "61845",
+     "61846",
+     "61847",
+     "61848"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "canonbury place": {
    "name": "Canonbury Place",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61849",
+     "61850"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "canonbury street": {
    "name": "Canonbury Street",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61851",
+     "61852"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "cardozo road": {
    "name": "Cardozo Road",
    "zones": {
     "Y": 1
+   },
+   "codes": {
+    "Y": [
+     "62264"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cardwell road": {
    "name": "Cardwell Road",
    "zones": {
     "W": 1
+   },
+   "codes": {
+    "W": [
+     "62240"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "carleton road": {
@@ -663,216 +1431,550 @@
    "zones": {
     "R": 3,
     "W": 1
+   },
+   "codes": {
+    "R": [
+     "62045",
+     "62046",
+     "62047"
+    ],
+    "W": [
+     "62241"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "carnegie street": {
    "name": "Carnegie Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61215"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "carnoustie drive": {
    "name": "Carnoustie Drive",
    "zones": {
     "S": 3
+   },
+   "codes": {
+    "S": [
+     "62090",
+     "62091",
+     "62092"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "cathcart hill": {
    "name": "Cathcart Hill",
    "zones": {
     "P": 2
+   },
+   "codes": {
+    "P": [
+     "61951",
+     "61952"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "catherall road": {
    "name": "Catherall Road",
    "zones": {
     "Q": 2
+   },
+   "codes": {
+    "Q": [
+     "62017",
+     "62018"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "central street": {
    "name": "Central Street",
    "zones": {
     "C": 7
+   },
+   "codes": {
+    "C": [
+     "61317",
+     "61318",
+     "61319",
+     "61320",
+     "61321",
+     "61323",
+     "61324"
+    ]
+   },
+   "maxStay": {
+    "120": 5,
+    "240": 2
    }
   },
   "chadwell street": {
    "name": "Chadwell Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61027",
+     "61028"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "chambers road": {
    "name": "Chambers Road",
    "zones": {
     "W": 1
+   },
+   "codes": {
+    "W": [
+     "62242"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "charlotte terrace": {
    "name": "Charlotte Terrace",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61499"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "charlton place": {
    "name": "Charlton Place",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61219"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "charterhouse square": {
    "name": "Charterhouse Square",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61325"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "charterhouse street": {
    "name": "Charterhouse Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61327",
+     "61328"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "charteris road": {
    "name": "Charteris Road",
    "zones": {
     "J": 2
+   },
+   "codes": {
+    "J": [
+     "61718",
+     "61719"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "chatterton road": {
    "name": "Chatterton Road",
    "zones": {
     "H": 2
+   },
+   "codes": {
+    "H": [
+     "61660",
+     "61661"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "cheverton road": {
    "name": "Cheverton Road",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62276"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "chillingworth road": {
    "name": "Chillingworth Road",
    "zones": {
     "N": 1
+   },
+   "codes": {
+    "N": [
+     "61914"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "christopher street": {
    "name": "Christopher Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61331",
+     "61332"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "city garden row": {
    "name": "City Garden Row",
    "zones": {
     "B": 4
+   },
+   "codes": {
+    "B": [
+     "61220",
+     "61221",
+     "61222",
+     "61223"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "city road": {
    "name": "City Road",
    "zones": {
     "C": 3
+   },
+   "codes": {
+    "C": [
+     "61333",
+     "61334",
+     "61335"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "claremont square": {
    "name": "Claremont Square",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61029"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "clephane road": {
    "name": "Clephane Road",
    "zones": {
     "T": 1
+   },
+   "codes": {
+    "T": [
+     "62111"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "clerkenwell close": {
    "name": "Clerkenwell Close",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61030",
+     "61031"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "clerkenwell green": {
    "name": "Clerkenwell Green",
    "zones": {
     "A": 7
+   },
+   "codes": {
+    "A": [
+     "61032",
+     "61033",
+     "61034",
+     "61035",
+     "61036",
+     "61037",
+     "61038"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 6
    }
   },
   "clerkenwell green / aylesbury street": {
    "name": "Clerkenwell Green / Aylesbury Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61039"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cleveland road": {
    "name": "Cleveland Road",
    "zones": {
     "T": 1
+   },
+   "codes": {
+    "T": [
+     "62112"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "clifton terrace": {
    "name": "Clifton Terrace",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61720"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cloudesley square": {
    "name": "Cloudesley Square",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61500",
+     "61501"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "coldbath square": {
    "name": "Coldbath Square",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61040"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "colebrook row": {
    "name": "Colebrook Row",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61218"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "colebrooke row": {
    "name": "Colebrooke Row",
    "zones": {
     "B": 5
+   },
+   "codes": {
+    "B": [
+     "61224",
+     "61225",
+     "61226",
+     "61227",
+     "61228"
+    ]
+   },
+   "maxStay": {
+    "120": 2,
+    "240": 3
    }
   },
   "coleridge road": {
    "name": "Coleridge Road",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61594"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "college cross": {
    "name": "College Cross",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61502"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "collier street": {
    "name": "Collier Street",
    "zones": {
     "B": 3
+   },
+   "codes": {
+    "B": [
+     "61229",
+     "61230",
+     "61231"
+    ]
+   },
+   "maxStay": {
+    "240": 3
    }
   },
   "compton road": {
    "name": "Compton Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61503"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "compton street": {
    "name": "Compton Street",
    "zones": {
     "A": 5
+   },
+   "codes": {
+    "A": [
+     "61041",
+     "61042",
+     "61043",
+     "61044",
+     "61045"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "compton terrace": {
    "name": "Compton Terrace",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61504"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "copenhagen street": {
@@ -880,132 +1982,335 @@
    "zones": {
     "E": 1,
     "S": 3
+   },
+   "codes": {
+    "E": [
+     "61505"
+    ],
+    "S": [
+     "62077",
+     "62093",
+     "62094"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "corbyn street": {
    "name": "Corbyn Street",
    "zones": {
     "J": 6
+   },
+   "codes": {
+    "J": [
+     "61721",
+     "61722",
+     "61723",
+     "61724",
+     "61725",
+     "61726"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "corinne road": {
    "name": "Corinne Road",
    "zones": {
     "R": 3
+   },
+   "codes": {
+    "R": [
+     "62048",
+     "62049",
+     "62050"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "cornwallis road": {
    "name": "Cornwallis Road",
    "zones": {
     "TW": 2
+   },
+   "codes": {
+    "TW": [
+     "62154",
+     "62155"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "corsica street": {
    "name": "Corsica Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61506"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cowcross street": {
    "name": "Cowcross Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61336"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cowper street": {
    "name": "Cowper Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61339",
+     "61340"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "crescent street": {
    "name": "Crescent Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61507"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cressida road": {
    "name": "Cressida Road",
    "zones": {
     "Z": 5
+   },
+   "codes": {
+    "Z": [
+     "62277",
+     "62278",
+     "62279",
+     "62280",
+     "62281"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "crinan street": {
    "name": "Crinan Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61232",
+     "61233"
+    ]
+   },
+   "maxStay": {
+    "120": 1,
+    "240": 1
    }
   },
   "cross st": {
    "name": "Cross St",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61508"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "cross street": {
    "name": "Cross Street",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61509",
+     "61510"
+    ]
+   },
+   "maxStay": {
+    "60": 1,
+    "120": 1
    }
   },
   "cruden street": {
    "name": "Cruden Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61511"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cruickshank street": {
    "name": "Cruickshank Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61046"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "cumming street": {
    "name": "Cumming Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61234"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "cynthia street": {
    "name": "Cynthia Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61235"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "cyrus street": {
    "name": "Cyrus Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61047"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "dagmar terrace": {
    "name": "Dagmar Terrace",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61512"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "dalington street": {
    "name": "Dalington Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61048"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "dalmeny avenue": {
    "name": "Dalmeny Avenue",
    "zones": {
     "W": 2
+   },
+   "codes": {
+    "W": [
+     "62243",
+     "62244"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "dalmeny road": {
    "name": "Dalmeny Road",
    "zones": {
     "W": 4
+   },
+   "codes": {
+    "W": [
+     "62245",
+     "62246",
+     "62247",
+     "62248"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "danbury street": {
    "name": "Danbury Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61237",
+     "61238"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "dartmouth park hill": {
@@ -1013,78 +2318,202 @@
    "zones": {
     "P": 4,
     "R": 1
+   },
+   "codes": {
+    "P": [
+     "61953",
+     "61954",
+     "61955",
+     "61956"
+    ],
+    "R": [
+     "62051"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "davenant park": {
    "name": "Davenant Park",
    "zones": {
     "TW": 3
+   },
+   "codes": {
+    "TW": [
+     "62156",
+     "62157",
+     "62158"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "despard road": {
    "name": "Despard Road",
    "zones": {
     "K": 1
+   },
+   "codes": {
+    "K": [
+     "61813"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "devonia road": {
    "name": "Devonia Road",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61239"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "dewey road": {
    "name": "Dewey Road",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61240"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "digswell street": {
    "name": "Digswell Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61513"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "dingley road": {
    "name": "Dingley Road",
    "zones": {
     "C": 8
+   },
+   "codes": {
+    "C": [
+     "61341",
+     "61342",
+     "61343",
+     "61344",
+     "61345",
+     "61346",
+     "61347",
+     "61348"
+    ]
+   },
+   "maxStay": {
+    "120": 8
    }
   },
   "domingo street": {
    "name": "Domingo Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61349",
+     "61350"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "dominion street": {
    "name": "Dominion Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61351",
+     "61352"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "donegal street": {
    "name": "Donegal Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61241"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "douglas road": {
    "name": "Douglas Road",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61853",
+     "61854"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "dove road": {
    "name": "Dove Road",
    "zones": {
     "T": 1
+   },
+   "codes": {
+    "T": [
+     "62113"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "downham road": {
    "name": "Downham Road",
    "zones": {
     "L": 3
+   },
+   "codes": {
+    "L": [
+     "61855",
+     "61856",
+     "61858"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "drayton park": {
@@ -1092,66 +2521,167 @@
    "zones": {
     "G": 2,
     "E": 1
+   },
+   "codes": {
+    "G": [
+     "61293",
+     "61641"
+    ],
+    "E": [
+     "61514"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "dresden road": {
    "name": "Dresden Road",
    "zones": {
     "Z": 2
+   },
+   "codes": {
+    "Z": [
+     "62282",
+     "62283"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "dufferin street": {
    "name": "Dufferin Street",
    "zones": {
     "C": 5
+   },
+   "codes": {
+    "C": [
+     "61353",
+     "61354",
+     "61355",
+     "61356",
+     "61357"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "dulas street": {
    "name": "Dulas Street",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61728"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "duncan street": {
    "name": "Duncan Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61242"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "duncan terrace": {
    "name": "Duncan Terrace",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61243"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "duncombe road": {
    "name": "Duncombe Road",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62284"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "durham road": {
    "name": "Durham Road",
    "zones": {
     "J": 2
+   },
+   "codes": {
+    "J": [
+     "61729",
+     "61730"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "earlstoke street": {
    "name": "Earlstoke Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61049"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "easton street": {
    "name": "Easton Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61050",
+     "61051"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 1
    }
   },
   "eburne road": {
    "name": "Eburne Road",
    "zones": {
     "F": 2
+   },
+   "codes": {
+    "F": [
+     "61595",
+     "61596"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "ecclesbourne road": {
@@ -1159,18 +2689,50 @@
    "zones": {
     "L": 2,
     "T": 1
+   },
+   "codes": {
+    "L": [
+     "61859",
+     "61860"
+    ],
+    "T": [
+     "62114"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "eden grove": {
    "name": "Eden Grove",
    "zones": {
     "N": 5
+   },
+   "codes": {
+    "N": [
+     "61915",
+     "61916",
+     "61917",
+     "61918",
+     "61919"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "elia street": {
    "name": "Elia Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61244"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "elizabeth avenue": {
@@ -1178,42 +2740,122 @@
    "zones": {
     "L": 5,
     "T": 1
+   },
+   "codes": {
+    "L": [
+     "61861",
+     "61862",
+     "61863",
+     "61864",
+     "61865"
+    ],
+    "T": [
+     "62115"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "ellington street": {
    "name": "Ellington Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61515"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "elmore street": {
    "name": "Elmore Street",
    "zones": {
     "T": 5
+   },
+   "codes": {
+    "T": [
+     "62116",
+     "62117",
+     "62118",
+     "62119",
+     "62120"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "elthorne road": {
    "name": "Elthorne Road",
    "zones": {
     "P": 6
+   },
+   "codes": {
+    "P": [
+     "61957",
+     "61958",
+     "61959",
+     "61960",
+     "61961",
+     "61962"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "englefield road": {
    "name": "Englefield Road",
    "zones": {
     "T": 5
+   },
+   "codes": {
+    "T": [
+     "62121",
+     "62122",
+     "62123",
+     "62125",
+     "62126"
+    ]
+   },
+   "maxStay": {
+    "120": 4,
+    "240": 1
    }
   },
   "epworth street": {
    "name": "Epworth Street",
    "zones": {
     "C": 3
+   },
+   "codes": {
+    "C": [
+     "61358",
+     "61359",
+     "61360"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "errol street": {
    "name": "Errol Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61361",
+     "61363"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "essex road": {
@@ -1221,18 +2863,56 @@
    "zones": {
     "E": 5,
     "T": 5
+   },
+   "codes": {
+    "E": [
+     "61516",
+     "61517",
+     "61518",
+     "61519",
+     "61520"
+    ],
+    "T": [
+     "62127",
+     "62128",
+     "62131",
+     "62132",
+     "62133"
+    ]
+   },
+   "maxStay": {
+    "120": 4,
+    "60": 6
    }
   },
   "everleigh street": {
    "name": "Everleigh Street",
    "zones": {
     "J": 2
+   },
+   "codes": {
+    "J": [
+     "61731",
+     "61732"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "evershot road": {
    "name": "Evershot Road",
    "zones": {
     "J": 2
+   },
+   "codes": {
+    "J": [
+     "61733",
+     "61734"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "fairbridge road": {
@@ -1240,96 +2920,262 @@
    "zones": {
     "P": 1,
     "Z": 3
+   },
+   "codes": {
+    "P": [
+     "61963"
+    ],
+    "Z": [
+     "62285",
+     "62286",
+     "62287"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 3
    }
   },
   "fairmead road": {
    "name": "Fairmead Road",
    "zones": {
     "U": 1
+   },
+   "codes": {
+    "U": [
+     "62181"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "farringdon lane": {
    "name": "Farringdon Lane",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61053",
+     "61054",
+     "61055"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "featherstone street": {
    "name": "Featherstone Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61365"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "fergus road": {
    "name": "Fergus Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61521"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "ferntower road": {
    "name": "Ferntower Road",
    "zones": {
     "V": 2
+   },
+   "codes": {
+    "V": [
+     "62194",
+     "62195"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "fieldway crescent": {
    "name": "Fieldway Crescent",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61522"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "finsbury square": {
    "name": "Finsbury Square",
    "zones": {
     "C": 7
+   },
+   "codes": {
+    "C": [
+     "61366",
+     "61367",
+     "61368",
+     "61369",
+     "61370",
+     "61371",
+     "61372"
+    ]
+   },
+   "maxStay": {
+    "120": 7
    }
   },
   "finsbury street": {
    "name": "Finsbury Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61373",
+     "61374"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "fitzwarren gardens": {
    "name": "Fitzwarren Gardens",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62288"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "florence street": {
    "name": "Florence Street",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61523",
+     "61524"
+    ]
+   },
+   "maxStay": {
+    "60": 1,
+    "120": 1
    }
   },
   "flowers mews": {
    "name": "Flowers Mews",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61964"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "fonthill road": {
    "name": "Fonthill Road",
    "zones": {
     "J": 21
+   },
+   "codes": {
+    "J": [
+     "61735",
+     "61736",
+     "61737",
+     "61738",
+     "61739",
+     "61740",
+     "61741",
+     "61742",
+     "61743",
+     "61744",
+     "61745",
+     "61746",
+     "61747",
+     "61748",
+     "61749",
+     "61750",
+     "61751",
+     "61752",
+     "61753",
+     "61754",
+     "61755"
+    ]
+   },
+   "maxStay": {
+    "120": 21
    }
   },
   "fortnam road": {
    "name": "Fortnam Road",
    "zones": {
     "TW": 1
+   },
+   "codes": {
+    "TW": [
+     "62159"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "foxham road": {
    "name": "Foxham Road",
    "zones": {
     "U": 1
+   },
+   "codes": {
+    "U": [
+     "62182"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "frederica street": {
    "name": "Frederica Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62095"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "freegrove road": {
@@ -1337,114 +3183,288 @@
    "zones": {
     "D": 1,
     "Y": 1
+   },
+   "codes": {
+    "D": [
+     "61435"
+    ],
+    "Y": [
+     "62265"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "freeling street": {
    "name": "Freeling Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62096"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "fulbrook road": {
    "name": "Fulbrook Road",
    "zones": {
     "R": 1
+   },
+   "codes": {
+    "R": [
+     "62052"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "furlong road": {
    "name": "Furlong Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61525",
+     "61526"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "garrett street": {
    "name": "Garrett Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61375",
+     "61376"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "gaskin street": {
    "name": "Gaskin Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61527"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "gee street": {
    "name": "Gee Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61057"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "georges road": {
    "name": "Georges Road",
    "zones": {
     "N": 2
+   },
+   "codes": {
+    "N": [
+     "61920",
+     "61921"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "gerrard road": {
    "name": "Gerrard Road",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61245",
+     "61246"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "gibson square": {
    "name": "Gibson Square",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61528"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "giesbach road": {
    "name": "Giesbach Road",
    "zones": {
     "P": 2
+   },
+   "codes": {
+    "P": [
+     "61965",
+     "61966"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "gifford street": {
    "name": "Gifford Street",
    "zones": {
     "S": 2
+   },
+   "codes": {
+    "S": [
+     "62097",
+     "62098"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "gillespie road": {
    "name": "Gillespie Road",
    "zones": {
     "H": 5
+   },
+   "codes": {
+    "H": [
+     "61662",
+     "61663",
+     "61664",
+     "61665",
+     "61666"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "gladsmuir road": {
    "name": "Gladsmuir Road",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62289"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "glasshouse yard": {
    "name": "Glasshouse Yard",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61377"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "gloucester way": {
    "name": "Gloucester Way",
    "zones": {
     "A": 6
+   },
+   "codes": {
+    "A": [
+     "61058",
+     "61059",
+     "61060",
+     "61061",
+     "61062",
+     "61063"
+    ]
+   },
+   "maxStay": {
+    "240": 3,
+    "120": 3
    }
   },
   "golden lane": {
    "name": "Golden Lane",
    "zones": {
     "C": 3
+   },
+   "codes": {
+    "C": [
+     "61378",
+     "61379",
+     "61380"
+    ]
+   },
+   "maxStay": {
+    "120": 1,
+    "240": 2
    }
   },
   "goodinge road": {
    "name": "Goodinge Road",
    "zones": {
     "D": 1
+   },
+   "codes": {
+    "D": [
+     "61436"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "goodwin street": {
    "name": "Goodwin Street",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61756"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "goswell road": {
@@ -1452,54 +3472,160 @@
    "zones": {
     "A": 11,
     "C": 1
+   },
+   "codes": {
+    "A": [
+     "61065",
+     "61066",
+     "61067",
+     "61068",
+     "61069",
+     "61070",
+     "61071",
+     "61072",
+     "61073",
+     "61074",
+     "61075"
+    ],
+    "C": [
+     "61381"
+    ]
+   },
+   "maxStay": {
+    "240": 10,
+    "120": 2
    }
   },
   "graham street": {
    "name": "Graham Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61247",
+     "61248"
+    ]
+   },
+   "maxStay": {
+    "120": 1,
+    "240": 1
    }
   },
   "grange grove": {
    "name": "Grange Grove",
    "zones": {
     "L": 4
+   },
+   "codes": {
+    "L": [
+     "61866",
+     "61867",
+     "61868",
+     "61869"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "grantbridge street": {
    "name": "Grantbridge Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61249"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "great percy street": {
    "name": "Great Percy Street",
    "zones": {
     "A": 10
+   },
+   "codes": {
+    "A": [
+     "61077",
+     "61078",
+     "61079",
+     "61080",
+     "61081",
+     "61082",
+     "61083",
+     "61084",
+     "61085",
+     "61086"
+    ]
+   },
+   "maxStay": {
+    "240": 4,
+    "120": 6
    }
   },
   "great sutton street": {
    "name": "Great Sutton Street",
    "zones": {
     "A": 4
+   },
+   "codes": {
+    "A": [
+     "61087",
+     "61088",
+     "61089",
+     "61090"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "green lanes": {
    "name": "Green Lanes",
    "zones": {
     "V": 3
+   },
+   "codes": {
+    "V": [
+     "62196",
+     "62197",
+     "62198"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "greenman street": {
    "name": "Greenman Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61529"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "grenville road": {
    "name": "Grenville Road",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61692"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "grosvenor avenue": {
@@ -1507,156 +3633,412 @@
    "zones": {
     "Q": 2,
     "V": 4
+   },
+   "codes": {
+    "Q": [
+     "62019",
+     "62020"
+    ],
+    "V": [
+     "62199",
+     "62200",
+     "62201",
+     "62202"
+    ]
+   },
+   "maxStay": {
+    "300": 1,
+    "120": 5
    }
   },
   "gwynne place": {
    "name": "Gwynne Place",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61091"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hall street": {
    "name": "Hall Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61092"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "halliford street": {
    "name": "Halliford Street",
    "zones": {
     "L": 3
+   },
+   "codes": {
+    "L": [
+     "61870",
+     "61871",
+     "61872"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "halton cross street": {
    "name": "Halton Cross Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61530"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "halton road": {
    "name": "Halton Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61531",
+     "61532"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "hamilton park": {
    "name": "Hamilton Park",
    "zones": {
     "G": 3
+   },
+   "codes": {
+    "G": [
+     "61642",
+     "61643",
+     "61644"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "hampden road": {
    "name": "Hampden Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61967"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "hanley road": {
    "name": "Hanley Road",
    "zones": {
     "J": 8
+   },
+   "codes": {
+    "J": [
+     "61757",
+     "61758",
+     "61759",
+     "61760",
+     "61761",
+     "61762",
+     "61763",
+     "61764"
+    ]
+   },
+   "maxStay": {
+    "120": 8
    }
   },
   "hardwick street": {
    "name": "Hardwick Street",
    "zones": {
     "A": 4
+   },
+   "codes": {
+    "A": [
+     "61093",
+     "61094",
+     "61095",
+     "61096"
+    ]
+   },
+   "maxStay": {
+    "240": 4
    }
   },
   "harecourt road": {
    "name": "Harecourt Road",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61873"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hargrave park": {
    "name": "Hargrave Park",
    "zones": {
     "P": 3
+   },
+   "codes": {
+    "P": [
+     "61968",
+     "61969",
+     "61970"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "hargrave road": {
    "name": "Hargrave Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61972"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hartham road": {
    "name": "Hartham Road",
    "zones": {
     "D": 3
+   },
+   "codes": {
+    "D": [
+     "61437",
+     "61438",
+     "61439"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "hatchard road": {
    "name": "Hatchard Road",
    "zones": {
     "TW": 1
+   },
+   "codes": {
+    "TW": [
+     "62160"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "havelock street": {
    "name": "Havelock Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62099"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "haverstock street": {
    "name": "Haverstock Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61250"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hazelville road": {
    "name": "Hazelville Road",
    "zones": {
     "Z": 6
+   },
+   "codes": {
+    "Z": [
+     "62290",
+     "62291",
+     "62292",
+     "62293",
+     "62294",
+     "62295"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "helmet row": {
    "name": "Helmet Row",
    "zones": {
     "C": 3
+   },
+   "codes": {
+    "C": [
+     "61382",
+     "61383",
+     "61384"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "hemmingford road": {
    "name": "Hemmingford Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61533",
+     "61534"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "henshall street": {
    "name": "Henshall Street",
    "zones": {
     "T": 1
+   },
+   "codes": {
+    "T": [
+     "62134"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hercules street": {
    "name": "Hercules Street",
    "zones": {
     "F": 2
+   },
+   "codes": {
+    "F": [
+     "61599",
+     "61600"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "hertslet road": {
    "name": "Hertslet Road",
    "zones": {
     "F": 2
+   },
+   "codes": {
+    "F": [
+     "61601",
+     "61602"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "highbury crescent": {
    "name": "Highbury Crescent",
    "zones": {
     "E": 3
+   },
+   "codes": {
+    "E": [
+     "61535",
+     "61536",
+     "61537"
+    ]
+   },
+   "maxStay": {
+    "120": 2,
+    "240": 1
    }
   },
   "highbury grange": {
    "name": "Highbury Grange",
    "zones": {
     "Q": 3
+   },
+   "codes": {
+    "Q": [
+     "62021",
+     "62022",
+     "62023"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "highbury new park": {
    "name": "Highbury New Park",
    "zones": {
     "Q": 7
+   },
+   "codes": {
+    "Q": [
+     "62024",
+     "62025",
+     "62026",
+     "62027",
+     "62028",
+     "62029",
+     "62030"
+    ]
+   },
+   "maxStay": {
+    "120": 7
    }
   },
   "highbury park": {
@@ -1664,84 +4046,209 @@
    "zones": {
     "G": 1,
     "Q": 2
+   },
+   "codes": {
+    "G": [
+     "61645"
+    ],
+    "Q": [
+     "62031",
+     "62032"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "highbury place": {
    "name": "Highbury Place",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61538",
+     "61539"
+    ]
+   },
+   "maxStay": {
+    "120": 1,
+    "240": 1
    }
   },
   "highbury quadrant": {
    "name": "Highbury Quadrant",
    "zones": {
     "Q": 1
+   },
+   "codes": {
+    "Q": [
+     "62033"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "highbury quandrant": {
    "name": "Highbury Quandrant",
    "zones": {
     "Q": 2
+   },
+   "codes": {
+    "Q": [
+     "62034",
+     "62035"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "highbury station road": {
    "name": "Highbury Station Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61540",
+     "61541"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "highbury terrace": {
    "name": "Highbury Terrace",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61542"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "highcroft road": {
    "name": "Highcroft Road",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61693"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "highgate hill": {
    "name": "Highgate Hill",
    "zones": {
     "K": 5
+   },
+   "codes": {
+    "K": [
+     "61814",
+     "61815",
+     "61816",
+     "61817",
+     "61819"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "highwood road": {
    "name": "Highwood Road",
    "zones": {
     "U": 1
+   },
+   "codes": {
+    "U": [
+     "62183"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "hilldrop crescent": {
    "name": "Hilldrop Crescent",
    "zones": {
     "W": 1
+   },
+   "codes": {
+    "W": [
+     "62249"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hilldrop road": {
    "name": "Hilldrop Road",
    "zones": {
     "W": 1
+   },
+   "codes": {
+    "W": [
+     "62250"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hillmarton road": {
    "name": "Hillmarton Road",
    "zones": {
     "D": 1
+   },
+   "codes": {
+    "D": [
+     "61440"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "honduras street": {
    "name": "Honduras Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61385",
+     "61386"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "hornsey rise gardens": {
    "name": "Hornsey Rise Gardens",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61694"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hornsey road": {
@@ -1750,162 +4257,428 @@
     "F": 8,
     "HE": 1,
     "Z": 4
+   },
+   "codes": {
+    "F": [
+     "61604",
+     "61605",
+     "61606",
+     "61607",
+     "61608",
+     "61609",
+     "61610",
+     "61611"
+    ],
+    "HE": [
+     "61695"
+    ],
+    "Z": [
+     "62296",
+     "62297",
+     "62298",
+     "62299"
+    ]
+   },
+   "maxStay": {
+    "120": 13
    }
   },
   "hornsey street": {
    "name": "Hornsey Street",
    "zones": {
     "N": 1
+   },
+   "codes": {
+    "N": [
+     "61922"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "huddleston road": {
    "name": "Huddleston Road",
    "zones": {
     "R": 1
+   },
+   "codes": {
+    "R": [
+     "62053"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "hugo road": {
    "name": "Hugo Road",
    "zones": {
     "R": 2
+   },
+   "codes": {
+    "R": [
+     "62054",
+     "62055"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "hungerford road": {
    "name": "Hungerford Road",
    "zones": {
     "D": 5
+   },
+   "codes": {
+    "D": [
+     "61441",
+     "61442",
+     "61443",
+     "61444",
+     "61445"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "inglebert street": {
    "name": "Inglebert Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61097",
+     "61098"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "ironmonger row": {
    "name": "Ironmonger Row",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61387",
+     "61389"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "islington high street": {
    "name": "Islington High Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61251",
+     "61252"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "japan crescent": {
    "name": "Japan Crescent",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61765"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "junction road": {
    "name": "Junction Road",
    "zones": {
     "P": 10
+   },
+   "codes": {
+    "P": [
+     "61973",
+     "61974",
+     "61976",
+     "61977",
+     "61978",
+     "61979",
+     "61980",
+     "61981",
+     "61982",
+     "61983"
+    ]
+   },
+   "maxStay": {
+    "120": 10
    }
   },
   "kelvin road": {
    "name": "Kelvin Road",
    "zones": {
     "Q": 1
+   },
+   "codes": {
+    "Q": [
+     "62036"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "kember street": {
    "name": "Kember Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62100"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "killick street": {
    "name": "Killick Street",
    "zones": {
     "B": 5
+   },
+   "codes": {
+    "B": [
+     "61253",
+     "61254",
+     "61255",
+     "61256",
+     "61257"
+    ]
+   },
+   "maxStay": {
+    "240": 4,
+    "120": 1
    }
   },
   "king henry street": {
    "name": "King Henry Street",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62203"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "king henry's walk": {
    "name": "King Henry's Walk",
    "zones": {
     "V": 2
+   },
+   "codes": {
+    "V": [
+     "62204",
+     "62205"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "kingsbury road": {
    "name": "Kingsbury Road",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62206"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "kingsdown road": {
    "name": "Kingsdown Road",
    "zones": {
     "TW": 2
+   },
+   "codes": {
+    "TW": [
+     "62161",
+     "62162"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "kingsland green": {
    "name": "Kingsland Green",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62207"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "kiver road": {
    "name": "Kiver Road",
    "zones": {
     "TW": 1
+   },
+   "codes": {
+    "TW": [
+     "62163"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "lackington street": {
    "name": "Lackington Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61390"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "lambert street": {
    "name": "Lambert Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61543"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "lambton road": {
    "name": "Lambton Road",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61696"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "landseer road": {
    "name": "Landseer Road",
    "zones": {
     "TW": 2
+   },
+   "codes": {
+    "TW": [
+     "62164",
+     "62165"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "leconfield road": {
    "name": "Leconfield Road",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62208"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "leigh road": {
    "name": "Leigh Road",
    "zones": {
     "G": 3
+   },
+   "codes": {
+    "G": [
+     "61646",
+     "61647",
+     "61648"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "lennox road": {
    "name": "Lennox Road",
    "zones": {
     "J": 5
+   },
+   "codes": {
+    "J": [
+     "61768",
+     "61769",
+     "61770",
+     "61771",
+     "61772"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "leonard street": {
    "name": "Leonard Street",
    "zones": {
     "C": 4
+   },
+   "codes": {
+    "C": [
+     "61391",
+     "61392",
+     "61393",
+     "61394"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "lever street": {
@@ -1913,12 +4686,35 @@
    "zones": {
     "A": 3,
     "C": 2
+   },
+   "codes": {
+    "A": [
+     "61099",
+     "61100",
+     "61101"
+    ],
+    "C": [
+     "61395",
+     "61396"
+    ]
+   },
+   "maxStay": {
+    "240": 3,
+    "120": 2
    }
   },
   "linton street": {
    "name": "Linton Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61544"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "liverpool road": {
@@ -1926,816 +4722,2049 @@
    "zones": {
     "E": 3,
     "N": 5
+   },
+   "codes": {
+    "E": [
+     "61545",
+     "61546",
+     "61547"
+    ],
+    "N": [
+     "61923",
+     "61924",
+     "61925",
+     "61926",
+     "61927"
+    ]
+   },
+   "maxStay": {
+    "120": 7,
+    "240": 1
    }
   },
   "lloyd baker street": {
    "name": "Lloyd Baker Street",
    "zones": {
     "A": 5
+   },
+   "codes": {
+    "A": [
+     "61102",
+     "61103",
+     "61104",
+     "61105",
+     "61106"
+    ]
+   },
+   "maxStay": {
+    "240": 2,
+    "120": 3
    }
   },
   "lloyd square": {
    "name": "Lloyd Square",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61107",
+     "61108"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "lofting road": {
    "name": "Lofting Road",
    "zones": {
     "E": 3
+   },
+   "codes": {
+    "E": [
+     "61548",
+     "61549",
+     "61550"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "lonsdale square": {
    "name": "Lonsdale Square",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61551"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "loraine road": {
    "name": "Loraine Road",
    "zones": {
     "F": 2
+   },
+   "codes": {
+    "F": [
+     "61613",
+     "61614"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "lorenzo street": {
    "name": "Lorenzo Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61258"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "lough road": {
    "name": "Lough Road",
    "zones": {
     "N": 1
+   },
+   "codes": {
+    "N": [
+     "61929"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "lucerne road": {
    "name": "Lucerne Road",
    "zones": {
     "G": 1
+   },
+   "codes": {
+    "G": [
+     "61649"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "lysander grove": {
    "name": "Lysander Grove",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62300"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "macclesfield road": {
    "name": "Macclesfield Road",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61397",
+     "61398"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "macdonald road": {
    "name": "Macdonald Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61984"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mackenzie road": {
    "name": "Mackenzie Road",
    "zones": {
     "N": 1
+   },
+   "codes": {
+    "N": [
+     "61930"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "madras place": {
    "name": "Madras Place",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61552"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "magdala avenue": {
    "name": "Magdala Avenue",
    "zones": {
     "P": 2
+   },
+   "codes": {
+    "P": [
+     "61986",
+     "61987"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "manor gardens": {
    "name": "Manor Gardens",
    "zones": {
     "F": 4
+   },
+   "codes": {
+    "F": [
+     "61615",
+     "61616",
+     "61617",
+     "61618"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "market road": {
    "name": "Market Road",
    "zones": {
     "D": 6
+   },
+   "codes": {
+    "D": [
+     "61446",
+     "61447",
+     "61448",
+     "61449",
+     "61450",
+     "61451"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "marlborough road": {
    "name": "Marlborough Road",
    "zones": {
     "TW": 3
+   },
+   "codes": {
+    "TW": [
+     "62166",
+     "62167",
+     "62168"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "marquess road": {
    "name": "Marquess Road",
    "zones": {
     "T": 1
+   },
+   "codes": {
+    "T": [
+     "62135"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "martineau road": {
    "name": "Martineau Road",
    "zones": {
     "G": 1
+   },
+   "codes": {
+    "G": [
+     "61650"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mary street": {
    "name": "Mary Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61553"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "matilda street": {
    "name": "Matilda Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61554"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "maygood street": {
    "name": "Maygood Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61259"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "medina road": {
    "name": "Medina Road",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61619"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mercers road": {
    "name": "Mercers Road",
    "zones": {
     "U": 2
+   },
+   "codes": {
+    "U": [
+     "62184",
+     "62185"
+    ]
+   },
+   "maxStay": {
+    "60": 2
    }
   },
   "meredith street": {
    "name": "Meredith Street",
    "zones": {
     "A": 4
+   },
+   "codes": {
+    "A": [
+     "61109",
+     "61110",
+     "61111",
+     "61112"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "mildmay grove north": {
    "name": "Mildmay Grove North",
    "zones": {
     "V": 3
+   },
+   "codes": {
+    "V": [
+     "62209",
+     "62210",
+     "62211"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "mildmay grove south": {
    "name": "Mildmay Grove South",
    "zones": {
     "V": 2
+   },
+   "codes": {
+    "V": [
+     "62212",
+     "62213"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "mildmay park": {
    "name": "Mildmay Park",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62217"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mildmay road": {
    "name": "Mildmay Road",
    "zones": {
     "V": 2
+   },
+   "codes": {
+    "V": [
+     "62219",
+     "62220"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "mildmay street": {
    "name": "Mildmay Street",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62221"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "milner square": {
    "name": "Milner Square",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61555"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "miranda road": {
    "name": "Miranda Road",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62301"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mitchison road": {
    "name": "Mitchison Road",
    "zones": {
     "T": 1
+   },
+   "codes": {
+    "T": [
+     "62136"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "monnery road": {
    "name": "Monnery Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61988"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "monsell road": {
    "name": "Monsell Road",
    "zones": {
     "H": 5
+   },
+   "codes": {
+    "H": [
+     "61667",
+     "61668",
+     "61669",
+     "61670",
+     "61671"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "mora street": {
    "name": "Mora Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61400",
+     "61402"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "moray road": {
    "name": "Moray Road",
    "zones": {
     "J": 3
+   },
+   "codes": {
+    "J": [
+     "61773",
+     "61774",
+     "61775"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "moreland street": {
    "name": "Moreland Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61113",
+     "61114",
+     "61115"
+    ]
+   },
+   "maxStay": {
+    "240": 3
    }
   },
   "morgan road": {
    "name": "Morgan Road",
    "zones": {
     "N": 2
+   },
+   "codes": {
+    "N": [
+     "61931",
+     "61932"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "morris place": {
    "name": "Morris Place",
    "zones": {
     "J": 2
+   },
+   "codes": {
+    "J": [
+     "61776",
+     "61777"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "morton road": {
    "name": "Morton Road",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61874",
+     "61875"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "mount pleasant": {
    "name": "Mount Pleasant",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61116"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mount pleasant crescent": {
    "name": "Mount Pleasant Crescent",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61778"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mountgrove road": {
    "name": "Mountgrove Road",
    "zones": {
     "H": 5
+   },
+   "codes": {
+    "H": [
+     "61673",
+     "61674",
+     "61675",
+     "61676",
+     "61677"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "myddelton square": {
    "name": "Myddelton Square",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61117",
+     "61118"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "myddelton street": {
    "name": "Myddelton Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61119"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "myddleton street": {
    "name": "Myddleton Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61120"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "mylne street": {
    "name": "Mylne Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61122",
+     "61123",
+     "61124"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "naoroji street": {
    "name": "Naoroji Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61125",
+     "61126"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "new north road": {
    "name": "New North Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61556"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "newington green road": {
    "name": "Newington Green Road",
    "zones": {
     "V": 6
+   },
+   "codes": {
+    "V": [
+     "62222",
+     "62223",
+     "62224",
+     "62225",
+     "62226",
+     "62227"
+    ]
+   },
+   "maxStay": {
+    "60": 2,
+    "120": 3,
+    "240": 1
    }
   },
   "noel road": {
    "name": "Noel Road",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61260",
+     "61261"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "norman street": {
    "name": "Norman Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61403"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "north road": {
    "name": "North Road",
    "zones": {
     "D": 16
+   },
+   "codes": {
+    "D": [
+     "61452",
+     "61453",
+     "61454",
+     "61455",
+     "61456",
+     "61457",
+     "61458",
+     "61460",
+     "61461",
+     "61462",
+     "61463",
+     "61464",
+     "61465",
+     "61466",
+     "61467",
+     "61468"
+    ]
+   },
+   "maxStay": {
+    "120": 16
    }
   },
   "northampton park": {
    "name": "Northampton Park",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61876",
+     "61877"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "northampton road": {
    "name": "Northampton Road",
    "zones": {
     "A": 7
+   },
+   "codes": {
+    "A": [
+     "61127",
+     "61128",
+     "61129",
+     "61130",
+     "61132",
+     "61133",
+     "61134"
+    ]
+   },
+   "maxStay": {
+    "240": 2,
+    "120": 5
    }
   },
   "northampton square": {
    "name": "Northampton Square",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61135",
+     "61136"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "northampton street": {
    "name": "Northampton Street",
    "zones": {
     "L": 4
+   },
+   "codes": {
+    "L": [
+     "61878",
+     "61879",
+     "61880",
+     "61881"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "northchurch road": {
    "name": "Northchurch Road",
    "zones": {
     "T": 2
+   },
+   "codes": {
+    "T": [
+     "62137",
+     "62138"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "northdown street": {
    "name": "Northdown Street",
    "zones": {
     "B": 4
+   },
+   "codes": {
+    "B": [
+     "61262",
+     "61263",
+     "61264",
+     "61265"
+    ]
+   },
+   "maxStay": {
+    "60": 1,
+    "240": 3
    }
   },
   "northolme road": {
    "name": "Northolme Road",
    "zones": {
     "Q": 1
+   },
+   "codes": {
+    "Q": [
+     "62037"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "nugent road": {
    "name": "Nugent Road",
    "zones": {
     "HE": 2
+   },
+   "codes": {
+    "HE": [
+     "61697",
+     "61698"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "oakley crescent": {
    "name": "Oakley Crescent",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61266"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "oakley road": {
    "name": "Oakley Road",
    "zones": {
     "T": 2
+   },
+   "codes": {
+    "T": [
+     "62139",
+     "62140"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "offord road": {
    "name": "Offord Road",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61557",
+     "61558"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "offord street": {
    "name": "Offord Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61559"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "okendon road": {
    "name": "Okendon Road",
    "zones": {
     "T": 3
+   },
+   "codes": {
+    "T": [
+     "62141",
+     "62142",
+     "62143"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "ormond road": {
    "name": "Ormond Road",
    "zones": {
     "HE": 2
+   },
+   "codes": {
+    "HE": [
+     "61699",
+     "61700"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "packington street": {
    "name": "Packington Street",
    "zones": {
     "E": 3
+   },
+   "codes": {
+    "E": [
+     "61560",
+     "61561",
+     "61562"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "parkside crescent": {
    "name": "Parkside Crescent",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61620"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "pauntley street": {
    "name": "Pauntley Street",
    "zones": {
     "Z": 2
+   },
+   "codes": {
+    "Z": [
+     "62302",
+     "62303"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "peartree street": {
    "name": "PearTree Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61138",
+     "61139",
+     "61140"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "peerless street": {
    "name": "Peerless Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61404"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "pemberton gardens": {
    "name": "Pemberton Gardens",
    "zones": {
     "P": 4
+   },
+   "codes": {
+    "P": [
+     "61989",
+     "61990",
+     "61991",
+     "61992"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "pemberton terrace": {
    "name": "Pemberton Terrace",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61993"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "pembroke street": {
    "name": "Pembroke Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62101"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "penn road": {
    "name": "Penn Road",
    "zones": {
     "Y": 1
+   },
+   "codes": {
+    "Y": [
+     "62266"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "penton street": {
    "name": "Penton Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61268",
+     "61269"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "percival street": {
    "name": "Percival Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61141",
+     "61142"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "percy circus": {
    "name": "Percy Circus",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61143"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "petherton road": {
    "name": "Petherton Road",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62228"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "pickard street": {
    "name": "Pickard Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61144"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "pine street": {
    "name": "Pine Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61145",
+     "61146",
+     "61147"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "playford road": {
    "name": "Playford Road",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61780"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "pleasant place": {
    "name": "Pleasant Place",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61563"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "plimsol road": {
    "name": "Plimsol Road",
    "zones": {
     "H": 1
+   },
+   "codes": {
+    "H": [
+     "61678"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "poets road": {
    "name": "Poets Road",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62229"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "pooles park": {
    "name": "Pooles Park",
    "zones": {
     "J": 2
+   },
+   "codes": {
+    "J": [
+     "61781",
+     "61782"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "popham road": {
    "name": "Popham Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61564"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "poynings road": {
    "name": "Poynings Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61994"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "prah road": {
    "name": "Prah Road",
    "zones": {
     "H": 1
+   },
+   "codes": {
+    "H": [
+     "61679"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "prebend street": {
    "name": "Prebend Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61565"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "prideaux place": {
    "name": "Prideaux Place",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61148",
+     "61149"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "prospero road": {
    "name": "Prospero Road",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62304"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "pyrland road": {
    "name": "Pyrland Road",
    "zones": {
     "V": 2
+   },
+   "codes": {
+    "V": [
+     "62230",
+     "62231"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "queen margarets grove": {
    "name": "Queen Margarets Grove",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62232"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "queensbury street": {
    "name": "Queensbury Street",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61882",
+     "61883"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "quemerford road": {
    "name": "Quemerford Road",
    "zones": {
     "Y": 1
+   },
+   "codes": {
+    "Y": [
+     "62267"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "radnor street": {
    "name": "Radnor Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61405"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "raleigh street": {
    "name": "Raleigh Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61566"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "ramsey walk": {
    "name": "Ramsey Walk",
    "zones": {
     "T": 2
+   },
+   "codes": {
+    "T": [
+     "62144",
+     "62145"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "randells road": {
    "name": "Randells Road",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62102"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "ray street": {
    "name": "Ray Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61151"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "rector street": {
    "name": "Rector Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61567"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "remington street": {
    "name": "Remington Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61270"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "rheidol terrace": {
    "name": "Rheidol Terrace",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61568",
+     "61569"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 1
    }
   },
   "richmond avenue": {
    "name": "Richmond Avenue",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61570",
+     "61571"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "ripplevale grove": {
    "name": "Ripplevale Grove",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61572"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "risinghill street": {
    "name": "Risinghill Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61271"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "ritchie street": {
    "name": "Ritchie Street",
    "zones": {
     "B": 2
+   },
+   "codes": {
+    "B": [
+     "61272",
+     "61273"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 1
    }
   },
   "river place": {
    "name": "River Place",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61573",
+     "61574"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "river street": {
    "name": "River Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61152",
+     "61153"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "riversdale road": {
    "name": "Riversdale Road",
    "zones": {
     "H": 1
+   },
+   "codes": {
+    "H": [
+     "61680"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "rocliffe street": {
    "name": "Rocliffe Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61274"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "rodney street": {
    "name": "Rodney Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61275"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "roman way": {
    "name": "Roman Way",
    "zones": {
     "N": 4
+   },
+   "codes": {
+    "N": [
+     "61933",
+     "61934",
+     "61935",
+     "61936"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "romilly road": {
    "name": "Romilly Road",
    "zones": {
     "H": 1
+   },
+   "codes": {
+    "H": [
+     "61681"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "ronalds road": {
    "name": "Ronalds Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61575"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "roseberry avenue": {
    "name": "Roseberry Avenue",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61154",
+     "61155"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 1
    }
   },
   "rosoman place": {
    "name": "Rosoman Place",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61156"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "rotherfield street": {
    "name": "Rotherfield Street",
    "zones": {
     "L": 3
+   },
+   "codes": {
+    "L": [
+     "61884",
+     "61885",
+     "61886"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "rufford street": {
    "name": "Rufford Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62103"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "rupert road": {
    "name": "Rupert Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "61995"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "salterton road": {
    "name": "Salterton Road",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61621"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "sebastian street": {
    "name": "Sebastian Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61157",
+     "61158",
+     "61159"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "sebbon street": {
    "name": "Sebbon Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61577"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "sekforde street": {
    "name": "Sekforde Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61160",
+     "61161",
+     "61162"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "shaftesbury road": {
    "name": "Shaftesbury Road",
    "zones": {
     "HE": 2
+   },
+   "codes": {
+    "HE": [
+     "61701",
+     "61702"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "sheperton road": {
    "name": "Sheperton Road",
    "zones": {
     "L": 4
+   },
+   "codes": {
+    "L": [
+     "61887",
+     "61888",
+     "61889",
+     "61890"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "sherbourne road": {
    "name": "Sherbourne Road",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61892",
+     "61893"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "sheringham road": {
    "name": "Sheringham Road",
    "zones": {
     "N": 1
+   },
+   "codes": {
+    "N": [
+     "61937"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "sonderburg road": {
    "name": "Sonderburg Road",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61783"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "sotheby road": {
    "name": "Sotheby Road",
    "zones": {
     "Q": 1
+   },
+   "codes": {
+    "Q": [
+     "62038"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "south place": {
    "name": "South Place",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61407"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "southern street": {
    "name": "Southern Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61276"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "southgate road": {
@@ -2743,24 +6772,67 @@
    "zones": {
     "L": 2,
     "T": 4
+   },
+   "codes": {
+    "L": [
+     "61894",
+     "61895"
+    ],
+    "T": [
+     "62146",
+     "62147",
+     "62148",
+     "62149"
+    ]
+   },
+   "maxStay": {
+    "120": 6
    }
   },
   "sparsholt road": {
    "name": "Sparsholt Road",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61784"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "spears road": {
    "name": "Spears Road",
    "zones": {
     "HE": 3
+   },
+   "codes": {
+    "HE": [
+     "61703",
+     "61704",
+     "61705"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "spencer street": {
    "name": "Spencer Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61163",
+     "61164",
+     "61165"
+    ]
+   },
+   "maxStay": {
+    "240": 3
    }
   },
   "st john street": {
@@ -2768,120 +6840,329 @@
    "zones": {
     "A": 7,
     "C": 6
+   },
+   "codes": {
+    "A": [
+     "61166",
+     "61167",
+     "61168",
+     "61169",
+     "61170",
+     "61171",
+     "61172"
+    ],
+    "C": [
+     "61408",
+     "61409",
+     "61410",
+     "61411",
+     "61413",
+     "61414"
+    ]
+   },
+   "maxStay": {
+    "240": 5,
+    "120": 7,
+    "60": 1
    }
   },
   "st john's lane": {
    "name": "St John's Lane",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61412"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "st john's square": {
    "name": "St. John's Square",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61415",
+     "61416"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "st john's way": {
    "name": "St John's Way",
    "zones": {
     "Z": 3
+   },
+   "codes": {
+    "Z": [
+     "62305",
+     "62306",
+     "62307"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "st johns grove": {
    "name": "St. Johns Grove",
    "zones": {
     "P": 6
+   },
+   "codes": {
+    "P": [
+     "61996",
+     "61997",
+     "61998",
+     "61999",
+     "62000",
+     "62001"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 5
    }
   },
   "st johns villas": {
    "name": "St. Johns Villas",
    "zones": {
     "P": 3
+   },
+   "codes": {
+    "P": [
+     "62002",
+     "62003",
+     "62004"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "st jude street": {
    "name": "St. Jude Street",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62233"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "st mary's grove": {
    "name": "St Mary's Grove",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61896",
+     "61897"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "st paul street": {
    "name": "St. Paul Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61578"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "st paul's place": {
    "name": "St Paul's Place",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61898"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "st paul's road": {
    "name": "St Paul's Road",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61899",
+     "61900"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "st peters street": {
    "name": "St Peters Street",
    "zones": {
     "B": 3
+   },
+   "codes": {
+    "B": [
+     "61277",
+     "61278",
+     "61279"
+    ]
+   },
+   "maxStay": {
+    "120": 2,
+    "240": 1
    }
   },
   "st thomas's road": {
    "name": "St Thomas's Road",
    "zones": {
     "H": 5
+   },
+   "codes": {
+    "H": [
+     "61672",
+     "61682",
+     "61683",
+     "61684",
+     "61685"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "stanley terrace": {
    "name": "Stanley Terrace",
    "zones": {
     "TW": 1
+   },
+   "codes": {
+    "TW": [
+     "62169"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "station road": {
    "name": "Station Road",
    "zones": {
     "R": 3
+   },
+   "codes": {
+    "R": [
+     "62056",
+     "62057",
+     "62058"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "stock orchard crescent": {
    "name": "Stock Orchard Crescent",
    "zones": {
     "Y": 2
+   },
+   "codes": {
+    "Y": [
+     "62268",
+     "62269"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "stock orchard street": {
    "name": "Stock Orchard Street",
    "zones": {
     "Y": 1
+   },
+   "codes": {
+    "Y": [
+     "62270"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "stroud green road": {
    "name": "Stroud Green Road",
    "zones": {
     "J": 7
+   },
+   "codes": {
+    "J": [
+     "61785",
+     "61786",
+     "61787",
+     "61788",
+     "61789",
+     "61790",
+     "61791"
+    ]
+   },
+   "maxStay": {
+    "60": 3,
+    "120": 4
    }
   },
   "sudeley street": {
    "name": "Sudeley Street",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61280"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "sunnyside road": {
    "name": "Sunnyside Road",
    "zones": {
     "Z": 4
+   },
+   "codes": {
+    "Z": [
+     "62308",
+     "62309",
+     "62310",
+     "62311"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "sussex way": {
@@ -2889,90 +7170,249 @@
    "zones": {
     "F": 2,
     "TW": 8
+   },
+   "codes": {
+    "F": [
+     "61622",
+     "61623"
+    ],
+    "TW": [
+     "62171",
+     "62172",
+     "62173",
+     "62174",
+     "62175",
+     "62176",
+     "62177",
+     "62178"
+    ]
+   },
+   "maxStay": {
+    "120": 10
    }
   },
   "sycamore street": {
    "name": "Sycamore Street",
    "zones": {
     "C": 1
+   },
+   "codes": {
+    "C": [
+     "61417"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "tabernacle street": {
    "name": "Tabernacle Street",
    "zones": {
     "C": 5
+   },
+   "codes": {
+    "C": [
+     "61418",
+     "61419",
+     "61420",
+     "61421",
+     "61425"
+    ]
+   },
+   "maxStay": {
+    "120": 4,
+    "240": 1
    }
   },
   "tabley road": {
    "name": "Tabley Road",
    "zones": {
     "W": 2
+   },
+   "codes": {
+    "W": [
+     "62251",
+     "62252"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "tavistock terrace": {
    "name": "Tavistock Terrace",
    "zones": {
     "U": 1
+   },
+   "codes": {
+    "U": [
+     "62186"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "thane villas": {
    "name": "Thane Villas",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61624"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "theberton street": {
    "name": "Theberton Street",
    "zones": {
     "E": 4
+   },
+   "codes": {
+    "E": [
+     "61579",
+     "61580",
+     "61581",
+     "61582"
+    ]
+   },
+   "maxStay": {
+    "120": 3,
+    "60": 1
    }
   },
   "thornhill road": {
    "name": "Thornhill Road",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61583"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "thornhill square": {
    "name": "Thornhill Square",
    "zones": {
     "E": 2
+   },
+   "codes": {
+    "E": [
+     "61584",
+     "61585"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "thorpedale road": {
    "name": "Thorpedale Road",
    "zones": {
     "J": 7
+   },
+   "codes": {
+    "J": [
+     "61792",
+     "61793",
+     "61794",
+     "61795",
+     "61796",
+     "61797",
+     "61798"
+    ]
+   },
+   "maxStay": {
+    "120": 7
    }
   },
   "tile yard road": {
    "name": "Tile Yard Road",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62104"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "tollington park": {
    "name": "Tollington Park",
    "zones": {
     "J": 8
+   },
+   "codes": {
+    "J": [
+     "61779",
+     "61799",
+     "61800",
+     "61801",
+     "61802",
+     "61803",
+     "61804",
+     "61805"
+    ]
+   },
+   "maxStay": {
+    "120": 7,
+    "240": 1
    }
   },
   "tollington way": {
    "name": "Tollington Way",
    "zones": {
     "F": 3
+   },
+   "codes": {
+    "F": [
+     "61625",
+     "61626",
+     "61627"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "topham street": {
    "name": "Topham Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61173",
+     "61174"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "trinder road": {
    "name": "Trinder Road",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61706"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "tufnell park road": {
@@ -2980,36 +7420,98 @@
    "zones": {
     "R": 5,
     "W": 4
+   },
+   "codes": {
+    "R": [
+     "62059",
+     "62060",
+     "62061",
+     "62062",
+     "62063"
+    ],
+    "W": [
+     "62253",
+     "62254",
+     "62255",
+     "62256"
+    ]
+   },
+   "maxStay": {
+    "120": 9
    }
   },
   "turle road": {
    "name": "Turle Road",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61806"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "turnmill street": {
    "name": "Turnmill Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61175",
+     "61176"
+    ]
+   },
+   "maxStay": {
+    "240": 1,
+    "120": 1
    }
   },
   "twyford street": {
    "name": "Twyford Street",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62105"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "tysoe street": {
    "name": "Tysoe Street",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61177",
+     "61178",
+     "61179"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "tytherton road": {
    "name": "Tytherton Road",
    "zones": {
     "U": 1
+   },
+   "codes": {
+    "U": [
+     "62187"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "upper street": {
@@ -3017,258 +7519,637 @@
    "zones": {
     "B": 1,
     "E": 1
+   },
+   "codes": {
+    "B": [
+     "61281"
+    ],
+    "E": [
+     "61586"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "vale royal": {
    "name": "Vale Royal",
    "zones": {
     "S": 1
+   },
+   "codes": {
+    "S": [
+     "62106"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "vernon rise": {
    "name": "Vernon Rise",
    "zones": {
     "A": 5
+   },
+   "codes": {
+    "A": [
+     "61180",
+     "61181",
+     "61182",
+     "61183",
+     "61184"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "vincent terrace": {
    "name": "Vincent Terrace",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61282"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "vine street bridge": {
    "name": "Vine Street Bridge",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61185",
+     "61186"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "vineyard walk": {
    "name": "Vineyard Walk",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61188"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "vorley road": {
    "name": "Vorley Road",
    "zones": {
     "P": 5
+   },
+   "codes": {
+    "P": [
+     "62005",
+     "62006",
+     "62007",
+     "62008",
+     "62009"
+    ]
+   },
+   "maxStay": {
+    "120": 5
    }
   },
   "wallace road": {
    "name": "Wallace Road",
    "zones": {
     "L": 2
+   },
+   "codes": {
+    "L": [
+     "61901",
+     "61902"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "wallace road/grosvenor avenue": {
    "name": "Wallace Road/Grosvenor Avenue",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62234"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "warltersville road": {
    "name": "Warltersville Road",
    "zones": {
     "HE": 1
+   },
+   "codes": {
+    "HE": [
+     "61707"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "warrender road": {
    "name": "Warrender Road",
    "zones": {
     "R": 1
+   },
+   "codes": {
+    "R": [
+     "62064"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "waterloo terrace": {
    "name": "Waterloo Terrace",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61587"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "waterlow road": {
    "name": "Waterlow Road",
    "zones": {
     "K": 1
+   },
+   "codes": {
+    "K": [
+     "61821"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wedmore gardens": {
    "name": "Wedmore Gardens",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "62011"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "wedmore street": {
    "name": "Wedmore Street",
    "zones": {
     "U": 2
+   },
+   "codes": {
+    "U": [
+     "62188",
+     "62189"
+    ]
+   },
+   "maxStay": {
+    "60": 2
    }
   },
   "wells terrace": {
    "name": "Wells Terrace",
    "zones": {
     "J": 4
+   },
+   "codes": {
+    "J": [
+     "61807",
+     "61808",
+     "61809",
+     "62315"
+    ]
+   },
+   "maxStay": {
+    "120": 4
    }
   },
   "westbourne road": {
    "name": "Westbourne Road",
    "zones": {
     "N": 1
+   },
+   "codes": {
+    "N": [
+     "61939"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "whadcoat street": {
    "name": "Whadcoat Street",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61810"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wharfdale road": {
    "name": "Wharfdale Road",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "62313"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "wharton street": {
    "name": "Wharton Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61189",
+     "61190"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "whiskin street": {
    "name": "Whiskin Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61191"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "white lion street": {
    "name": "White Lion Street",
    "zones": {
     "B": 6
+   },
+   "codes": {
+    "B": [
+     "61283",
+     "61284",
+     "61285",
+     "61286",
+     "61287",
+     "61288"
+    ]
+   },
+   "maxStay": {
+    "120": 4,
+    "240": 2
    }
   },
   "whitehall park": {
    "name": "Whitehall Park",
    "zones": {
     "Z": 1
+   },
+   "codes": {
+    "Z": [
+     "62312"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "williamson street": {
    "name": "Williamson Street",
    "zones": {
     "Y": 1
+   },
+   "codes": {
+    "Y": [
+     "62271"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wilmington square": {
    "name": "Wilmington Square",
    "zones": {
     "A": 3
+   },
+   "codes": {
+    "A": [
+     "61192",
+     "61193",
+     "61194"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "wilson street": {
    "name": "Wilson Street",
    "zones": {
     "C": 3
+   },
+   "codes": {
+    "C": [
+     "61422",
+     "61423",
+     "61424"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "wilton square": {
    "name": "Wilton Square",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61903"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wilton villas": {
    "name": "Wilton Villas",
    "zones": {
     "L": 1
+   },
+   "codes": {
+    "L": [
+     "61904"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "windermere road": {
    "name": "Windermere Road",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "62012"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "windsor road": {
    "name": "Windsor Road",
    "zones": {
     "F": 3
+   },
+   "codes": {
+    "F": [
+     "61628",
+     "61629",
+     "61630"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "windsor street": {
    "name": "Windsor Street",
    "zones": {
     "E": 1
+   },
+   "codes": {
+    "E": [
+     "61588"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wolsey road": {
    "name": "Wolsey Road",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62235"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "woodfall road": {
    "name": "Woodfall Road",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61811"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "woodville road": {
    "name": "Woodville Road",
    "zones": {
     "V": 1
+   },
+   "codes": {
+    "V": [
+     "62236"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "worship street": {
    "name": "Worship Street",
    "zones": {
     "C": 2
+   },
+   "codes": {
+    "C": [
+     "61426",
+     "61427"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "wray crescent": {
    "name": "Wray Crescent",
    "zones": {
     "J": 1
+   },
+   "codes": {
+    "J": [
+     "61812"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wyclif street": {
    "name": "Wyclif Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61195",
+     "61196"
+    ]
+   },
+   "maxStay": {
+    "120": 2
    }
   },
   "wynatt street": {
    "name": "Wynatt Street",
    "zones": {
     "A": 1
+   },
+   "codes": {
+    "A": [
+     "61197"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "wyndham crescent": {
    "name": "Wyndham Crescent",
    "zones": {
     "P": 3
+   },
+   "codes": {
+    "P": [
+     "62013",
+     "62014",
+     "62015"
+    ]
+   },
+   "maxStay": {
+    "120": 3
    }
   },
   "wynford road": {
    "name": "Wynford Road",
    "zones": {
     "B": 1
+   },
+   "codes": {
+    "B": [
+     "61289"
+    ]
+   },
+   "maxStay": {
+    "240": 1
    }
   },
   "yardley street": {
    "name": "Yardley Street",
    "zones": {
     "A": 2
+   },
+   "codes": {
+    "A": [
+     "61198",
+     "61199"
+    ]
+   },
+   "maxStay": {
+    "240": 2
    }
   },
   "yerbury road": {
    "name": "Yerbury Road",
    "zones": {
     "U": 1
+   },
+   "codes": {
+    "U": [
+     "62190"
+    ]
+   },
+   "maxStay": {
+    "60": 1
    }
   },
   "yonge park": {
    "name": "Yonge Park",
    "zones": {
     "F": 1
+   },
+   "codes": {
+    "F": [
+     "61631"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   },
   "york way": {
@@ -3277,12 +8158,38 @@
     "B": 1,
     "D": 1,
     "S": 4
+   },
+   "codes": {
+    "B": [
+     "61290"
+    ],
+    "D": [
+     "61470"
+    ],
+    "S": [
+     "62107",
+     "62108",
+     "62109",
+     "62110"
+    ]
+   },
+   "maxStay": {
+    "120": 5,
+    "240": 1
    }
   },
   "zoffany street": {
    "name": "Zoffany Street",
    "zones": {
     "P": 1
+   },
+   "codes": {
+    "P": [
+     "62016"
+    ]
+   },
+   "maxStay": {
+    "120": 1
    }
   }
  }
