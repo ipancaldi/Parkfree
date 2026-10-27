@@ -12,10 +12,14 @@ Can I park here, now? A phone web app for Islington's 24 controlled parking zone
 
 The signs on the street always win: bay suspensions, yellow lines and loading bans are not modelled.
 
+## Scan a sign
+Tap the camera button and photograph a parking sign. The photo is read on the phone with Tesseract (bundled in `vendor/ocr`, nothing is uploaded). `src/sign.js` turns the text into zone, days, times and who can park, and checks it against your resident permit and Blue Badge.
+
 ## Develop
-Edit `src/app.html` (UI) or `src/logic.js` (rules), then:
+Edit `src/app.html` (UI), `src/logic.js` (zone rules) or `src/sign.js` (sign reader), then:
 ```
 python3 build.py      # writes index.html
 node tests/rules.test.js
+node tests/sign.test.js
 ```
 Free services used at runtime: OpenStreetMap Overpass & Nominatim, CARTO basemap tiles, gov.uk bank holidays.
