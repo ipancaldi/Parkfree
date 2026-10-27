@@ -1,4 +1,2 @@
-arsenal page: 29 events
-https://fixturedownload.com/feed/json/epl-2026: 19 home games, 1 not on the Arsenal page
-https://fixturedownload.com/feed/json/wsl-2026: 13 home games, 8 not on the Arsenal page
-total 38 events, 30 from today
+arsenal page: 28 events
+total 28 events, 21 from today
