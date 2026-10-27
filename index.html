@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" id="theme-color" content="#F2F4F7">
 <meta http-equiv="Cache-Control" content="no-cache">
-<meta name="parkfree-build" content="20261027173638">
+<meta name="parkfree-build" content="20261027174838">
 <title>ParkFree Islington</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2316A34A'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='700' font-size='38' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
@@ -62,6 +62,11 @@ a{color:inherit;text-decoration:none}
 .leaflet-container{font-family:var(--font);background:var(--canvas)}
 .leaflet-tile-pane{filter:saturate(.35) brightness(1.06) contrast(.9)}
 @media (prefers-color-scheme:dark){.leaflet-tile-pane{filter:invert(.92) hue-rotate(180deg) saturate(.3) brightness(.85) contrast(.9)}}
+body.vector .leaflet-tile-pane{filter:none}
+body.vector.vinvert .leaflet-tile-pane{filter:invert(.92) hue-rotate(180deg) brightness(.9)}
+.leaflet-gl-layer{z-index:1}
+#baykey{position:fixed;z-index:12;left:var(--gutter);display:flex;gap:10px;align-items:center;background:var(--surface);border-radius:12px;box-shadow:var(--shadow);padding:6px 10px;font-size:12px;font-weight:500;color:var(--ink-2)}
+#baykey i{display:inline-block;width:14px;height:5px;border-radius:3px;margin-right:5px;vertical-align:middle}
 .leaflet-control-attribution{font-size:9.5px!important;background:color-mix(in srgb,var(--surface) 75%,transparent)!important;color:var(--ink-3)!important;border-radius:6px 0 0 0}
 .leaflet-control-attribution a{color:var(--ink-2)!important}
 #wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:var(--tone);opacity:0;transition:opacity .5s,background .5s}
@@ -113,6 +118,7 @@ body[data-tone="idle"] .ans .ic{background:var(--ink-3)}
 .zp b{font-size:20px;font-weight:800;margin-top:2px}
 .where{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13.5px;color:var(--ink-2);min-width:0}
 .where span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.where #a-src{flex:none}
 .where .sep{flex:none}
 .where button{color:var(--plate);font-weight:600;font-size:13.5px;flex:none;margin-left:auto;padding:4px 0 4px 8px}
 .flag{margin-top:10px;font-size:13.5px;color:var(--ink);background:color-mix(in srgb,var(--surface) 70%,transparent);border-radius:12px;padding:8px 10px}
@@ -222,6 +228,7 @@ details summary::-webkit-details-marker{display:none}
   </button>
 </header>
 
+<div id="baykey" hidden><span><i style="background:var(--go)"></i>Bay, free now</span><span><i style="background:var(--stop)"></i>Bay, controlled</span><span><i style="background:var(--plate)"></i>Disabled</span></div>
 <button class="fab" id="locate" aria-label="Check where I am">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3 3 10.5l7.5 2.5L13 21z"/></svg>
 </button>
@@ -533,6 +540,29 @@ function useBase(i){
     .on('tileerror',()=>{bad++;if(!ok&&bad>=3&&baseIdx<BASES.length-1)useBase(baseIdx+1);}).addTo(map);
 }
 useBase(0);
+const loadJs=src=>new Promise((ok,no)=>{const e=document.createElement('script');e.src=src;e.onload=ok;e.onerror=no;document.head.appendChild(e);});
+const loadCss=href=>{const l=document.createElement('link');l.rel='stylesheet';l.href=href;document.head.appendChild(l);};
+async function loadVector(){
+  try{
+    const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+    const tries=dark?[['dark',false],['positron',true]]:[['liberty',false],['bright',false]];
+    let style=null,invert=false;
+    for(const [name,inv] of tries){
+      try{const c=new AbortController(),to=setTimeout(()=>c.abort(),6000);
+        const r=await fetch('https://tiles.openfreemap.org/styles/'+name,{signal:c.signal});clearTimeout(to);
+        if(r.ok){style='https://tiles.openfreemap.org/styles/'+name;invert=inv;break;}}catch(e){}
+    }
+    if(!style)return;
+    loadCss('vendor/maplibre-gl.css'); await loadJs('vendor/maplibre-gl.js'); await loadJs('vendor/leaflet-maplibre-gl.js');
+    if(!L.maplibreGL)return;
+    const gl=L.maplibreGL({style,attribution:'© <a href="https://openfreemap.org">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> '+OSMA,interactive:false}).addTo(map);
+    const m=gl.getMaplibreMap();
+    const swap=()=>{if(baseLayer){map.removeLayer(baseLayer);baseLayer=null;}document.body.classList.add('vector');document.body.classList.toggle('vinvert',invert);};
+    if(m.loaded())swap();else m.once('load',swap);
+    m.on('error',()=>{});
+  }catch(e){/* raster map stays */}
+}
+setTimeout(loadVector,300);
 const css=v=>getComputedStyle(document.body).getPropertyValue(v).trim();
 const canvas=L.canvas({padding:.4});
 const streetLayer=L.layerGroup().addTo(map), nearLayer=L.layerGroup().addTo(map);
@@ -541,7 +571,7 @@ let pin=null, meDot=null, meAcc=null, hereLine=null;
 const toneOf=s=>({free:'free',roamer:'free',permit:'free',restricted:'stop',matchday:'stop'})[s]||'check';
 const colorOf=t=>css({free:'--go',stop:'--stop',check:'--check'}[t]||'--ink-3');
 function cardH(){return $('card').offsetHeight;}
-function placeLocate(){$('locate').style.bottom=(innerWidth>=820?24:cardH()+12)+'px';}
+function placeLocate(){const b=(innerWidth>=820?24:cardH()+12);$('locate').style.bottom=b+'px';const k=$('baykey');if(k){k.style.bottom=(b+8)+'px';if(innerWidth>=820)k.style.left='432px';}}
 if(window.ResizeObserver)new ResizeObserver(()=>{placeLocate();}).observe($('card'));
 addEventListener('resize',placeLocate);
 function visibleCentre(lat,lng,z){ // put the point in the middle of the map area above the card
@@ -566,8 +596,26 @@ const dataReady=(async()=>{
     });
     BOUND=(d.boundary||[]).map(f=>{const a=[];for(let i=0;i<f.length;i+=2)a.push([f[i],f[i+1]]);return a;});
   }catch(e){STREETS=null;}
-  drawStreets();
+  linkZones(); drawStreets();
 })();
+// Council records sometimes abbreviate or misspell names ("Cross St", "Highbury Quandrant").
+// Link each one to the closest real street name so its zone shows on the map.
+const ABBR={st:'street',rd:'road',ave:'avenue',av:'avenue',gdns:'gardens',sq:'square',pl:'place',ter:'terrace',tce:'terrace',cres:'crescent',gr:'grove',ln:'lane',mws:'mews',pk:'park'};
+const expand=k=>{const w=k.replace(/'/g,' ').replace(/\s+/g,' ').trim().split(' ');const l=w.length-1;if(ABBR[w[l]])w[l]=ABBR[w[l]];return w.join(' ');};
+function lev(a,b){if(Math.abs(a.length-b.length)>2)return 9;const m=[...Array(b.length+1).keys()];
+  for(let i=1;i<=a.length;i++){let prev=m[0];m[0]=i;for(let j=1;j<=b.length;j++){const t=m[j];m[j]=Math.min(m[j]+1,m[j-1]+1,prev+(a[i-1]===b[j-1]?0:1));prev=t;}}return m[b.length];}
+function linkZones(){
+  if(!STREETS||!Object.keys(RINGGO).length)return;
+  const names=new Set(STREETS.map(s=>s.k));
+  for(const [k,v] of Object.entries(RINGGO)){
+    if(!k||names.has(k))continue;
+    for(const part of k.split('/').map(x=>expand(x.trim())).filter(Boolean)){
+      let hit=names.has(part)?part:null;
+      if(!hit){let best=2;for(const n of names){if(n[0]!==part[0])continue;const d=lev(part,n);if(d<best){best=d;hit=n;}}}
+      if(hit&&!RINGGO[hit])RINGGO[hit]=v;
+    }
+  }
+}
 function segDist(p,a,b){const k=Math.cos(p[0]*Math.PI/180),R=111320;
   const ax=(a[1]-p[1])*k*R,ay=(a[0]-p[0])*R,bx=(b[1]-p[1])*k*R,by=(b[0]-p[0])*R,dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy;
   let t=l?-(ax*dx+ay*dy)/l:0;t=Math.max(0,Math.min(1,t));return {d:Math.hypot(ax+t*dx,ay+t*dy),p:[a[0]+t*(b[0]-a[0]),a[1]+t*(b[1]-a[1])]};}
@@ -600,6 +648,23 @@ async function lookupLive(lat,lng){ // fallback only, until the shipped street m
     const road=d.address&&(d.address.road||d.address.pedestrian);if(road)return {name:road,snap:[lat,lng],segs:null,borough:JSON.stringify(d.address)};}catch(e){}
   throw new Error('lookup failed');
 }
+function guessZone(lat,lng,skipKey){
+  if(!STREETS)return null;
+  const hits=[];
+  for(const st of STREETS){if(st.k===skipKey)continue;const b=st.box;
+    if(lat<b[0]-.0015||lat>b[2]+.0015||lng<b[1]-.0022||lng>b[3]+.0022)continue;
+    const r=resolveZone(st.name,st.mid[0],st.mid[1]);if(!r.z)continue;
+    const d=distTo(st,[lat,lng]);if(d&&d.d<=160)hits.push({z:r.z,d:d.d});}
+  if(!hits.length)return null;
+  hits.sort((a,b)=>a.d-b.d);
+  const top=hits.slice(0,4), zs=[...new Set(top.map(h=>h.z))];
+  return zs.length===1?{z:zs[0],src:'nearby'}:{z:null,src:'multi',cands:zs.slice(0,3)};
+}
+function zoneFor(name,lat,lng){
+  const r=resolveZone(name,lat,lng);
+  if(r.z||r.cands)return r;
+  return guessZone(lat,lng,norm(name))||r;
+}
 function resolveZone(name,lat,lng){
   const key=norm(name), mine=learned.filter(x=>x.s===key);
   if(mine.length){mine.sort((a,b)=>Math.hypot(a.lat-lat,a.lng-lng)-Math.hypot(b.lat-lat,b.lng-lng));return {z:mine[0].z,src:'you'};}
@@ -611,7 +676,7 @@ function resolveZone(name,lat,lng){
 
 // Colour every street whose zone is known, for the chosen time
 let drawQueued=false;
-function drawStreets(){if(drawQueued)return;drawQueued=true;requestAnimationFrame(()=>{drawQueued=false;paintStreets();});}
+function drawStreets(){if(drawQueued)return;drawQueued=true;requestAnimationFrame(()=>{drawQueued=false;paintStreets();if(typeof paintBays==='function')paintBays();});}
 function paintStreets(){
   streetLayer.clearLayers(); if(!STREETS||map.getZoom()<14)return;
   const t=currentT(), b=map.getBounds().pad(.25), curK=cur&&cur.name?norm(cur.name):null;
@@ -624,10 +689,46 @@ function paintStreets(){
     if(r.z){cache[r.z]=cache[r.z]||toneOf(PF.status(r.z,t,profile).state);tone=cache[r.z];}
     else if(r.cands)tone='check';
     if(!tone)continue;
-    st.segs.forEach(sg=>L.polyline(sg,{renderer:canvas,color:colorOf(tone),weight:map.getZoom()>=16?5:3.5,opacity:.85,lineCap:'round',interactive:false}).addTo(streetLayer));
+    st.segs.forEach(sg=>L.polyline(sg,{renderer:canvas,color:colorOf(tone),weight:map.getZoom()>=17?3:map.getZoom()>=16?5:3.5,opacity:map.getZoom()>=17?.55:.85,lineCap:'round',interactive:false}).addTo(streetLayer));
   }
 }
 map.on('moveend zoomend',drawStreets);
+
+// Kerbside bays mapped in OpenStreetMap (zoom in to see them)
+let BAYS=null;
+const baysReady=(async()=>{try{const r=await fetch('data/bays.json',{cache:'no-cache'});if(!r.ok)throw 0;const d=await r.json();
+  const pts=f=>{const a=[];for(let i=0;i<f.length;i+=2)a.push([f[i],f[i+1]]);return a;};
+  BAYS={kerbs:d.kerbs.map(k=>({...k,g:pts(k.g),key:norm(k.n)})),areas:d.areas.map(a=>({...a,g:pts(a.g)})),spaces:d.spaces};
+  drawStreets();}catch(e){BAYS=null;}})();
+const bayLayer=L.layerGroup().addTo(map);
+function offsetLine(pts,m,side){
+  const out=[],k=Math.cos(pts[0][0]*Math.PI/180),M=111320,sg=side==='l'?1:-1;
+  for(let i=0;i<pts.length;i++){
+    const a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)];
+    const dx=(b[1]-a[1])*k*M,dy=(b[0]-a[0])*M,l=Math.hypot(dx,dy)||1;
+    const nx=-dy/l*m*sg,ny=dx/l*m*sg;
+    out.push([pts[i][0]+ny/M,pts[i][1]+nx/(k*M)]);}
+  return out;
+}
+function bayTone(name,lat,lng,t){
+  const r=name?zoneFor(name,lat,lng):(()=>{const n=STREETS&&nearestLocal(lat,lng,40);return n?zoneFor(n.st.name,lat,lng):{};})();
+  return r.z?(PF.isFree(PF.status(r.z,t,profile))?'free':'stop'):'check';
+}
+function paintBays(){
+  bayLayer.clearLayers();
+  const show=BAYS&&map.getZoom()>=17; $('baykey').hidden=!show; if(!show)return;
+  const t=currentT(), b=map.getBounds().pad(.2), inView=p=>b.contains(p);
+  const col=k=>k==='disabled'?css('--plate'):k==='loading'||k==='private'?css('--ink-3'):null;
+  BAYS.kerbs.forEach(k=>{if(!k.g.some(inView))return;
+    const c=col(k.k)||colorOf(bayTone(k.n,k.g[0][0],k.g[0][1],t));
+    L.polyline(offsetLine(k.g,7,k.s),{renderer:canvas,color:c,weight:6,opacity:.95,lineCap:'butt',dashArray:k.k==='private'?'4 4':null,interactive:false}).addTo(bayLayer);});
+  BAYS.areas.forEach(a=>{if(!a.g.some(inView))return;
+    const c=col(a.k)||colorOf(bayTone(null,a.g[0][0],a.g[0][1],t));
+    L.polygon(a.g,{renderer:canvas,color:c,weight:2,fillColor:c,fillOpacity:.45,interactive:false}).addTo(bayLayer);});
+  BAYS.spaces.forEach(sp=>{if(!inView(sp.p))return;
+    const c=col(sp.k)||colorOf(bayTone(null,sp.p[0],sp.p[1],t));
+    L.circleMarker(sp.p,{renderer:canvas,radius:5,color:'#fff',weight:2,fillColor:c,fillOpacity:1,interactive:false}).addTo(bayLayer);});
+}
 
 // ================================================================
 //  CHECK A SPOT
@@ -650,9 +751,9 @@ async function checkPoint(lat,lng,opts={}){
       name=r.name;snap=r.snap;segs=r.segs;
     }
     pin.setLatLng(snap);
-    const z=resolveZone(name,lat,lng);
+    const z=zoneFor(name,lat,lng);
     cur={lat:snap[0],lng:snap[1],name,segs,z:z.z,src:z.src,cands:z.cands||null};
-    pickerOpen=!z.z;
+    pickerOpen=!z.z&&!z.cands;
     render();
   }catch(e){if(id===reqId){cur={lat,lng,src:'error'};render();}}
 }
@@ -763,8 +864,8 @@ $('cta').onclick=e=>{e.stopPropagation();const k=$('cta').dataset.k;
 // ================================================================
 (async()=>{for(const u of ['data/zones.json','https://raw.githubusercontent.com/ipancaldi/Parkfree/main/data/zones.json']){
   try{const r=await fetch(u,{cache:'no-cache'});if(!r.ok)continue;const d=await r.json();
-    if(d&&d.streets&&Object.keys(d.streets).length){RINGGO=d.streets;store.set('ringgo',RINGGO);
-      if(cur&&cur.name&&!cur.z&&cur.src!=='you'){const z=resolveZone(cur.name,cur.lat,cur.lng);Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});pickerOpen=!z.z;}
+    if(d&&d.streets&&Object.keys(d.streets).length){RINGGO=d.streets;store.set('ringgo',RINGGO);await dataReady;linkZones();
+      if(cur&&cur.name&&cur.src!=='you'&&cur.src!=='council'&&cur.src!=='outside'&&cur.src!=='nostreet'&&cur.src!=='error'){const z=zoneFor(cur.name,cur.lat,cur.lng);Object.assign(cur,{z:z.z,src:z.src,cands:z.cands||null});pickerOpen=!z.z&&!z.cands;}
       render();drawStreets();return;}}catch(e){}}})();
 fetch('https://www.gov.uk/bank-holidays.json').then(r=>r.json()).then(d=>{PF.setBankHols(d['england-and-wales'].events.map(e=>e.date));render();}).catch(()=>{});
 
@@ -789,11 +890,13 @@ function compute(t){
     return {tone:'check',icon:'check',head:'Check the sign',sub:'We don’t know this street’s zone yet'};
   }
   const st=PF.status(cur.z,t,profile),free=PF.isFree(st),nx=PF.nextChange(cur.z,t,profile);
+  const guess=cur.src==='nearby';
   let sub;
   if(nx){sub=free?`Until ${whenText(t,nx)}`:`Free from ${whenText(t,nx)}`;}
   else sub=free?'All week':'All week, around the clock';
   let then='';
   if(nx){const st2=PF.status(cur.z,nx,profile),nx2=PF.nextChange(cur.z,nx,profile);then=`Then ${thenWords(st2.state)}${nx2?` until ${whenText(t,nx2)}`:''}`;}
+  if(guess)return {tone:free?'check':'stop',icon:free?'check':'stop',head:free?'Probably free':'Probably not free',sub,then,state:st.state,zone:cur.z,zoneLabel:cur.z};
   return {tone:free?'free':'stop',icon:free?'free':'stop',head:headline(st.state),sub,then,state:st.state,zone:cur.z,zoneLabel:cur.z};
 }
 
@@ -811,8 +914,9 @@ function render(){
   const has=!!(cur&&cur.name&&!cur.loading&&!['error','outside','nostreet'].includes(cur.src));
   $('a-where').hidden=!has;
   if(has){$('a-street').textContent=cur.name;
-    const src={you:'confirmed by you',council:'council records'}[cur.src]||'';
-    $('a-src').textContent=src;$('a-sep').hidden=!src;$('b-fix').hidden=pickerOpen;}
+    const src={you:'confirmed',council:'council data',nearby:'estimated',multi:'zones meet'}[cur.src]||'';
+    $('a-src').textContent=src;$('a-sep').hidden=!src;$('b-fix').hidden=pickerOpen;
+    $('b-fix').textContent=(cur.src==='nearby'||cur.src==='multi')?'Confirm':'Wrong zone?';}
   // event flag
   const ev=PF.eventOn(t.date), md=v.zone&&PF.ZONES[v.zone]&&PF.ZONES[v.zone].md;
   if(ev&&md){const dt=(t.dow===0||PF.isBH(t))?'sun':t.dow===6?'sat':'wk';const w=PF.MD[PF.ZONES[v.zone].md][dt];
@@ -840,7 +944,7 @@ function render(){
   // pin + street highlight
   if(pin)pin.setIcon(pinIcon(cur&&cur.loading));
   if(hereLine){map.removeLayer(hereLine);hereLine=null;}
-  if(has&&cur.segs)hereLine=L.layerGroup(cur.segs.map(s=>L.polyline(s,{renderer:canvas,color:colorOf(v.tone),weight:9,opacity:.95,lineCap:'round',interactive:false}))).addTo(map);
+  if(has&&cur.segs)hereLine=L.layerGroup(cur.segs.map(s=>L.polyline(s,{renderer:canvas,color:colorOf(v.tone),weight:map.getZoom()>=17?5:9,opacity:.95,lineCap:'round',interactive:false}))).addTo(map);
   // expanded detail
   $('actions').hidden=!has;
   if(has){$('a-dir').href=`https://maps.apple.com/?daddr=${cur.lat.toFixed(5)},${cur.lng.toFixed(5)}&dirflg=d`;
