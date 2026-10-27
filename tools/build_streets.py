@@ -10,29 +10,50 @@ from datetime import datetime, timezone
 UA = "ParkFree-Islington/1.0 (+https://github.com/ipancaldi/Parkfree)"
 ENDPOINTS = [
     "https://overpass-api.de/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
     "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
 ]
-QUERY = """[out:json][timeout:180];
-area["name"="London Borough of Islington"]["admin_level"="8"]->.i;
-way(area.i)["highway"~"^(trunk|primary|secondary|tertiary|unclassified|residential|living_street)$"]["name"];
-out tags geom;
-rel["name"="London Borough of Islington"]["admin_level"="8"]["boundary"="administrative"];
+BBOX = "51.5130,-0.1470,51.5780,-0.0750"  # Islington plus a margin
+Q_STREETS = f"""[out:json][timeout:120];
+way({BBOX})["highway"~"^(trunk|primary|secondary|tertiary|unclassified|residential|living_street)$"]["name"];
+out tags geom;"""
+Q_BOUNDARY = f"""[out:json][timeout:60];
+rel({BBOX})["boundary"="administrative"]["admin_level"="8"]["name"~"Islington"];
 out geom;"""
+LOG = []
 
 
-def fetch():
-    body = urllib.parse.urlencode({"data": QUERY}).encode()
+def log(*a):
+    msg = " ".join(str(x) for x in a)
+    print(msg, flush=True)
+    LOG.append(datetime.now(timezone.utc).strftime("%H:%M:%S ") + msg)
+
+
+def save_log():
+    os.makedirs("data/debug", exist_ok=True)
+    with open("data/debug/streets-log.txt", "w") as f:
+        f.write("\n".join(LOG) + "\n")
+
+
+def fetch(query, label):
+    body = urllib.parse.urlencode({"data": query}).encode()
     for ep in ENDPOINTS:
         for attempt in range(2):
+            t0 = time.time()
             try:
-                req = urllib.request.Request(ep, data=body, headers={"User-Agent": UA})
-                with urllib.request.urlopen(req, timeout=240) as r:
-                    return json.load(r)
+                req = urllib.request.Request(ep, data=body, headers={"User-Agent": UA, "Accept": "application/json"})
+                with urllib.request.urlopen(req, timeout=150) as r:
+                    raw = r.read()
+                d = json.loads(raw)
+                log(f"{label}: {ep} ok in {time.time()-t0:.0f}s, {len(d.get('elements', []))} elements, {len(raw)} bytes")
+                if d.get("remark"):
+                    log(f"{label}: remark: {d['remark'][:200]}")
+                return d
             except Exception as e:
-                print("Overpass failed:", ep, e, flush=True)
-                time.sleep(15)
-    sys.exit("All Overpass endpoints failed")
+                log(f"{label}: {ep} attempt {attempt+1} failed after {time.time()-t0:.0f}s: {str(e)[:200]}")
+                time.sleep(8)
+    return None
 
 
 def _perp(p, a, b, k):
@@ -113,20 +134,32 @@ def build(d):
 
 
 def main():
-    streets, boundary = build(fetch())
-    print(f"{len(streets)} named streets, {len(boundary)} boundary rings", flush=True)
-    if len(streets) < 300:
-        sys.exit("Too few streets; not overwriting data.")
-    out = {
-        "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "source": "OpenStreetMap contributors (ODbL)",
-        "boundary": boundary,
-        "streets": dict(sorted(streets.items())),
-    }
-    os.makedirs("data", exist_ok=True)
-    with open("data/streets.json", "w") as f:
-        json.dump(out, f, separators=(",", ":"), ensure_ascii=False)
-    print("size", os.path.getsize("data/streets.json"), "bytes")
+    try:
+        d = fetch(Q_STREETS, "streets")
+        if not d:
+            sys.exit("All Overpass endpoints failed for streets")
+        b = fetch(Q_BOUNDARY, "boundary") or {"elements": []}
+        streets, _ = build(d)
+        rels = [e for e in b.get("elements", []) if e.get("type") == "relation" and "Islington" in e.get("tags", {}).get("name", "")]
+        boundary = [flat(simplify(r, 0.00005)) for r in rings(rels[0])] if rels else []
+        log(f"{len(streets)} named streets, {len(boundary)} boundary rings")
+        if len(streets) < 300:
+            sys.exit("Too few streets; not overwriting data.")
+        out = {
+            "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "source": "OpenStreetMap contributors (ODbL)",
+            "boundary": boundary,
+            "streets": dict(sorted(streets.items())),
+        }
+        os.makedirs("data", exist_ok=True)
+        with open("data/streets.json", "w") as f:
+            json.dump(out, f, separators=(",", ":"), ensure_ascii=False)
+        log("size", os.path.getsize("data/streets.json"), "bytes")
+    except SystemExit as e:
+        log("stopped:", e)
+        raise
+    finally:
+        save_log()
 
 
 if __name__ == "__main__":
