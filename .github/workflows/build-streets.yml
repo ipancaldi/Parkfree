@@ -1,0 +1,42 @@
+name: Build street map
+
+on:
+  push:
+    branches: [main]
+    paths: ['tools/build_streets.py', '.github/workflows/build-streets.yml']
+  schedule:
+    - cron: '41 4 2 * *'   # monthly refresh
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-streets
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect Islington streets from OpenStreetMap
+        run: python tools/build_streets.py
+      - name: Commit to main and gh-pages
+        run: |
+          git config user.name "parkfree-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/streets.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Update Islington street map from OpenStreetMap"
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push origin HEAD:main && break
+            sleep 10
+          done
+          git push -f origin HEAD:gh-pages
