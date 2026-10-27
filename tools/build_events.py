@@ -9,7 +9,7 @@ from datetime import date, datetime, timezone, timedelta
 
 UA = "ParkFree-Islington/1.0 (+https://github.com/ipancaldi/Parkfree; personal, non-commercial)"
 ARSENAL = "https://help.arsenal.com/support/solutions/articles/101000594163-fixture-and-event-timings-for-local-residents"
-FEEDS = ["https://fixturedownload.com/feed/json/epl-{y}", "https://fixturedownload.com/feed/json/wsl-{y}"]
+FEEDS = ["https://fixturedownload.com/feed/json/epl-{y}"]  # fallback only; WSL home games are mostly at Meadow Park
 MONTHS = {m: i + 1 for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])}
 LOG = []
 
@@ -48,6 +48,8 @@ def parse_arsenal(text, today):
     events = {}
     lines = text.splitlines()
     for i, ln in enumerate(lines):
+        if re.search(r"\b(moved|rescheduled|previously|postponed|instead of|was due)\b", ln, re.I):
+            continue                                   # notes about changed dates, not events
         for m in DATE_RE.finditer(ln):
             mon = MONTHS.get(m.group(2)[:3].lower())
             if not mon:
@@ -62,7 +64,7 @@ def parse_arsenal(text, today):
             tail = ctx[m.end():] if ctx.startswith(ln) else ctx
             tm = TIME_RE.search(tail)
             nm = NAME_RE.search(ctx) or NAME_RE.search(" | ".join(lines[max(0, i - 2):i + 1]))
-            if not nm:
+            if not nm or not tm:
                 continue
             name = re.sub(r"\s+", " ", nm.group(1)).strip(" -–|")
             events[d.isoformat()] = {"date": d.isoformat(), "ko": f"{int(tm.group(1)):02d}:{tm.group(2)}" if tm else "", "name": name, "src": "arsenal"}
@@ -99,13 +101,12 @@ def main():
         log(f"arsenal page: {len(a)} events")
         events.update(a)
     season = today.year if today.month >= 7 else today.year - 1
-    for f in FEEDS:
-        raw = get(f.format(y=season))
-        if raw:
-            fe = parse_feed(raw)
-            added = {k: v for k, v in fe.items() if k not in events}
-            log(f"{f.format(y=season)}: {len(fe)} home games, {len(added)} not on the Arsenal page")
-            events.update(added)
+    if len([e for e in events.values() if e["date"] >= today.isoformat()]) < 3:
+        log("Arsenal page gave too little; falling back to the Premier League feed")
+        for f in FEEDS:
+            raw = get(f.format(y=season))
+            if raw:
+                events.update(parse_feed(raw))
     future = [e for e in events.values() if e["date"] >= today.isoformat()]
     log(f"total {len(events)} events, {len(future)} from today")
     open("data/debug/events-log.txt", "w").write("\n".join(LOG) + "\n")
