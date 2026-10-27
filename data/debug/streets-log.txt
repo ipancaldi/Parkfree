@@ -1,0 +1,5 @@
+16:42:20 streets: https://overpass-api.de/api/interpreter attempt 1 failed after 1s: HTTP Error 502: Bad Gateway
+16:43:09 streets: https://overpass-api.de/api/interpreter ok in 40s, 10627 elements, 7597255 bytes
+16:43:53 boundary: https://overpass-api.de/api/interpreter ok in 44s, 1 elements, 114353 bytes
+16:43:53 2594 named streets, 1 boundary rings
+16:43:53 size 510057 bytes
