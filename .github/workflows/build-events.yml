@@ -1,0 +1,43 @@
+name: Build Emirates events
+
+on:
+  push:
+    branches: [main]
+    paths: ['tools/build_events.py', '.github/workflows/build-events.yml']
+  schedule:
+    - cron: '23 5 * * 1,4'   # Monday and Thursday mornings
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-events
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect event days
+        run: python tools/build_events.py
+        continue-on-error: true
+      - name: Commit to main and gh-pages
+        run: |
+          git config user.name "parkfree-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Update Emirates event days"
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push origin HEAD:main && break
+            sleep 10
+          done
+          git push -f origin HEAD:gh-pages

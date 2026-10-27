@@ -45,7 +45,7 @@ def main():
     html = get(LIST)
     os.makedirs("data/debug", exist_ok=True)
     open("data/debug/list.html", "w").write(html[:200000])
-    codes = sorted(set(re.findall(r"/islington/parkinglocator/(\d{5})", html)))
+    codes = sorted(c for c in set(re.findall(r"/islington/parkinglocator/(\d{5})", html)) if not c.startswith("54"))  # 54xxx are retired
     # Street names from the list page: "Alwyne Road N1 (61823)"
     text = re.sub(r"<[^>]+>", "\n", html)
     listed = {}
@@ -65,8 +65,6 @@ def main():
             page = get(f"{LIST}/{code}")
         except Exception as e:
             failed.append(code); debug["errors"][code] = str(e)[:200]; continue
-        if i < 3 or (i % 10 == 0 and i < 40):
-            open(f"data/debug/{code}.html", "w").write(page[:100000])
         t = re.search(r"<title[^>]*>(.*?)</title>", page, re.S | re.I)
         title = html_lib.unescape(re.sub(r"\s+", " ", t.group(1)).strip()) if t else ""
         plain = html_lib.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", page)))
@@ -81,8 +79,13 @@ def main():
         if not zone or zone not in ZONES or not name:
             failed.append(code); continue
         key = norm(name)
-        rec = streets.setdefault(key, {"name": re.sub(r",?\s*\b(N|EC|WC)\d+[A-Z]?\b", "", name).strip(), "zones": {}})
+        rec = streets.setdefault(key, {"name": re.sub(r",?\s*\b(N|EC|WC)\d+[A-Z]?\b", "", name).strip(), "zones": {}, "codes": {}})
         rec["zones"][zone] = rec["zones"].get(zone, 0) + 1
+        rec["codes"].setdefault(zone, []).append(code)
+        ms = re.search(r"Max(?:imum)?\s*stay[:\s]*(\d+)\s*(hours?|hrs?|minutes?|mins?)", plain, re.I)
+        if ms:
+            mins = int(ms.group(1)) * (60 if ms.group(2).lower().startswith("h") else 1)
+            rec.setdefault("maxStay", {})[str(mins)] = rec.get("maxStay", {}).get(str(mins), 0) + 1
         if i % 50 == 0:
             print(f"{i}/{len(todo)} {name} -> {zone}", flush=True)
 
